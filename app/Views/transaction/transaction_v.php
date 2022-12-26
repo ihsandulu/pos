@@ -86,7 +86,7 @@
                         <div class="col-6">
                             <div class="input-group mb-3">
                                 <input type="hidden" id="typesearch" value="gambar"/>
-                                <input onfocusout="fokus('barcode');" onkeyup="cariproduk();" id="cariproduk" type="text" class="form-control" placeholder="Cari Produk" aria-label="Cari Produk" aria-describedby="basic-addon2">
+                                <input  onkeyup="cariproduk();" id="cariproduk" type="text" class="form-control" placeholder="Cari Produk" aria-label="Cari Produk" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary fa fa-search" type="button"></button>
                                 </div>
@@ -119,8 +119,8 @@
                         <input type="hidden" id="kasterakhirval"/>                        
                         <input type="hidden" id="kasshift" value="0"/>
                         <div class="col-7 p-0">                             
-                            <button  data-toggle="tooltip" data-placement="top" title="Modal Awal dari Owner" onclick="modalkas('masuk');" class="btn  btn-primary fa fa-money mb-2" type="button"></button>   
-                            <button  data-toggle="tooltip" data-placement="top" title="Stor Uang ke Owner" onclick="modalkas('keluar');" class="btn  btn-primary mb-2" type="button">
+                            <button id="btnmodalawal"  data-toggle="tooltip" data-placement="top" title="Modal Awal dari Owner" onclick="modalkas('masuk');" class="btn  btn-primary fa fa-money mb-2" type="button"></button>   
+                            <button  data-toggle="tooltip" data-placement="top" title="Stor Uang ke Owner" onclick="modalkas('keluar');" class="btn  btn-primary mb-2 btn-child" type="button">
                                 <span class="fa-stack fa-xs">
                                     <i class="fa fa-money fa-stack-1x"></i>
                                     <i class="fa fa-ban fa-stack-2x text-danger"></i>
@@ -190,7 +190,7 @@
                                     <div class="form-inline">
                                         <label for="modalawal">Jumlah Uang:</label> &nbsp
                                         <input type="number" class="form-control" id="modalawal"> &nbsp
-                                        <button onclick="kas('masuk')" type="button" class="btn btn-primary">Submit</button>
+                                        <button onclick="kasmodal('masuk')" type="button" class="btn btn-primary">Submit</button>
                                     </div>
                                     <div>Keterangan : <span class="keteranganmodalawal">Modal awal dari owner.</span></div>
                                 </div>
@@ -213,7 +213,7 @@
                                     <div class="form-inline">
                                         <label for="modalakhir">Jumlah Uang:</label> &nbsp
                                         <input type="number" class="form-control" id="modalakhir"> &nbsp
-                                        <button onclick="kas('keluar')" type="button" class="btn btn-primary">Submit</button>
+                                        <button onclick="kasmodal('keluar')" type="button" class="btn btn-primary">Submit</button>
                                     </div>
                                     <div>Keterangan : <span class="keteranganmodalakhir">Stor uang kepada owner.</span></div>
                                 </div>
@@ -228,11 +228,13 @@
                             $.get("<?=base_url("posisishift");?>")
                             .done(function(data){ 
                                 $("#modalstatus").val(data);
-                                if(data=='keluar'){                               
+                                if(data=='keluar'){                             
                                     $(".btn-child").prop('disabled', true);
+                                    $("#btnmodalawal").attr('data-original-title', 'Modal Awal dari Owner');
                                 }
                                 if(data=='masuk'){                                
-                                    $(".btn-child").prop('disabled', false);
+                                    $(".btn-child").prop('disabled', false);     
+                                    $("#btnmodalawal").attr('data-original-title', 'Update Modal Awal');
                                 }
                             });                     
                         }
@@ -264,6 +266,8 @@
                             //shift
                             shift();
                         }
+                        </script>
+                        <script>
                         function modalkas(type){
                             if(type=='masuk'){
                                 $("#showmodalawal").modal();
@@ -278,7 +282,9 @@
                             datamodalkas();
                             
                         }
-                        function kas(kas_type){
+                        </script>
+                        <script>
+                        function kasmodal(kas_type){
                             let store_id=<?=session()->get("store_id");?>;
                             let ok = confirm('Are you sure?');
                             let en = false;
@@ -292,8 +298,7 @@
                                     $("#showmodalawal").modal('hide');
                                     $('#modalawal').val(0);
                                     en = true;
-                                }
-                                if(kas_type=='keluar'){
+                                }else if(kas_type=='keluar'){
                                     kas_nominal=$("#modalakhir").val();
                                     kas_nominal=parseInt(kas_nominal);
                                     if(kasterakhir==kas_nominal){
@@ -311,8 +316,8 @@
                                 }
                                 // alert(kas_type);
                                 if(en==true){
-                                    // alert("<?=base_url("kas");?>?kas_type="+kas_type+"&kas_nominal="+kas_nominal+"&store_id="+store_id);
-                                    $.get("<?=base_url("kas");?>",{kas_type:kas_type,kas_nominal:kas_nominal,store_id:store_id})
+                                    // alert("<?=base_url("kasmodal");?>?kas_type="+kas_type+"&kas_nominal="+kas_nominal+"&store_id="+store_id);
+                                    $.get("<?=base_url("kasmodal");?>",{kas_type:kas_type,kas_nominal:kas_nominal,store_id:store_id})
                                     .done(function(data){
                                         alert(data);
                                         modalstatus();
@@ -324,6 +329,8 @@
                             }
                         }
 
+                        </script>
+                        <script>
                         function fokus(type){
                             switch (type) {
                                 case 'barcode':
@@ -331,7 +338,7 @@
                                     $("#fokus").val("barcode"); 
                                 break;         
                                 case 'cari':
-                                    $("#inputbarcode").focus();
+                                    $("#cariproduk").focus();
                                     $("#fokus").val("cari"); 
                                 break;         
                                 case 'bayar':
@@ -447,7 +454,7 @@
                                     $("#typesearch").val("list");
                                 });
                             }  
-                            fokus('barcode');                          
+                            // fokus('barcode');                          
                         }
                         function listnota(transaction_status){
                             $.get("<?=base_url("listnota");?>",{transaction_status:transaction_status})
@@ -557,11 +564,11 @@
                             shift();
                         });
                         $(document).on("keyup", function(e){ 
-                            let fokus = $("#fokus").val();                           
-                            if(e.which == 9 && (fokus=="" || fokus=="barcode")){
+                            let ifokus = $("#fokus").val();                           
+                            if(e.which == 9 && (ifokus=="" || ifokus=="barcode")){
                                 fokus('cari');
                             }                          
-                            if(e.which == 9 && fokus=="cari"){
+                            if(e.which == 9 && ifokus=="cari"){
                                 fokus('barcode');
                             }
                             // alert(e.which);
@@ -584,23 +591,23 @@
                                bayar();
                             }
                                                    
-                            if(e.which == 13 && fokus=="barcode"){
+                            if(e.which == 13 && ifokus=="barcode"){
                                 let product_batch = $("#inputbarcode").val();
                                 if(product_batch==""){alert("Barcode tidak boleh kosong!");}
                                 insertnotabarcode(product_batch);
                                 $("#inputbarcode").val("");
                             }    
                                                       
-                            if(e.which == 13 && fokus=="bayar"){
+                            if(e.which == 13 && ifokus=="bayar"){
                                 pelunasan();
                             }     
                                                       
-                            if(e.which == 13 && fokus=="modalawal"){
-                                kas('masuk');
+                            if(e.which == 13 && ifokus=="modalawal"){
+                                kasmodal('masuk');
                             }     
                                                       
-                            if(e.which == 13 && fokus=="modalakhir"){
-                                kas('keluar');
+                            if(e.which == 13 && ifokus=="modalakhir"){
+                                kasmodal('keluar');
                             }   
                             <?php }?>                       
                         });

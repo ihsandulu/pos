@@ -66,7 +66,7 @@ class transaction extends baseController
         echo $store_shift;
     }
 
-    public function kasmodal(){
+    public function kas(){
         $data["message"]="";
         $kas_nominal=$this->request->getGet("kas_nominal");
         $kas_typeinput=$this->request->getGet("kas_type");//inputan
@@ -74,37 +74,44 @@ class transaction extends baseController
         $kas_shiftinput=$this->request->getGet("kas_shift");
 
         //cek kas realtime
-        $storekas=$this->db->table("store")
-        ->select("*,COUNT(store.store_id) AS count, modal.kas_id AS kas_id, store.modal_id AS modal_id")
-        ->join("modal","modal.modal_id=store.modal_id")
-        ->join("kas","kas.kas_id=modal.kas_id")
-        ->where("store.store_id",$store_id)
-        ->orderBy("store.store_id","DESC")
+       $store=$this->db->table("store")
+       ->where("store_id",$store_id)
+        ->orderBy("store_id","DESC")
+        ->limit(1)
+        ->get()
+        ->getRow();
+       $modalawal=$store->store_modal;//modal awal
+       $kasrealtime=$store->store_kas;//kas aktual
+       $store_shift=$store->store_shift;//shift ke berapa
+       $store_date=$store->store_date;//tgl shift yg sedang berlaku
+       $posisishift=$store->store_posisishift;//posisi shift apakah sendang berjalan (masuk) ataukah sedang off(toko tutup/pergantian shift)
+
+        
+       //cek shift
+        if($posisishift==''||$store_date!=date("Y-m-d")){
+            $store_shift=1;
+        }elseif($posisishift=='keluar'&&$kas_typeinput=='masuk'){
+            $store_shift+=1;
+        }else{
+            $store_shift=$store_shift;
+        }
+
+        //cek kas terakhir
+       $kas=$this->db->table("kas")
+       ->where("store_id",$store_id)
+        ->orderBy("kas_id","DESC")
         ->limit(1);
-        $store=$storekas->get();        
-        $countstorekas=$store->getRow()->count;   
-        $data["message"] = $this->db->getLastQuery(); 
+        $cekkas=$kas->get();
+        $data["message"] = $this->db->getLastQuery();
 
         $kas_lasttype='keluar';//masuk,keluar
+
+        if($kas->countAll()>0){
             
-        if($countstorekas>0){
-            foreach($store->getResult() as $kas){
-                $modalid=$kas->modal_id;//id modal
-                $modalawal=$kas->store_modal;//modal awal
-                $kasrealtime=$kas->store_kas;//kas aktual
-                $store_shift=$kas->store_shift;//shift ke berapa
-                $store_date=$kas->store_date;//tgl shift yg sedang berlaku                
-
-                $kas_lasttype= $kas->store_posisishift;//masuk, keluar
-
-                //cek shift
-                if($kas_lasttype==''||$store_date!=date("Y-m-d")){
-                    $store_shift=1;
-                }elseif($kas_lasttype=='keluar'&&$kas_typeinput=='masuk'){
-                    $store_shift+=1;
-                }else{
-                    $store_shift=$store_shift;
-                }
+            foreach($cekkas->getResult() as $kas){
+                $kas_lasttype= $kas->kas_type;//data terakhir di database
+                $kas_lastnominal= $kas->kas_nominal;//nominal terakhir di table kas
+                $kas_shift=$kas->kas_shift;//shift terakhir di table kas
                 
                 // echo $kas_lasttype."-".$kas_typeinput."-".$store_date."-".date("Y-m-d");
 
@@ -117,9 +124,7 @@ class transaction extends baseController
                     ){
                     //Keluar(Terakhir)-Masuk(Input) atau Masuk(Terakhir)-Masuk(Input) tapi Di Hari yang Sama
 
-                    //insert kas modal awal
-                    $input["store_id"]=session()->get("store_id");
-                    $input["kas_modal"]= 1;
+                    //insert kas
                     $input["kas_shift"]= $store_shift;
                     $input["kas_nominal"]= $kas_nominal;
                     $input["kas_type"]= $kas_typeinput;
@@ -131,17 +136,13 @@ class transaction extends baseController
                     $data["message"]="Store modal awal berhasil, ID=".$kas_id;
 
                     //insert modal
-                    $input2["kas_id"]=$kas_id;
-                    $input2["store_id"]=session()->get("store_id");
                     $input2["modal_shift"]= $store_shift;
                     $input2["modal_nominal"]= $kasrealtime+$kas_nominal;
                     $input2["modal_date"]= date("Y-m-d");
                     $this->db->table("modal")
                     ->insert($input2);
-                    $modal_id = $this->db->insertID();
 
                     //update store
-                    $input1["modal_id"]= $modal_id;
                     $input1["store_kas"]= $kasrealtime+$kas_nominal;
                     $input1["store_modal"]= $kasrealtime+$kas_nominal;//nambah dari kas bukan dari modal
                     $input1["store_shift"]= $store_shift;
@@ -150,14 +151,13 @@ class transaction extends baseController
                     $where1["store_id"]= $store_id;
                     $this->db->table("store")
                     ->update($input1,$where1);
-                    // $data["message"] = $this->db->getLastQuery();
 
                 }elseif($kas_lasttype=='masuk'&&$kas_typeinput=='masuk'){
                     //Masuk(Terakhir)-Masuk(Input) di Hari yang Sama
 
                     
 
-                    //update kas modal awal
+                    //update kas
                     $input["kas_nominal"]= $kas_nominal;
                     $input["kas_shift"]= $store_shift;
                     $where["kas_id"]= $kas->kas_id;
@@ -168,16 +168,15 @@ class transaction extends baseController
                     $data["message"]="Modal awal diupdate, ID=".$kas_id;
 
                     //update modal
-                    $input2["modal_nominal"]= ($modalawal-$kasrealtime)+$kas_nominal;
-                    $input2["modal_shift"]= $store_shift;
-                    $input2["modal_date"]= date("Y-m-d");
-                    $where2["modal_id"]= $modalid;
+                    $where2["modal_shift"]= $store_shift;
+                    $input2["modal_nominal"]= ($modalawal-$kas_lastnominal)+$kas_nominal;
+                    $where2["modal_date"]= date("Y-m-d");
                     $this->db->table("modal")
-                    ->update($input2,$where2);
+                    ->update($input2);
 
                     //update store
-                    $input1["store_kas"]= ($kasrealtime-$kasrealtime)+$kas_nominal;
-                    $input1["store_modal"]= ($modalawal-$kasrealtime)+$kas_nominal;
+                    $input1["store_kas"]= ($kasrealtime-$kas_lastnominal)+$kas_nominal;
+                    $input1["store_modal"]= ($modalawal-$kas_lastnominal)+$kas_nominal;
                     $input1["store_posisishift"]= $kas_typeinput;
                     $where1["store_id"]= $store_id;
                     $this->db->table("store")
@@ -186,10 +185,8 @@ class transaction extends baseController
                 }elseif($kas_lasttype=='masuk'&&$kas_typeinput=='keluar'){
                     //Masuk(Terakhir)-Keluar(Input)
 
-                    //input kas tariksetoran
-                    $input["store_id"]=session()->get("store_id");
-                    $input["kas_tariksetoran"]= 1;
-                    $input["kas_nominal"]= $kas_nominal;
+                    //input kas
+                   $input["kas_nominal"]= $kas_nominal;
                     $input["kas_shift"]= $store_shift;
                     $input["kas_type"]= $kas_typeinput;
                     $input["kas_description"]= "Penarikan Kas";
@@ -202,7 +199,6 @@ class transaction extends baseController
                      //update store
                     $kastoko=$kasrealtime-$kas_nominal;
                     $input1["store_kas"]= $kastoko;
-                    $input1["store_modal"]= $kastoko;
                     $input1["store_posisishift"]= $kas_typeinput;
                     $where1["store_id"]= $store_id;
                     $this->db->table("store")
@@ -212,7 +208,7 @@ class transaction extends baseController
                     
                     
 
-                    //update kas tarik setoran
+                    //input kas
                     $input["kas_nominal"]= $kas_nominal;
                     $input["kas_shift"]= $store_shift;
                     $where["kas_id"]= $kas->kas_id;
@@ -222,11 +218,12 @@ class transaction extends baseController
                     $kas_id = $kas->kas_id;
                     $data["message"]="Modal Akhir diupdate, ID=".$kas_id;
 
-                    // echo $kasrealtime."+".$kasrealtime."-".$kas_nominal;
+                    // echo $kasrealtime."+".$kas_lastnominal."-".$kas_nominal;
                     //update store
-                    $kastoko=($kasrealtime+$kasrealtime)-$kas_nominal;
+                    $kastoko=($kasrealtime+$kas_lastnominal)-$kas_nominal;
                     $input1["store_kas"]= $kastoko;
-                    $input1["store_modal"]= $kastoko;
+                    $modal=($modalawal+$kas_lastnominal)-$kas_nominal;
+                    $input1["store_modal"]= $modal;
                     $input1["store_posisishift"]= $kas_typeinput;
                     $where1["store_id"]= $store_id;
                     $this->db->table("store")
@@ -234,11 +231,7 @@ class transaction extends baseController
                 }
             }
         }else{
-            $store_shift=1;
-            $kasrealtime=0;
             //insert kas
-            $input["store_id"]=session()->get("store_id");
-            $input["kas_modal"]= 1;
             $input["kas_shift"]= $store_shift;
             $input["kas_nominal"]= $kas_nominal;
             $input["kas_type"]= $kas_typeinput;
@@ -251,20 +244,16 @@ class transaction extends baseController
 
             
             //insert modal
-            $input2["kas_id"]=$kas_id;
-            $input2["store_id"]=session()->get("store_id");
             $input2["modal_shift"]= $store_shift;
             $input2["modal_nominal"]= $kas_nominal;
             $input2["modal_date"]= date("Y-m-d");
             $this->db->table("modal")
             ->insert($input2);
-            $modal_id = $this->db->insertID();
 
             //update store
             $input1["store_kas"]= $kasrealtime+$kas_nominal;
             $input1["store_modal"]= $kasrealtime+$kas_nominal;//nambah dari kas bukan dari modal
             $input1["store_shift"]= $store_shift;
-            $input1["modal_id"]= $modal_id;
             $input1["store_posisishift"]= 'masuk';
             $input1["store_date"]= date("Y-m-d");
             $where1["store_id"]= $store_id;
@@ -272,7 +261,6 @@ class transaction extends baseController
             ->update($input1,$where1);
             // $data["message"] = $this->db->getLastQuery();
         }
-        
         echo $data["message"];
         
     }
@@ -301,7 +289,6 @@ class transaction extends baseController
 
     public function listnota(){
         $listnota=$this->db->table("transaction")
-        ->where("store_id",session()->get("store_id"))
         ->where("transaction_status",$this->request->getGet("transaction_status"))
         ->get();
         foreach ($listnota->getResult() as $listnota) {
@@ -368,7 +355,6 @@ class transaction extends baseController
                     $product->update($input1,$where1);
                 }
             }else{
-                $where["store_id"]=session()->get("store_id");
                 $where["transactiond_qty"] = 1;
                 $where["transactiond_price"] = $sell;
                 $transactiond->insert($where);
@@ -519,7 +505,6 @@ class transaction extends baseController
         echo 0;
 
         //insert kas
-        $input1["store_id"]=session()->get("store_id");
         $input1["kas_shift"]= $kas_shift;
         $input1["transaction_id"]= $transaction_id;
         $input1["kas_nominal"]= $transaction_bill;
@@ -530,23 +515,6 @@ class transaction extends baseController
         ->insert($input1);
 
         // echo $this->db->getLastQuery();
-
-        //update store
-        //cek kas realtime
-        $store=$this->db->table("store")
-        ->where("store_id",session()->get("store_id"))
-        ->orderBy("store_id","DESC")
-        ->limit(1)
-        ->get()
-        ->getRow();
-        $kasrealtime=$store->store_kas;//kas aktual
-        $input2["store_kas"]= $kasrealtime+$transaction_bill;
-        $input2["store_shift"]= $kas_shift;
-        $input2["store_posisishift"]= 'masuk';
-        $input2["store_date"]= date("Y-m-d");
-        $where2["store_id"]= session()->get("store_id");
-        $this->db->table("store")
-        ->update($input2,$where2);
     }
 
     public function updatestatus(){
@@ -738,7 +706,6 @@ class transaction extends baseController
          if($this->request->getGet("product_name")!=""){
             $builder->like("product.product_name",$this->request->getGet("product_name"),"BOTH");
         }
-        $builder->where("product.store_id",session()->get("store_id"));
         $product=$builder->orderBy("product_name")->get();
         foreach ($product->getResult() as $product) {?>
         <?php 
@@ -762,17 +729,10 @@ class transaction extends baseController
                 $insertnota = "toast('Info Stock', 'Stock Kosong!')";
                 $disabled="disabled";
             }
-        }else{$insertnota =""; $disabled="disabled";}
-        
-        if($product->product_picture==""){
-            $gambar="no_image.png";
-        }else{
-            $gambar=$product->product_picture;
-        }
-        ?>
+        }else{$insertnota =""; $disabled="disabled";}?>
         <div class="col-3 divimg_product <?=$disabled;?>" onclick="<?=$insertnota;?>" >
             <figure class="caption-1 pointer">
-                <img src="<?=base_url("images/product_picture/". $gambar);?>" alt="" class="w-100 card-img-top  img_product">
+                <img src="<?=base_url("images/product_picture/".$product->product_picture);?>" alt="" class="w-100 card-img-top  img_product">
                 <figcaption class="px-5 py-4 text-center text-light">
                     <h2 class="h5 font-weight-bold mb-0 text-small1 text-light figcaption"><?=$product->product_name;?></h2>
                     <p class="text-small2 figcaption"><?=number_format($product->product_sell,0,",",".");?></p>

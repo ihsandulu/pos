@@ -102,6 +102,7 @@ class payment_m extends core_m
 
             //input kas
             $store=$this->db->table("store")->where("store_id",session()->get("store_id"))->get()->getRow();
+            $input2["store_id"]=session()->get("store_id");
             $input2["kas_date"] = date("Y-m-d");
             $input2["kas_nominal"] = $input["payment_nominal"];
             $input2["kas_type"] = 'keluar';

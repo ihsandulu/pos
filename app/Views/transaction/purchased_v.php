@@ -85,6 +85,12 @@
                                     </div>
                                 </div> 
                                 <div class="form-group">
+                                    <label class="control-label col-sm-2" for="purchased_outdate">Out of Date:</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" autofocus class="form-control" id="purchased_outdate" name="purchased_outdate" placeholder="" value="<?= $purchased_outdate; ?>">
+                                    </div>
+                                </div>    
+                                <div class="form-group">
                                     <label class="control-label col-sm-2" for="purchased_qty">Qty (<span id="unit_name"></span>):</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="purchased_qty" name="purchased_qty" placeholder="" value="<?= $purchased_qty; ?>">
@@ -153,6 +159,7 @@
                                         <th>No.</th>
                                         <th>Store</th>
                                         <th>Trans No.</th>
+                                        <th>Out of Date</th>
                                         <th>Product</th>
                                         <th>Qty</th>
                                         <th>Nominal</th>
@@ -229,6 +236,7 @@
                                             <td><?= $no++; ?></td>
                                             <td><?= $usr->store_name; ?></td>
                                             <td><?= $usr->purchase_no; ?></td>
+                                            <td><?= $usr->purchased_outdate; ?></td>
                                             <td><?= $usr->product_name; ?></td>
                                             <td><?= number_format($usr->purchased_qty,0,",","."); ?></td>
                                             <td><?= number_format($usr->purchased_price,0,",","."); ?></td>

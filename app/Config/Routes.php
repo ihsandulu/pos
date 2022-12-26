@@ -62,7 +62,7 @@ $routes->add('/cekstatus', 'transaction\transaction::cekstatus');
 $routes->add('/nominalkas', 'transaction\transaction::nominalkas');
 $routes->add('/modalawalkas', 'transaction\transaction::modalawalkas');
 $routes->add('/cekmodal', 'transaction\transaction::cekmodal');
-$routes->add('/kas', 'transaction\transaction::kas');
+// $routes->add('/kas', 'transaction\transaction::kas');
 $routes->add('/shift', 'transaction\transaction::shift');
 $routes->add('/posisishift', 'transaction\transaction::posisishift');
 $routes->add('/rkas', 'report\rkas::index');
@@ -72,6 +72,7 @@ $routes->add('/rlabarugi', 'report\rlabarugi::index');
 $routes->add('/payment', 'transaction\payment::index');
 $routes->add('/purchase', 'transaction\purchase::index');
 $routes->add('/purchased', 'transaction\purchased::index');
+$routes->add('/kasmodal', 'transaction\transaction::kasmodal');
 
 $routes->add('/msupplier', 'master\msupplier::index');
 

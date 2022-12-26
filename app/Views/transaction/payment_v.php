@@ -8,7 +8,7 @@
 
 
                     <div class="row">
-                        <?php if (!isset($_GET['user_id']) && !isset($_POST['new']) && !isset($_POST['edit'])) {
+                        <?php if (!isset($_GET['user_id']) && !isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['purchase_id'])) {
                             $coltitle = "col-md-10";
                         } else {
                             $coltitle = "col-md-8";
@@ -17,14 +17,13 @@
                             <h4 class="card-title"></h4>
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
                         </div>
-                        <?php if (isset($_GET['report'])) { ?>
-                            <form method="post" class="col-md-2">
-                                <h1 class="page-header col-md-12">
-                                    <a href="<?= site_url("saran"); ?>" class="btn btn-danger btn-block btn-lg" value="OK" style="">Suggestion</a>
-
-                                </h1>
-                            </form>
-                        <?php } ?>
+                        <?php if(isset($_GET['purchase_id'])){?>
+                        <form action="<?= base_url("purchase"); ?>" method="get" class="col-md-2">
+                            <h1 class="page-header col-md-12">
+                                <button class="btn btn-warning btn-block btn-lg" value="OK" style="">Back</button>
+                            </h1>
+                        </form>
+                        <?php }?>
                         <?php if (!isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) { ?>
                             <?php if (isset($_GET["user_id"])) { ?>
                                 <form action="<?= site_url("user"); ?>" method="get" class="col-md-2">
@@ -146,6 +145,7 @@
                                     <?php
                                     $builder = $this->db
                                         ->table("payment")
+                                        ->join("purchase", "purchase.purchase_id=payment.purchase_id", "left")
                                         ->join("supplier", "supplier.supplier_id=payment.supplier_id", "left")
                                         ->join("store", "store.store_id=payment.store_id", "left")
                                         ->join("user", "user.user_id=payment.cashier_id", "left")
@@ -214,7 +214,10 @@
                                             <td><?= $usr->payment_date; ?></td>
                                             <td><?= $usr->store_name; ?></td>
                                             <td><?= $usr->supplier_name; ?></td>
-                                            <td><?= $usr->payment_no; ?></td>
+                                            <td>
+                                                <?= $usr->payment_no; ?>
+                                                <?php if($usr->purchase_no!=''){echo "<br/>(".$usr->purchase_no.")";}?>
+                                            </td>
                                             <td><?= $usr->user_name; ?></td>
                                             <td><?= number_format($usr->payment_nominal,0,",","."); ?></td>
                                         </tr>
@@ -230,7 +233,8 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Payment";
+    <?php if(isset($_GET["purchase_no"])){$purchase_no=$_GET["purchase_no"]." (Tagihan ".number_format($_GET["kas_nominal"],0,",",".").")";}else{$purchase_no="";}?>
+    var title = "Payment <?=$purchase_no;?>";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

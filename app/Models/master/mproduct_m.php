@@ -34,7 +34,9 @@ class mproduct_m extends core_m
         } else {
             foreach ($this->db->getFieldNames('product') as $field) {
                 $data[$field] = "";
-            }
+            }            
+            $ubeno="UBE".date("ymdHis");
+            $data["product_ube"] = $ubeno;
         }
 
         //upload image

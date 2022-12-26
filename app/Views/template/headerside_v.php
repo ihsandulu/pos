@@ -117,7 +117,7 @@
                 </li>
                 <?php }?>
 
-                <?php 
+                <!-- <?php 
                 if (
                     (
                         isset(session()->get("position_administrator")[0][0]) 
@@ -134,7 +134,7 @@
                 <li> 
                     <a class="  " href="<?= base_url("mppn"); ?>" aria-expanded="false"><i class="fa fa-money"></i><span class="hide-menu">PPN</span></a>
                 </li>
-                <?php }?>
+                <?php }?> -->
 
                 <?php 
                 if (

@@ -24,8 +24,16 @@
                         <input type="date" id="from" name="from" class="form-control">&nbsp;
                         <label for="to">Ke:</label>&nbsp;
                         <input type="date" id="to" name="to" class="form-control">&nbsp;
+                        <?php 
+                        if(isset($_GET["tanpamodal"])&&$_GET["tanpamodal"]!=""){
+                            $checked="checked";
+                        }else{$checked="";} ?>
+                        <input <?=$checked;?> type="checkbox" id="tanpamodal" name="tanpamodal" class="form-control">&nbsp;Pure Transaction&nbsp;
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
+                    <div class="alert alert-danger m-t-5">
+                        Pure Transaction adalah transaksi masuk dan keluar tanpa modal awal dan penarika setoran oleh owner.
+                    </div>
 
                         <?php if ($message != "") { ?>
                             <div class="alert alert-info alert-dismissable">
@@ -61,6 +69,10 @@
                                     }
                                     if(isset($_GET["to"])&&$_GET["to"]!=""){
                                         $builder->where("kas.kas_date <=",$this->request->getGet("to"));
+                                    }
+                                    if(isset($_GET["tanpamodal"])&&$_GET["tanpamodal"]!=""){
+                                        $builder->where("kas.kas_modal !=","1");
+                                        $builder->where("kas.kas_tariksetoran !=","1");
                                     }
                                     $usr= $builder
                                         ->orderBy("kas_id", "DESC")
@@ -110,6 +122,10 @@
                                     }
                                     if(isset($_GET["to"])&&$_GET["to"]!=""){
                                         $builder->where("kas.kas_date <=",$this->request->getGet("to"));
+                                    }
+                                    if(isset($_GET["tanpamodal"])&&$_GET["tanpamodal"]!=""){
+                                        $builder->where("kas.kas_modal !=","1");
+                                        $builder->where("kas.kas_tariksetoran !=","1");
                                     }
                                     $usr= $builder
                                         ->orderBy("kas_id", "DESC")

@@ -150,7 +150,9 @@
                                         ->get();
                                     // echo $this->db->getLastquery();die;
                                     $no = 1;
-                                    foreach ($usr->getResult() as $usr) { ?>
+                                    foreach ($usr->getResult() as $usr) { 
+                                        if($usr->nominal>0){$usr->nominal=$usr->nominal;}else{$usr->nominal=0;}
+                                        ?>
                                         <tr>      
                                             <?php if (!isset($_GET["report"])) { ?>
                                                 <td style="padding-left:0px; padding-right:0px;">

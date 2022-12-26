@@ -64,6 +64,7 @@
                                         <?php
                                         $position = $this->db->table("position")
                                             ->where("position_administrator!=","1")
+                                            ->where("store_id",session()->get("store_id"))
                                             ->orderBy("position_name", "ASC")
                                             ->get();
                                         //echo $this->db->getLastQuery();
