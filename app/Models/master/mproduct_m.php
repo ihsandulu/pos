@@ -37,6 +37,14 @@ class mproduct_m extends core_m
             }            
             $ubeno="UBE".date("ymdHis");
             $data["product_ube"] = $ubeno;
+            
+            //buy
+            $purchase=$this->db->table("purchased")
+            ->orderBy("purchased_id ","DESC")
+            ->limit(1)
+            ->getWhere($productd);
+            $data["product_buy"] = 0;
+           foreach ($purchase->getResult() as $purchase) {$data["product_buy"] = $purchase->purchased_price/$purchase->purchased_qty;}
         }
 
         //upload image
@@ -132,6 +140,32 @@ class mproduct_m extends core_m
             $data["message"] = "Update Success";
             //echo $this->db->last_query();die;
         }
+
+        //update buy
+        if ($this->request->getPost("updatebuy") == "OK") {
+            $product=$this->db->table("product")
+            ->where("store_id",session()->get("store_id"))
+            ->get();
+            foreach ($product->getResult() as $product) {
+                $purchased=$this->db->table("purchased")
+                ->select("*,COUNT(purchased_id)")
+                ->where("product_id",$product->product_id)
+                ->orderBy("purchased_id ","DESC")
+                ->limit(1)
+                ->get();
+                
+                foreach ($purchased->getResult() as $purchased) {
+                    if($purchased->purchased_price>0 && $purchased->purchased_qty>0){
+                        $input["product_buy"] = $purchased->purchased_price/$purchased->purchased_qty;  
+                        $where["product_id"] = $product->product_id;
+                        $this->db->table('product')->update($input, $where);
+                    }
+                }                
+            }
+            $data["message"] = "Update Success";
+            //echo $this->db->last_query();die;
+        }
+
         return $data;
     }
 }

@@ -9,22 +9,14 @@
 
                     <div class="row">
                         <?php if (!isset($_GET['user_id']) && !isset($_POST['new']) && !isset($_POST['edit'])) {
-                            $coltitle = "col-md-10";
+                            $coltitle = "col-md-6";
                         } else {
-                            $coltitle = "col-md-8";
+                            $coltitle = "col-md-4";
                         } ?>
                         <div class="<?= $coltitle; ?>">
                             <h4 class="card-title"></h4>
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
-                        </div>
-                        <?php if (isset($_GET['report'])) { ?>
-                            <form method="post" class="col-md-2">
-                                <h1 class="page-header col-md-12">
-                                    <a href="<?= site_url("saran"); ?>" class="btn btn-danger btn-block btn-lg" value="OK" style="">Suggestion</a>
-
-                                </h1>
-                            </form>
-                        <?php } ?>
+                        </div>                       
                         <?php if (!isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) { ?>
                             <?php if (isset($_GET["user_id"])) { ?>
                                 <form action="<?= site_url("user"); ?>" method="get" class="col-md-2">
@@ -47,6 +39,11 @@
                                     && session()->get("halaman")['8']['act_create'] == "1"
                                 )
                             ) { ?>
+                            <form method="post" class="col-md-4">
+                                <h1 class="page-header col-md-12">
+                                    <button name="updatebuy" class="btn btn-warning btn-block btn-lg" value="OK" style="">Buy Price Updates</button>
+                                </h1>
+                            </form>
                             <form method="post" class="col-md-2">
                                 <h1 class="page-header col-md-12">
                                     <button name="new" class="btn btn-info btn-block btn-lg" value="OK" style="">New</button>

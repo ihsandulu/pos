@@ -75,6 +75,7 @@ $routes->add('/purchased', 'transaction\purchased::index');
 $routes->add('/kasmodal', 'transaction\transaction::kasmodal');
 
 $routes->add('/msupplier', 'master\msupplier::index');
+$routes->add('/mproductbuy', 'master\mproduct::buy');
 
 
 
