@@ -3,7 +3,7 @@
         <?php if(session()->get("store_picture")==""){
             $gambar="logo.png";
         }else{
-            $gambar=$product->product_picture;
+            $gambar=session()->get("store_picture");
         } ?>
         <img src="<?=base_url("images/store_picture/".$gambar);?>" style="width:30px; height:auto; max-height:30px;  max-width:50px; "/>  
     </div>
