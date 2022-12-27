@@ -590,8 +590,8 @@ class transaction extends baseController
                         )
                     ) ||
                     (
-                        isset(session()->get("halaman")['pos']['act_delete']) 
-                        && session()->get("halaman")['pos']['act_delete'] == "1"
+                        isset(session()->get("halaman")['13']['act_delete']) 
+                        && session()->get("halaman")['13']['act_delete'] == "1"
                     )
                 ) { ?>
                 <button onclick="deletenota(<?=$transaction->transaction_id;?>);" class="btn btn-danger btn-xs btn-right fa fa-close mb-2" type="button"></button>
@@ -644,8 +644,8 @@ class transaction extends baseController
                                             )
                                         ) ||
                                         (
-                                            isset(session()->get("halaman")['pos']['act_delete']) 
-                                            && session()->get("halaman")['pos']['act_delete'] == "1"
+                                            isset(session()->get("halaman")['13']['act_delete']) 
+                                            && session()->get("halaman")['13']['act_delete'] == "1"
                                         )
                                     ) { ?>
                                         <button class="btn btn-xs btn-danger delete m-2" onclick="deletetransactiond(<?= $usr->transaction_id; ?>,<?= $usr->product_id; ?>,<?= $usr->qty; ?>);" name="delete" value="OK"><span class="fa fa-close" style="color:white;"></span> </button>
@@ -671,8 +671,8 @@ class transaction extends baseController
                                         )
                                     ) ||
                                     (
-                                        isset(session()->get("halaman")['pos']['act_update']) 
-                                        && session()->get("halaman")['pos']['act_update'] == "1"
+                                        isset(session()->get("halaman")['13']['act_update']) 
+                                        && session()->get("halaman")['13']['act_update'] == "1"
                                     )
                                 ) { ?>
                                 <?php if($qty>0){?>
@@ -708,8 +708,8 @@ class transaction extends baseController
                                     )
                                 ) ||
                                 (
-                                    isset(session()->get("halaman")['pos']['act_create']) 
-                                    && session()->get("halaman")['pos']['act_create'] == "1"
+                                    isset(session()->get("halaman")['13']['act_create']) 
+                                    && session()->get("halaman")['13']['act_create'] == "1"
                                 )
                             ) { ?>
                             <button class="btn btn-md btn-success" onclick="bayar();"><span class="fa fa-money" style="color:white;"></span>  Bayar</button>        
@@ -751,8 +751,8 @@ class transaction extends baseController
                 )
             ) ||
             (
-                isset(session()->get("halaman")['pos']['act_create']) 
-                && session()->get("halaman")['pos']['act_create'] == "1"
+                isset(session()->get("halaman")['13']['act_create']) 
+                && session()->get("halaman")['13']['act_create'] == "1"
             )
         ) {
             if($product->product_stock>0){
@@ -822,8 +822,8 @@ class transaction extends baseController
                                 )
                             ) ||
                             (
-                                isset(session()->get("halaman")['pos']['act_create']) 
-                                && session()->get("halaman")['pos']['act_create'] == "1"
+                                isset(session()->get("halaman")['13']['act_create']) 
+                                && session()->get("halaman")['13']['act_create'] == "1"
                             )
                         ) {
                             if($usr->product_stock>0){
