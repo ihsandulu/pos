@@ -31,6 +31,7 @@
         line-height:100%;
     }
     #storename_title{margin: bottom 30px, im !important;}
+    p{margin-bottom:0px; font-size:50px;}
     @page {
         
     }	
@@ -44,6 +45,7 @@
 .border{border:black solid 1px;}
 </style>
 <?php 
+$store=$this->db->table("store")->where("store_id",session()->get("store_id"))->get()->getRow();
 $builder=$this->db->table("transaction")
 ->where("transaction_id",$this->request->getGet("transaction_id"));
 $transaction=$builder->get();
@@ -52,11 +54,17 @@ if($builder->countAll()>0){
     ?>
     <div class='container-fluid'>
         <div class='row'>
-            <?php echo $this->include("template/kop"); ?>
-            <div class="col-4 mt-3 p-0 tebal10">Invoice No.</div>
-            <div class="col-8 mt-3 p-0 tebal10">: <?=$transaction->transaction_no;?></div>
-            <div class="col-4 mb-3 p-0 tebal10">Date</div>
-            <div class="col-8 mb-3 p-0 tebal10">: <?=date("d M Y",strtotime($transaction->transaction_date));?></div>
+            <div class="col-12 row" style=" border-top:black solid  1px; border-bottom:black solid 1px; padding-top:25px; padding-bottom:25px;">	 
+                <div class="col-12 text-center" id="storename_title" style="font-weight:bold; padding:0px; font-size:60px;"><?=$store->store_name;?></div>
+                <div style="padding:5px;"></div>
+                <div class="col-12 text-center" style="padding:0px; font-size:40px;"><?=$store->store_address;?></div>
+                <div style="padding:15px;"></div>
+                <div class="col-12 text-center" style="padding:0px; font-size:45px;">Mobile : <?=$store->store_phone;?>,  <?=session()->get("store_web");?></div> 
+            </div>
+            <div class="col-4 mt-3 p-0 tebal10" style="font-size:40px;">Invoice No.</div>
+            <div class="col-8 mt-3 p-0 text-right" style="font-size:40px;"><?=$transaction->transaction_no;?></div>
+            <div class="col-4 mb-3 p-0 tebal10" style="font-size:40px;">Date</div>
+            <div class="col-8 mb-3 p-0 text-right" style="font-size:40px;"><?=date("d M Y",strtotime($transaction->transaction_date));?></div>
             <div class="col-12" style="padding:0px;"> 
                 <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                     <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
@@ -118,21 +126,16 @@ if($builder->countAll()>0){
                     </tbody>
                 </table>                        
             </div>
-            <div class="col-8 row mt-5 p-0">   
-                <div class="col-12" style="font-weight:bold; ">Note :</div>
-                <div class="col-12">
-                    <?=session()->get("store_noteinvoice");?>
-                </div>	
+            <div class="col-12 mt-3 pt-0 text-center" style="  ">   
+                <?=$store->store_noteinvoice;?>
             </div>
-            <div class="col-4 row mt-5 p-0" style=""  align="center">
+           <!--  <div class="col-4 row mt-5 p-0" style=""  align="center">
                 <div class="col-12"><strong class="tebal10">Hormat Kami,</strong></div>
                 <div class="col-12" style="height:50px;">&nbsp;</div>
                 <div class="col-12" style=""><strong><?=session()->get("user_name");?></strong></div>
-            </div>
-            
+            </div> -->
         </div>
     </div>
-    <div class="pagebreak"></div>
 
 <?php }
 }else{?>

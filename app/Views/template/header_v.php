@@ -58,6 +58,9 @@ if ($this->session->get('user_id') == "") {
     <!--Fungsi Pemisah Ribuan -->
     <script src="js/pemisah_ribuan.js"></script>
 
+    <script src="tinymce/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>tinymce.init({selector:'textarea'});</script>
+
     <style>
         .toast {
             min-width: 300px;
