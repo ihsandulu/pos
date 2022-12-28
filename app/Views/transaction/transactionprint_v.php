@@ -26,19 +26,19 @@
 @media print {
     html, body, div{
         font-family:Arial, Helvetica, sans-serif;
-        font-size:10px;
+        font-size:50px;
         margin: 0px !important;
         line-height:100%;
     }
-
+    #storename_title{margin: bottom 30px, im !important;}
     @page {
         
     }	
-    .tebal10{font-size:10px; font-weight:bold;}		
-    .tebal12{font-size:12px; font-weight:bold;}	
-    .tebal14{font-size:14px; font-weight:bold;}	
-    .tebal16{font-size:16px; font-weight:bold;}		
-    th, td{padding:2px;}
+    .tebal10{font-size:50px; font-weight:bold;}		
+    .tebal12{font-size:52px; font-weight:bold;}	
+    .tebal14{font-size:54px; font-weight:bold;}	
+    .tebal16{font-size:56px; font-weight:bold;}		
+    th, td{padding:0px 1px 0px 1px; font-size:50px; line-height: 100% !important;}
     .pagebreak{page-break-after: always;}
 } 
 .border{border:black solid 1px;}
@@ -53,15 +53,15 @@ if($builder->countAll()>0){
     <div class='container-fluid'>
         <div class='row'>
             <?php echo $this->include("template/kop"); ?>
-            <div class="col-12 mt-3 p-0">Invoice No. : <?=$transaction->transaction_no;?></div>
-            <div class="col-12 mb-3 p-0">Date : <?=date("d M Y",strtotime($transaction->transaction_date));?></div>
+            <div class="col-4 mt-3 p-0 tebal10">Invoice No.</div>
+            <div class="col-8 mt-3 p-0 tebal10">: <?=$transaction->transaction_no;?></div>
+            <div class="col-4 mb-3 p-0 tebal10">Date</div>
+            <div class="col-8 mb-3 p-0 tebal10">: <?=date("d M Y",strtotime($transaction->transaction_date));?></div>
             <div class="col-12" style="padding:0px;"> 
                 <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                     <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                     <thead class="">
                         <tr>
-                            <th>No.</th>
-                            <th>Batch</th>
                             <th>Product</th>
                             <th>Qty</th>
                             <th>Price</th>
@@ -84,10 +84,11 @@ if($builder->countAll()>0){
                         $tprice=0;
                         foreach ($usr->getResult() as $usr) { 
                             ?>
-                            <tr>                                
-                                <td><?= $no++; ?></td>
-                                <td><?= $usr->product_batch; ?></td>
-                                <td><?= $usr->product_name; ?></td>
+                            <tr>            
+                                <td class="text-left">
+                                    <?= $no++; ?>. <?= $usr->product_name; ?><br/>
+                                    <?= $usr->product_batch; ?>
+                                </td>
                                 <?php 
                                 $qty=$usr->qty; 
                                 $price=$usr->price; 
@@ -100,28 +101,26 @@ if($builder->countAll()>0){
                             </tr>
                         <?php } ?>
                         <tr>
-                            <th colspan="4" class="text-right"><h5>Total</h5></th>
+                            <th colspan="2" class="text-right">Total</th>
                             <th>
                                 <?= number_format($tprice,0,",","."); ?>
                                 <input type="hidden" id="tagihan" value="<?=$tprice;?>"/>
                             </th>
                         </tr>
                         <tr>
-                            <th colspan="4" class="text-right"><h5>Bayar</h5></th>
+                            <th colspan="2" class="text-right">Bayar</th>
                             <th class="dibayar"><?=number_format($transaction->transaction_pay,0,",",".");?></th>
                         </tr>
                         <tr>
-                            <th colspan="4" class="text-right"><h5>Kembalian</h5></th>
+                            <th colspan="2" class="text-right">Kembalian</th>
                             <th class="kembalian"><?=number_format($transaction->transaction_change,0,",",".");?></th>
                         </tr>
                     </tbody>
                 </table>                        
             </div>
             <div class="col-8 row mt-5 p-0">   
-                <div class="col-2">
-                    <div class="col-12" style="font-weight:bold; font-size:16px;">Note :</div>
-                </div>
-                <div class="col-10">
+                <div class="col-12" style="font-weight:bold; ">Note :</div>
+                <div class="col-12">
                     <?=session()->get("store_noteinvoice");?>
                 </div>	
             </div>
