@@ -88,7 +88,13 @@
                                         </select>
 
                                     </div>
-                                </div>                               
+                                </div>      
+                                <div class="form-group">
+                                    <label class="control-label col-sm-12" for="purchase_ppn">PPN(%):</label>
+                                    <div class="col-sm-12">
+                                        <input onkeyup="tagihan()" type="number" autofocus class="form-control" id="purchase_ppn" name="purchase_ppn" placeholder="" value="<?= $purchase_ppn; ?>">
+                                    </div>
+                                </div>                                
                                 
 
                                 <input type="hidden" name="purchase_id" value="<?= $purchase_id; ?>" />
@@ -128,13 +134,15 @@
                                         <th>Purchase No.</th>
                                         <th>Cashier</th>
                                         <th>Nominal</th>
+                                        <th>PPN</th>
+                                        <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $builder = $this->db
                                         ->table("purchase")
-                                        ->join("(SELECT purchase_id AS purchaseid,SUM(purchased_bill)AS nominal FROM purchased GROUP BY purchase_id)purchased", "purchased.purchaseid=purchase.purchase_id", "left")
+                                        ->join("(SELECT purchase_id AS purchaseid,SUM(purchased_price)AS nominal FROM purchased GROUP BY purchase_id)purchased", "purchased.purchaseid=purchase.purchase_id", "left")
                                         ->join("supplier", "supplier.supplier_id=purchase.supplier_id", "left")
                                         ->join("store", "store.store_id=purchase.store_id", "left")
                                         ->join("user", "user.user_id=purchase.cashier_id", "left")
@@ -170,7 +178,7 @@
                                                             && session()->get("halaman")['18']['act_read'] == "1"
                                                         )
                                                     ) { ?>
-                                                    <a href="<?=base_url("purchased?supplier_id=".$usr->supplier_id."&purchase_id=".$usr->purchase_id);?>" class="btn btn-xs btn-info"><span class="fa fa-cubes"></span> <?= $no++; ?></a>
+                                                    <a href="<?=base_url("purchased?supplier_id=".$usr->supplier_id."&purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&purchase_ppn=".$usr->purchase_ppn);?>" class="btn btn-xs btn-info"><span class="fa fa-cubes"></span> <?= $no++; ?></a>
                                                     <?php }?>
                                                     <?php 
                                                     if (
@@ -235,6 +243,8 @@
                                             <td><?= $usr->purchase_no; ?></td>
                                             <td><?= $usr->user_name; ?></td>
                                             <td><?= number_format($usr->nominal,0,",","."); ?></td>
+                                            <td><?= $usr->purchase_ppn; ?> %</td>
+                                            <td><?= number_format($usr->nominal+($usr->nominal*$usr->purchase_ppn/100),0,",","."); ?></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>

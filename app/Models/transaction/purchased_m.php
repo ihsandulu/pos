@@ -63,6 +63,7 @@ class purchased_m extends core_m
                     $input[$e] = $this->request->getPost($e);
                 }
             }
+            if($this->request->getPost("purchased_ppn")==""){$input["purchased_ppn"]=0;}
             $input["store_id"] = session()->get("store_id");
             $input["purchase_id"] = $this->request->getGet("purchase_id");
 
@@ -91,6 +92,8 @@ class purchased_m extends core_m
                     $input[$e] = $this->request->getPost($e);
                 }
             }
+            
+            if($this->request->getPost("purchased_ppn")==""){$input["purchased_ppn"]=0;}
             $input["store_id"] = session()->get("store_id");
             $this->db->table('purchased')->update($input, array("purchased_id" => $this->request->getPost("purchased_id")));
             $data["message"] = "Update Success";
@@ -100,8 +103,7 @@ class purchased_m extends core_m
             $where1["supplier_id"] = $this->request->getGet("supplier_id");
             $builder=$this->db->table('supplier');
             $supplier_bill=$builder->getWhere($where1)->getRow()->supplier_bill;
-            
-            $input1["supplier_bill"] = $supplier_bill-$this->request->getPost("purchased_bill_before")+$this->request->getPost("purchased_bill");
+            $input1["supplier_bill"] = $supplier_bill-intVal($this->request->getPost("purchased_bill_before"))+intVal($this->request->getPost("purchased_bill"));
             $supplier=$builder->update($input1, $where1);
         }
         return $data;

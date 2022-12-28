@@ -101,14 +101,22 @@
                                     <div class="col-sm-12">
                                         <input onkeyup="tagihan()" type="number" autofocus class="form-control" id="purchased_price" name="purchased_price" placeholder="" value="<?= $purchased_price; ?>">
                                     </div>
-                                </div>        
-                                <div class="form-group">
+                                </div>     
+                                <?php if($this->request->getGET("purchase_ppn")==0){
+                                    $hide="";
+                                    }else{
+                                        $hide="hide"; 
+                                        $purchased_ppn=intval($this->request->getGET("purchase_ppn"));
+                                        if($purchased_ppn>0){$ppn = $purchased_ppn/100*$purchased_price;}else{$ppn=0;}
+                                        $purchased_bill=$purchased_price+$ppn;
+                                    }?>  
+                                <div class="form-group <?=$hide;?>">
                                     <label class="control-label col-sm-12" for="purchased_ppn">PPN(%):</label>
                                     <div class="col-sm-12">
                                         <input onkeyup="tagihan()" type="number" autofocus class="form-control" id="purchased_ppn" name="purchased_ppn" placeholder="" value="<?= $purchased_ppn; ?>">
                                     </div>
                                 </div>   
-                                <div class="form-group">
+                                <div class="form-group <?=$hide;?>">
                                     <label class="control-label col-sm-12" for="purchased_bill">Tagihan setelah PPN:</label>
                                     <div class="col-sm-12">
                                         <input readonly type="number" autofocus class="form-control" id="purchased_bill" name="purchased_bill" placeholder="" value="<?= $purchased_bill; ?>">
@@ -117,7 +125,9 @@
                                 <script>
                                     function tagihan(){
                                         let price = parseInt($("#purchased_price").val());
-                                        let ppn = parseInt($("#purchased_ppn").val())/100*price;
+                                        let ppn = parseInt($("#purchased_ppn").val());
+                                        if(ppn>0){ppn = ppn/100*price;}else{ppn=0;}
+                                        ppn = ppn/100*price;
                                         let bill = price+ppn;
                                         $('#purchased_bill').val(bill);
                                     }
@@ -158,13 +168,14 @@
                                         <th>Action</th>
                                         <th>No.</th>
                                         <th>Store</th>
-                                        <th>Trans No.</th>
                                         <th>Out of Date</th>
                                         <th>Product</th>
                                         <th>Qty</th>
-                                        <th>Nominal</th>
+                                        <th>Nominal</th>                                        
+                                        <?php if($this->request->getGET("purchase_ppn")==0){?>  
                                         <th>PPN</th>
                                         <th>Tagihan(setelah PPN)</th>
+                                        <?php }?>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -187,7 +198,8 @@
                                         ->get();
                                     // echo $this->db->getLastquery();
                                     $no = 1;
-                                    foreach ($usr->getResult() as $usr) { ?>
+                                    foreach ($usr->getResult() as $usr) { 
+                                        ?>
                                         <tr>     
                                             <?php if (!isset($_GET["report"])) { ?>
                                                 <td style="padding-left:0px; padding-right:0px;">
@@ -235,13 +247,14 @@
                                             <?php } ?>                                       
                                             <td><?= $no++; ?></td>
                                             <td><?= $usr->store_name; ?></td>
-                                            <td><?= $usr->purchase_no; ?></td>
                                             <td><?= $usr->purchased_outdate; ?></td>
                                             <td><?= $usr->product_name; ?></td>
                                             <td><?= number_format($usr->purchased_qty,0,",","."); ?></td>
                                             <td><?= number_format($usr->purchased_price,0,",","."); ?></td>
+                                            <?php if($this->request->getGET("purchase_ppn")==0){?>  
                                             <td><?= $usr->purchased_ppn; ?> %</td>
                                             <td><?= number_format($usr->purchased_bill,0,",","."); ?></td>
+                                            <?php }?>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
@@ -255,7 +268,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Report Detail Purchase";
+    var title = "Report Detail Purchase <?=$this->request->getGET("purchase_no");?>";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

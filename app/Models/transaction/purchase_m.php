@@ -75,6 +75,23 @@ class purchase_m extends core_m
             $purchase_id = $this->db->insertID();
 
             $data["message"] = "Insert Data Success";
+
+            if($input["purchase_ppn"]>0){             
+
+                $spurchased=$this->db->table("purchased")
+                ->where("purchase_id",$purchase_id);
+                $purchased=$spurchased->get();
+                foreach ($purchased->getResult() as $purchased) {  
+                    $purchased_price= $purchased->purchased_price;
+                    $purchased_ppn=intval($input["purchase_ppn"]);
+                    if($purchased_ppn>0){$ppn = $purchased_ppn/100*$purchased_price;}else{$ppn=0;}
+                    $purchased_bill=$purchased_price+$ppn;
+                   
+                    $input2["purchased_ppn"]=$purchased_ppn;
+                    $input2["purchased_bill"]= $purchased_bill;
+                    $spurchased->update($input2);
+                }
+            }
         }
         //echo $_POST["create"];die;
         
@@ -89,6 +106,23 @@ class purchase_m extends core_m
             $this->db->table('purchase')->update($input, array("purchase_id" => $this->request->getPost("purchase_id")));
             $data["message"] = "Update Success";
             //echo $this->db->last_query();die;
+
+                        
+                $purchase_id=$this->request->getPost("purchase_id");
+                $spurchased=$this->db->table("purchased")
+                ->where("purchase_id",$purchase_id);
+                $purchased=$spurchased->get();
+                foreach ($purchased->getResult() as $purchased) {  
+                    $purchased_price= $purchased->purchased_price;
+                    $purchased_ppn=intval($input["purchase_ppn"]);
+                    if($purchased_ppn>0){$ppn = $purchased_ppn/100*$purchased_price;}else{$ppn=0;}
+                    $purchased_bill=$purchased_price+$ppn;
+                   
+                    $input2["purchased_ppn"]=$purchased_ppn;
+                    $input2["purchased_bill"]= $purchased_bill;
+                    $spurchased->update($input2);
+                }
+            
         }
         return $data;
     }

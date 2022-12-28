@@ -120,6 +120,7 @@ if ($this->session->get('user_id') == "") {
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
         }
+        .hide{display: none !important;}
     </style>
     
 
