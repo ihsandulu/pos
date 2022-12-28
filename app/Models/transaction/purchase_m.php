@@ -84,12 +84,14 @@ class purchase_m extends core_m
                 foreach ($purchased->getResult() as $purchased) {  
                     $purchased_price= $purchased->purchased_price;
                     $purchased_ppn=intval($input["purchase_ppn"]);
+                    $purchased_id=intval($purchased->purchased_id);
                     if($purchased_ppn>0){$ppn = $purchased_ppn/100*$purchased_price;}else{$ppn=0;}
                     $purchased_bill=$purchased_price+$ppn;
                    
                     $input2["purchased_ppn"]=$purchased_ppn;
                     $input2["purchased_bill"]= $purchased_bill;
-                    $spurchased->update($input2);
+                    $where2["purchased_id"]= $purchased_id;
+                    $spurchased->update($input2,$where2);
                 }
             }
         }
@@ -115,12 +117,14 @@ class purchase_m extends core_m
                 foreach ($purchased->getResult() as $purchased) {  
                     $purchased_price= $purchased->purchased_price;
                     $purchased_ppn=intval($input["purchase_ppn"]);
+                    $purchased_id=intval($purchased->purchased_id);
                     if($purchased_ppn>0){$ppn = $purchased_ppn/100*$purchased_price;}else{$ppn=0;}
                     $purchased_bill=$purchased_price+$ppn;
                    
                     $input2["purchased_ppn"]=$purchased_ppn;
                     $input2["purchased_bill"]= $purchased_bill;
-                    $spurchased->update($input2);
+                    $where2["purchased_id"]= $purchased_id;
+                    $spurchased->update($input2,$where2);
                 }
             
         }
