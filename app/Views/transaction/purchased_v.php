@@ -124,11 +124,14 @@
                                 </div>  
                                 <script>
                                     function tagihan(){
-                                        let price = parseInt($("#purchased_price").val());
-                                        let ppn = parseInt($("#purchased_ppn").val());
-                                        if(ppn>0){ppn = ppn/100*price;}else{ppn=0;}
-                                        ppn = ppn/100*price;
-                                        let bill = price+ppn;
+                                        let price = $("#purchased_price").val();
+                                        let ppn = $("#purchased_ppn").val();
+                                        if(ppn>0){
+                                            ppnnom = ppn/100*price;
+                                        }else{
+                                            ppnnom=0;
+                                        }
+                                        let bill = parseInt(price)+parseInt(ppnnom);
                                         $('#purchased_bill').val(bill);
                                     }
                                 </script>
