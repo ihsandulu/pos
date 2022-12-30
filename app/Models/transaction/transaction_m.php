@@ -35,6 +35,10 @@ class transaction_m extends core_m
             foreach ($this->db->getFieldNames('transaction') as $field) {
                 $data[$field] = "";
             }
+            $data["transaction_bill"] = "0";
+            $data["transaction_pay"] = "0";
+            $data["transaction_change"] = "0";
+            $data["transaction_status"] = "2";
         }
 
         

@@ -33,10 +33,9 @@ class purchased_m extends core_m
             }
         } else {
             foreach ($this->db->getFieldNames('purchased') as $field) {
-                $data[$field] = "";
+                $data[$field] = "0";
             }
-            $data["purchased_ppn"] = "0";
-            $data["purchased_price"] = "0";
+            $data["purchased_outdate"] = "";
         }
 
         

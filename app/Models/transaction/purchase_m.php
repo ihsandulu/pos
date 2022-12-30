@@ -35,6 +35,7 @@ class purchase_m extends core_m
             foreach ($this->db->getFieldNames('purchase') as $field) {
                 $data[$field] = "";
             }
+            $data["purchase_ppn"] = "0";
         }
 
         
