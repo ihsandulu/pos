@@ -36,6 +36,7 @@ class purchased_m extends core_m
                 $data[$field] = "";
             }
             $data["purchased_ppn"] = "0";
+            $data["purchased_price"] = "0";
         }
 
         

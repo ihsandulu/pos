@@ -107,6 +107,7 @@
                                     }else{
                                         $hide="hide"; 
                                         $purchased_ppn=intval($this->request->getGET("purchase_ppn"));
+                                        if($purchased_price==""){$purchased_price=0;}
                                         if($purchased_ppn>0){$ppn = $purchased_ppn/100*$purchased_price;}else{$ppn=0;}
                                         $purchased_bill=$purchased_price+$ppn;
                                     }?>  
