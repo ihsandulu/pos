@@ -69,7 +69,11 @@
                                         ->get();
                                     //echo $this->db->getLastquery();
                                     $no = 1;
-                                    foreach ($usr->getResult() as $usr) { ?>
+                                    foreach ($usr->getResult() as $usr) { 
+                                        if($usr->transaction_bill==null){$usr->transaction_bill=0;}
+                                        if($usr->transaction_pay==null){$usr->transaction_pay=0;}
+                                        if($usr->transaction_change==null){$usr->transaction_change=0;}
+                                        ?>
                                         <tr>                                            
                                             <td><a href="<?=base_url("rtransactiond?transaction_id=".$usr->transaction_id);?>" class="btn btn-xs btn-info"><span class="fa fa-cubes"></span> <?= $no++; ?></a></td>
                                             <td><?= $usr->transaction_date; ?></td>

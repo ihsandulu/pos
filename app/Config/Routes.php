@@ -76,6 +76,11 @@ $routes->add('/kasmodal', 'transaction\transaction::kasmodal');
 
 $routes->add('/msupplier', 'master\msupplier::index');
 $routes->add('/mproductbuy', 'master\mproduct::buy');
+$routes->add('/mmember', 'master\mmember::index');
+$routes->add('/mpositionm', 'master\mpositionm::index');
+
+$routes->add('/listmember', 'transaction\transaction::listmember');
+$routes->add('/insertmember', 'transaction\transaction::insertmember');
 
 
 

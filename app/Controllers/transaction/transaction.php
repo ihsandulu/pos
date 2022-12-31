@@ -571,13 +571,17 @@ class transaction extends baseController
 
     public function nota(){
         $transaction=$this->db->table("transaction")
+        ->join("member","member.member_id=transaction.member_id","left")
         ->where("transaction_id",$this->request->getGet("transaction_id"))
         ->get();
         foreach ($transaction->getResult() as $transaction) {
             if($transaction->transaction_status==0){$iconprint="";}else{$iconprint="hide";}
         ?>
         <div class="row">            
-            <div class="col-9">NOTA : <i id="transactionno"><?=$transaction->transaction_no;?></i></div>
+            <div class="col-9">
+                NOTA : <i id="transactionno"><?=$transaction->transaction_no;?></i>
+                <?php if($transaction->member_id>0){?>( <?=$transaction->member_name;?> )<?php }?>
+            </div>
             <div class="col-3 text-right">
                 <button onclick="print(<?=$transaction->transaction_id;?>);" id="printicon" class="btn btn-warning btn-xs btn-right fa fa-print mb-2" type="button"></button>
                 <?php 
@@ -857,5 +861,78 @@ class transaction extends baseController
                 </tbody>
             </table>
        <?php
+    }
+
+    public function listmember(){
+       ?>
+        <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+            <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
+            <thead class="">
+                <tr>
+                    <?php if(isset($_GET["transaction_id"])){?>
+                        <th>Action</th>
+                    <?php } ?>
+                    <th>No.</th>
+                    <th>Store</th>
+                    <th>Grade</th>
+                    <th>Member No.</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $member_id=$this->request->getGet("member_id");
+                $builder = $this->db
+                ->table("member")
+                ->join("positionm", "positionm.positionm_id=member.positionm_id", "left")
+                ->join("store", "store.store_id=member.store_id", "left")
+                ->where("member.store_id", session()->get("store_id"));
+                
+                if(isset($_GET["member_no"])){
+                        $builder->like("member_no",$this->request->getGet("member_no"),"BOTH");
+                }
+
+                if(isset($_GET["member_name"])){
+                        $builder->like("member_name",$this->request->getGet("member_name"),"BOTH");
+                }
+
+                $usr=$builder->orderBy("member_id", "desc")
+                    ->get();
+                // echo $this->db->getLastquery();
+                $no = 1;
+                foreach ($usr->getResult() as $usr) { ?>
+                    <tr>
+                        <?php if(isset($_GET["transaction_id"])&&$_GET["transaction_id"]>0){
+                        $transaction_id=$this->request->getGet("transaction_id");
+                        ?>
+                        <td style="padding-left:0px; padding-right:0px;">
+                            <form method="post" class="btn-action" style="">
+                                <button type="button" class="btn btn-sm btn-success" onclick="insertmember(<?= $transaction_id; ?>,<?= $usr->member_id; ?>)" ><span class="fa fa-check" style="color:white;"></span> </button>
+                            </form>
+                        </td>
+                        <?php }?>
+                        <td><?= $no++; ?></td>
+                        <td><?= $usr->store_name; ?></td>
+                        <td><?= $usr->positionm_name; ?></td>
+                        <td><?= $usr->member_no; ?></td>
+                        <td><?= $usr->member_name; ?></td>
+                        <td><?= $usr->member_email; ?></td>
+                        <td><?= $usr->member_address; ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+       <?php
+    }
+
+    public function insertmember(){
+        $input["member_id"]=$this->request->getGet("member_id");
+        $where["transaction_id"]=$this->request->getGet("transaction_id");
+        $this->db->table("transaction")
+        ->update($input,$where);
+        // echo $this->db->getLastQuery();
+        echo $where["transaction_id"];
     }
 }

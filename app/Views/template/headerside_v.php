@@ -98,7 +98,63 @@
                 </li>
                 <?php }?>
 
+                
                 <?php 
+                if (
+                    (
+                        isset(session()->get("position_administrator")[0][0]) 
+                        && (
+                            session()->get("position_administrator") == "1" 
+                            || session()->get("position_administrator") == "2"
+                        )
+                    ) ||
+                    (
+                        isset(session()->get("halaman")['22']['act_read']) 
+                        && session()->get("halaman")['22']['act_read'] == "1"
+                    )
+                ) { ?>
+                <li> 
+                    <a class="has-arrow  " href="#" aria-expanded="false" data-toggle="collapse" data-target="#demo"><i class="fa fa-users"></i><span class="hide-menu">Manajemen Member <span class="label label-rouded label-warning pull-right">2</span></span></a>
+                    <ul aria-expanded="false" id="demo" class="collapse">
+                        <?php 
+                        if (
+                            (
+                                isset(session()->get("position_administrator")[0][0]) 
+                                && (
+                                    session()->get("position_administrator") == "1" 
+                                    || session()->get("position_administrator") == "2"
+                                )
+                            ) ||
+                            (
+                                isset(session()->get("halaman")['23']['act_read']) 
+                                && session()->get("halaman")['23']['act_read'] == "1"
+                            )
+                        ) { ?>
+                        <li><a href="<?= base_url("mpositionm"); ?>"><i class="fa fa-caret-right"></i> &nbsp;Grade Member</a></li>
+                        <?php }?>
+                        <?php 
+                        if (
+                            (
+                                isset(session()->get("position_administrator")[0][0]) 
+                                && (
+                                    session()->get("position_administrator") == "1" 
+                                    || session()->get("position_administrator") == "2"
+                                )
+                            ) ||
+                            (
+                                isset(session()->get("halaman")['21']['act_read']) 
+                                && session()->get("halaman")['21']['act_read'] == "1"
+                            )
+                        ) { ?>
+                        <li><a href="<?= base_url("mmember"); ?>"><i class="fa fa-caret-right"></i> &nbsp;Member</a></li>
+                        <?php }?>
+                    </ul>
+                </li>
+                <?php }?>
+
+               
+
+                 <?php 
                 if (
                     (
                         isset(session()->get("position_administrator")[0][0]) 
@@ -116,6 +172,7 @@
                     <a class="  " href="<?= base_url("msupplier"); ?>" aria-expanded="false"><i class="fa fa-address-book-o "></i><span class="hide-menu">Supplier</span></a>
                 </li>
                 <?php }?>
+
 
                 <!-- <?php 
                 if (
