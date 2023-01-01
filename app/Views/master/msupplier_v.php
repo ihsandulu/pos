@@ -17,14 +17,6 @@
                             <h4 class="card-title"></h4>
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
                         </div>
-                        <?php if (isset($_GET['report'])) { ?>
-                            <form method="post" class="col-md-2">
-                                <h1 class="page-header col-md-12">
-                                    <a href="<?= site_url("saran"); ?>" class="btn btn-danger btn-block btn-lg" value="OK" style="">Suggestion</a>
-
-                                </h1>
-                            </form>
-                        <?php } ?>
                         <?php if (!isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) { ?>
                             <?php if (isset($_GET["user_id"])) { ?>
                                 <form action="<?= site_url("user"); ?>" method="get" class="col-md-2">
@@ -64,7 +56,7 @@
                                 $judul = "Update Supplier";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Add Supplier";
+                                $judul = "Tambah Supplier";
                             } ?>
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
@@ -77,7 +69,7 @@
                                     </div>
                                 </div>                              
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="supplier_address">Address:</label>
+                                    <label class="control-label col-sm-2" for="supplier_address">Alamat:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="supplier_address" name="supplier_address" placeholder="" value="<?= $supplier_address; ?>">
                                     </div>
@@ -115,11 +107,11 @@
                                             <th>Action</th>
                                         <?php } ?>
                                         <th>No.</th>
-                                        <th>Store</th>
+                                        <th>Toko</th>
                                         <th>Supplier</th>
-                                        <th>Address</th>
+                                        <th>Alamat</th>
                                         <th>Phone</th>
-                                        <th>Bill</th>
+                                        <th>Sisa Hutang</th>
                                     </tr>
                                 </thead>
                                 <tbody>

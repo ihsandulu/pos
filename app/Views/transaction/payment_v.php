@@ -18,11 +18,11 @@
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
                         </div>
                         <?php if(isset($_GET['purchase_id'])){?>
-                        <form action="<?= base_url("purchase"); ?>" method="get" class="col-md-2">
+                        <a href="<?= urldecode($this->request->getGet("url")); ?>" method="get" class="col-md-2">
                             <h1 class="page-header col-md-12">
                                 <button class="btn btn-warning btn-block btn-lg" value="OK" style="">Back</button>
                             </h1>
-                        </form>
+                        </a>
                         <?php }?>
                         <?php if (!isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) { ?>
                             <?php if (isset($_GET["user_id"])) { ?>
@@ -59,10 +59,10 @@
                         <div class="">
                             <?php if (isset($_POST['edit'])) {
                                 $namabutton = 'name="change"';
-                                $judul = "Update Product";
+                                $judul = "Update Pembayaran";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Add Product";
+                                $judul = "Tambah Pembayaran";
                             } ?>
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
@@ -127,9 +127,9 @@
 
                         ?>
                         <form class="form-inline" >
-                            <label for="from">From:</label>&nbsp;
+                            <label for="from">Dari:</label>&nbsp;
                             <input type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
-                            <label for="to">To:</label>&nbsp;
+                            <label for="to">Ke:</label>&nbsp;
                             <input type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
@@ -147,11 +147,14 @@
                                 <thead class="">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Date</th>
-                                        <th>Store</th>
+                                        <?php if (!isset($_GET["report"])) { ?>
+                                        <th>Aksi</th>
+                                        <?php }?>
+                                        <th>Tanggal</th>
+                                        <th>Toko</th>
                                         <th>Supplier</th>
-                                        <th>Payment No.</th>
-                                        <th>Cashier</th>
+                                        <th>No. Pembayaran</th>
+                                        <th>Kasir</th>
                                         <th>Nominal</th>
                                     </tr>
                                 </thead>
@@ -182,8 +185,10 @@
                                         ->get();
                                     // echo $this->db->getLastquery();die;
                                     $no = 1;
+                                    $tnominal=0;
                                     foreach ($usr->getResult() as $usr) { ?>
-                                        <tr>      
+                                        <tr>
+                                            <td><?= $no++; ?></td>      
                                             <?php if (!isset($_GET["report"])) { ?>
                                                 <td style="padding-left:0px; padding-right:0px;">                                                    
                                                     <?php 
@@ -237,9 +242,22 @@
                                                 <?php if($usr->purchase_no!=''){echo "<br/>(".$usr->purchase_no.")";}?>
                                             </td>
                                             <td><?= $usr->user_name; ?></td>
-                                            <td><?= number_format($usr->payment_nominal,0,",","."); ?></td>
+                                            <td><?= number_format($usr->payment_nominal,0,",","."); $tnominal+=$usr->payment_nominal;?></td>
                                         </tr>
                                     <?php } ?>
+                                    
+                                    <tr>
+                                        <td><?= $no; ?></td>
+                                        <?php if (!isset($_GET["report"])) { ?>
+                                        <td></td>
+                                        <?php }?>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right">Total&nbsp;</td>
+                                        <td><?= number_format($tnominal,0,",","."); ?></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>                        
@@ -252,7 +270,7 @@
 <script>
     $('.select').select2();
     <?php if(isset($_GET["purchase_no"])){$purchase_no=$_GET["purchase_no"]." (Tagihan ".number_format($_GET["kas_nominal"],0,",",".").")";}else{$purchase_no="";}?>
-    var title = "Payment <?=$purchase_no;?>";
+    var title = "Pembayaran <?=$purchase_no;?>";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

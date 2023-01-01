@@ -17,14 +17,6 @@
                             <h4 class="card-title"></h4>
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
                         </div>
-                        <?php if (isset($_GET['report'])) { ?>
-                            <form method="post" class="col-md-2">
-                                <h1 class="page-header col-md-12">
-                                    <a href="<?= site_url("saran"); ?>" class="btn btn-danger btn-block btn-lg" value="OK" style="">Suggestion</a>
-
-                                </h1>
-                            </form>
-                        <?php } ?>
                         <?php if (!isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) { ?>
                             <?php if (isset($_GET["user_id"])) { ?>
                                 <form action="<?= site_url("user"); ?>" method="get" class="col-md-2">
@@ -50,7 +42,7 @@
                                 $ketpassword="Kosongkan jika tidak ingin merubah password!";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Add User";
+                                $judul = "Tambah User";
                                 $ketpassword="Jangan dikosongkan!";
                             } ?>
                             <div class="lead">
@@ -122,7 +114,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="user_address">Address:</label>
+                                    <label class="control-label col-sm-2" for="user_address">Alamat:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="user_address" name="user_address" placeholder="" value="<?= $user_address; ?>">
 
@@ -157,10 +149,10 @@
                                             <th>Action</th>
                                         <?php } ?>
                                         <th>No.</th>
-                                        <th>Store</th>
-                                        <th>Position</th>
+                                        <th>Toko</th>
+                                        <th>Posisi</th>
                                         <th>Name</th>
-                                        <th>Address</th>
+                                        <th>Alamat</th>
                                         <th>Email</th>
                                         <th>Whatsapp</th>
                                         <th>NPWP</th>

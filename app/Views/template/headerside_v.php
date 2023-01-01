@@ -42,7 +42,7 @@
                     )
                 ) { ?>
                 <li> 
-                    <a class="  " href="<?= base_url("mstore"); ?>" aria-expanded="false"><i class="fa fa-building"></i><span class="hide-menu">Store</span></a>
+                    <a class="  " href="<?= base_url("mstore"); ?>" aria-expanded="false"><i class="fa fa-building"></i><span class="hide-menu">Toko</span></a>
                 </li>
                 <?php }?>
                 <?php 
@@ -76,7 +76,7 @@
                                 && session()->get("halaman")['3']['act_read'] == "1"
                             )
                         ) { ?>
-                        <li><a href="<?= base_url("mposition"); ?>"><i class="fa fa-caret-right"></i> &nbsp;Position</a></li>
+                        <li><a href="<?= base_url("mposition"); ?>"><i class="fa fa-caret-right"></i> &nbsp;Posisi</a></li>
                         <?php }?>
                         <?php 
                         if (
@@ -208,7 +208,7 @@
                     )
                 ) { ?>
                 <li> 
-                    <a class="  " href="<?= base_url("mcategory"); ?>" aria-expanded="false"><i class="fa fa-cubes"></i><span class="hide-menu">Category</span></a>
+                    <a class="  " href="<?= base_url("mcategory"); ?>" aria-expanded="false"><i class="fa fa-cubes"></i><span class="hide-menu">Kategori</span></a>
                 </li>
                 <?php }?>
 
@@ -246,7 +246,7 @@
                     )
                 ) { ?>
                 <li> 
-                    <a class="  " href="<?= base_url("mproduct"); ?>" aria-expanded="false"><i class="fa fa-cube"></i><span class="hide-menu">Product</span></a>
+                    <a class="  " href="<?= base_url("mproduct"); ?>" aria-expanded="false"><i class="fa fa-cube"></i><span class="hide-menu">Produk</span></a>
                 </li>
                 <?php }?>
 
@@ -270,7 +270,7 @@
                         && session()->get("halaman")['9']['act_read'] == "1"
                     )
                 ) { ?>
-                <li class="nav-label">Transaction</li>
+                <li class="nav-label">Transaksi</li>
 
                 <?php 
                 if (
@@ -306,7 +306,7 @@
                     )
                 ) { ?>
                 <li> 
-                    <a class="  " href="<?= base_url("purchase"); ?>" aria-expanded="false"><i class="fa fa-cart-arrow-down"></i><span class="hide-menu">Purchase</span></a>
+                    <a class="  " href="<?= base_url("purchase"); ?>" aria-expanded="false"><i class="fa fa-cart-arrow-down"></i><span class="hide-menu">Pembelian</span></a>
                 </li>
                 <?php }?>
 
@@ -325,7 +325,7 @@
                     )
                 ) { ?>
                 <li> 
-                    <a class="  " href="<?= base_url("payment"); ?>" aria-expanded="false"><i class="fa fa-money"></i><span class="hide-menu">Payment</span></a>
+                    <a class="  " href="<?= base_url("payment"); ?>" aria-expanded="false"><i class="fa fa-money"></i><span class="hide-menu">Pembayaran</span></a>
                 </li>
                 <?php }?>
 
@@ -346,7 +346,7 @@
                         && session()->get("halaman")['14']['act_read'] == "1"
                     )
                 ) { ?>
-                <li class="nav-label">Report</li>
+                <li class="nav-label">Laporan</li>
 
                 <?php 
                 if (
@@ -376,12 +376,30 @@
                         )
                     ) ||
                     (
+                        isset(session()->get("halaman")['18']['act_read']) 
+                        && session()->get("halaman")['18']['act_read'] == "1"
+                    )
+                ) { ?>
+                <li> 
+                    <a class="  " href="<?= base_url("purchase?report=OK"); ?>" aria-expanded="false"><i class="fa fa-cart-arrow-down"></i><span class="hide-menu">Pembelian</span></a>
+                </li>
+                <?php }?>
+                <?php 
+                if (
+                    (
+                        isset(session()->get("position_administrator")[0][0]) 
+                        && (
+                            session()->get("position_administrator") == "1" 
+                            || session()->get("position_administrator") == "2"
+                        )
+                    ) ||
+                    (
                         isset(session()->get("halaman")['16']['act_read']) 
                         && session()->get("halaman")['16']['act_read'] == "1"
                     )
                 ) { ?>
                 <li> 
-                    <a class="  " href="<?= base_url("rtransaction"); ?>" aria-expanded="false"><i class="fa fa-file-text-o"></i><span class="hide-menu">Transaction</span></a>
+                    <a class="  " href="<?= base_url("rtransaction"); ?>" aria-expanded="false"><i class="fa fa-file-text-o"></i><span class="hide-menu">Penjualan</span></a>
                 </li>
                 <?php }?>
                 <?php 

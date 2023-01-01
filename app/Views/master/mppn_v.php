@@ -17,14 +17,6 @@
                             <h4 class="card-title"></h4>
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
                         </div>
-                        <?php if (isset($_GET['report'])) { ?>
-                            <form method="post" class="col-md-2">
-                                <h1 class="page-header col-md-12">
-                                    <a href="<?= site_url("saran"); ?>" class="btn btn-danger btn-block btn-lg" value="OK" style="">Suggestion</a>
-
-                                </h1>
-                            </form>
-                        <?php } ?>
                         <?php if (!isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) { ?>
                             <?php if (isset($_GET["user_id"])) { ?>
                                 <form action="<?= site_url("user"); ?>" method="get" class="col-md-2">
@@ -61,20 +53,20 @@
                         <div class="">
                             <?php if (isset($_POST['edit'])) {
                                 $namabutton = 'name="change"';
-                                $judul = "Update ppn";
+                                $judul = "Update PPN";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Add ppn";
+                                $judul = "Tambah PPN";
                             } ?>
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
                             </div>
                             <form class="form-horizontal" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="ppn_type">Type:</label>
+                                    <label class="control-label col-sm-2" for="ppn_type">Tipe:</label>
                                     <div class="col-sm-10">
                                         <select class="form-control select" id="ppn_type" name="ppn_type">
-                                            <option value="0" <?= ($ppn_type == "0") ? "selected" : ""; ?>>Pilih Type</option>
+                                            <option value="0" <?= ($ppn_type == "0") ? "selected" : ""; ?>>Pilih Tipe</option>
                                             <option value="1" <?= ($ppn_type == "1") ? "selected" : ""; ?>>Pembelian</option>
                                             <option value="2" <?= ($ppn_type == "2") ? "selected" : ""; ?>>Penjualan</option>                                            
                                         </select>
@@ -120,8 +112,8 @@
                                             <th>Action</th>
                                         <?php } ?>
                                         <th>No.</th>
-                                        <th>Store</th>
-                                        <th>Type</th>
+                                        <th>Toko</th>
+                                        <th>Tipe</th>
                                         <th>Nominal(%)</th>
                                         <th>Active Date</th>
                                         <th>Create Date</th>

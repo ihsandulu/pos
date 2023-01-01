@@ -164,11 +164,11 @@
 
                         ?>
                         <form class="form-inline" >
-                            <label for="from">From:</label>&nbsp;
+                            <label for="from">Dari:</label>&nbsp;
                             <input onchange="listnota(-1)" type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
-                            <label for="to">To:</label>&nbsp;
+                            <label for="to">Ke:</label>&nbsp;
                             <input onchange="listnota(-1)" type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
-                            <button onclick="hariini()" type="button" class="btn btn-primary">Today</button>
+                            <button onclick="hariini()" type="button" class="btn btn-primary">Hari Ini</button>
                         </form>
                         
                         <div class="my-1" id="listnota"></div>  

@@ -118,13 +118,13 @@
                         <input type="hidden" id="listnotastatus" value="2"/>                          
                         <input type="hidden" id="kasterakhirval"/>                        
                         <input type="hidden" id="kasshift" value="0"/>
-                        <div class="col-7 p-0">                             
+                        <div class="col-12 p-0">                             
                             <button id="btnmodalawal"  data-toggle="tooltip" data-placement="top" title="Modal Awal dari Owner" onclick="modalkas('masuk');" class="btn  btn-primary fa fa-money mb-2" type="button"></button>   
-                            <button  data-toggle="tooltip" data-placement="top" title="Stor Uang ke Owner" onclick="modalkas('keluar');" class="btn  btn-primary mb-2 btn-child" type="button">
-                                <span class="fa-stack fa-xs">
+                            <button  data-toggle="tooltip" data-placement="top" title="Stor Uang ke Owner" onclick="modalkas('keluar');" class="btn fa fa-mail-forward btn-primary mb-2 btn-child" type="button">
+                                <!-- <span class="fa-stack fa-xs">
                                     <i class="fa fa-money fa-stack-1x"></i>
                                     <i class="fa fa-ban fa-stack-2x text-danger"></i>
-                                </span>
+                                </span> -->
                             </button>    
                             <button  data-toggle="tooltip" data-placement="top" title="Transaksi Pending" onclick="listnota(2);nota(0);" class="btn  btn-warning fa fa-flag-checkered mb-2 btn-child" type="button"></button>
                             <button  data-toggle="tooltip" data-placement="top" title="Transaksi Sukses" onclick="listnota(0);nota(0);" class="btn  btn-success fa fa-check mb-2 btn-child" type="button"></button>
@@ -146,10 +146,31 @@
                             <button data-toggle="tooltip" data-placement="top" title="Buat Nota Baru" onclick="createnota();" class="btn  btn-primary fa fa-plus mb-2 btn-child" type="button"></button>
                             <?php }?>
                         </div>
-                        <div id="keterangan" class="alert alert-info col-5  p-1 text-center" role="alert"></div>          
+                        <div id="keterangan" class="alert alert-info col-12  p-1 text-center" role="alert"></div>          
                         
+                        <?php 
+                        if(isset($_GET["from"])&&$_GET["from"]!=""){
+                            $from=$_GET["from"];
+                        }else{
+                            $from=date("Y-m-d");
+                        }
+
+                        if(isset($_GET["to"])&&$_GET["to"]!=""){
+                            $to=$_GET["to"];
+                        }else{
+                            $to=date("Y-m-d");
+                        }
+
+                        ?>
+                        <form class="form-inline" >
+                            <label for="from">Dari:</label>&nbsp;
+                            <input onchange="listnota(-1)" type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
+                            <label for="to">Ke:</label>&nbsp;
+                            <input onchange="listnota(-1)" type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
+                            <button onclick="hariini()" type="button" class="btn btn-primary">Hari Ini</button>
+                        </form>
                         
-                        <span id="listnota"></span>   
+                        <div class="my-1" id="listnota"></div>   
                         <div class="separator my-3"></div>                    
                     </div>
                     <div class="col-12" id="nota">
@@ -224,6 +245,11 @@
                         </div>
                     </div>
                     <script>
+                        function hariini(){
+                            $("#from").val('<?=date("Y-m-d");?>');
+                            $("#to").val('<?=date("Y-m-d");?>');
+                            listnota(-1);
+                        }
                         function modalstatus(){
                             $.get("<?=base_url("posisishift");?>")
                             .done(function(data){ 
@@ -456,8 +482,12 @@
                             }  
                             // fokus('barcode');                          
                         }
-                        function listnota(transaction_status){
-                            $.get("<?=base_url("listnota");?>",{transaction_status:transaction_status})
+                        function listnota(transaction_status){                         
+                            let from =$("#from").val();
+                            let to =$("#to").val();
+                            if(transaction_status=='-1'){transaction_status=$("#listnotastatus").val();}
+                            // alert("<?=base_url("listnota");?>?transaction_status="+transaction_status+"&from="+from+"&to="+to);
+                            $.get("<?=base_url("listnota");?>",{transaction_status:transaction_status,from:from,to:to})
                             .done(function(data){
                                 $("#listnota").html(data);
                                 $("#listnotastatus").val(transaction_status);

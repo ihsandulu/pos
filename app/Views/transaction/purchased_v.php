@@ -49,17 +49,17 @@
                         <div class="">
                             <?php if (isset($_POST['edit'])) {
                                 $namabutton = 'name="change"';
-                                $judul = "Update Product";
+                                $judul = "Update Detil Pembelian";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Add Product";
+                                $judul = "Tambah Detil Pembelian";
                             } ?>
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
                             </div>
                             <form class="form-horizontal" method="post" enctype="multipart/form-data">   
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_id">Product:</label>
+                                    <label class="control-label col-sm-2" for="product_id">Produk:</label>
                                     <div class="col-sm-10">
                                         <?php
                                         $product = $this->db->table("product")
@@ -70,7 +70,7 @@
                                         //echo $this->db->getLastQuery();
                                         ?>
                                         <select onchange="unitname()" class="form-control select" id="product_id" name="product_id">
-                                            <option unit_name="" value="0" <?= ($product_id == "0") ? "selected" : ""; ?>>Pilih Product</option>
+                                            <option unit_name="" value="0" <?= ($product_id == "0") ? "selected" : ""; ?>>Pilih Produk</option>
                                             <?php
                                             foreach ($product->getResult() as $product) { ?>
                                                 <option unit_name="<?= $product->unit_name; ?>" value="<?= $product->product_id; ?>" <?= ($product_id == $product->product_id) ? "selected" : ""; ?>><?= $product->product_name; ?></option>
@@ -138,6 +138,7 @@
                                 </script>
                                 
 
+                                <input type="hidden" name="purchased_qtyb" value="<?= $purchased_qty; ?>" />
                                 <input type="hidden" name="purchased_id" value="<?= $purchased_id; ?>" />
                                 <input type="hidden" name="purchased_bill_before" value="<?= $purchased_bill; ?>" />
                                 <div class="form-group">
@@ -169,11 +170,11 @@
                                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                                 <thead class="">
                                     <tr>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                         <th>No.</th>
-                                        <th>Store</th>
-                                        <th>Out of Date</th>
-                                        <th>Product</th>
+                                        <th>Toko</th>
+                                        <th>Kadaluarsa</th>
+                                        <th>Produk</th>
                                         <th>Qty</th>
                                         <th>Nominal</th>                                        
                                         <?php if($this->request->getGET("purchase_ppn")==0){?>  
@@ -245,6 +246,8 @@
                                                         <button class="btn btn-sm btn-danger delete" onclick="return confirm(' you want to delete?');" name="delete" value="OK"><span class="fa fa-close" style="color:white;"></span> </button>
                                                         <input type="hidden" name="purchased_id" value="<?= $usr->purchased_id; ?>" />
                                                         <input type="hidden" name="purchased_bill" value="<?= $usr->purchased_bill; ?>" />
+                                                        <input type="hidden" name="purchased_qty" value="<?= $usr->purchased_qty; ?>" />
+                                                        <input type="hidden" name="product_id" value="<?= $usr->product_id; ?>" />
                                                     </form>
                                                     <?php }?>
                                                 </td>
@@ -272,7 +275,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Report Detail Purchase <?=$this->request->getGET("purchase_no");?>";
+    var title = "Laporan Detil Pembelian <?=$this->request->getGET("purchase_no");?>";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

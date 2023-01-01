@@ -17,14 +17,6 @@
                             <h4 class="card-title"></h4>
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
                         </div>
-                        <?php if (isset($_GET['report'])) { ?>
-                            <form method="post" class="col-md-2">
-                                <h1 class="page-header col-md-12">
-                                    <a href="<?= site_url("saran"); ?>" class="btn btn-danger btn-block btn-lg" value="OK" style="">Suggestion</a>
-
-                                </h1>
-                            </form>
-                        <?php } ?>
                         <?php if (!isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) { ?>
                             <?php if (isset($_GET["user_id"])) { ?>
                                 <form action="<?= site_url("user"); ?>" method="get" class="col-md-2">
@@ -40,10 +32,10 @@
                         <div class="">
                             <?php if (isset($_POST['edit'])) {
                                 $namabutton = 'name="change"';
-                                $judul = "Update Store";
+                                $judul = "Update Toko";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Add Store";
+                                $judul = "Tambah Toko";
                             } ?>
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
@@ -51,14 +43,14 @@
                             <form class="form-horizontal" method="post" enctype="multipart/form-data">
 
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="store_name">Store:</label>
+                                    <label class="control-label col-sm-2" for="store_name">Toko:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="store_name" name="store_name" placeholder="" value="<?= $store_name; ?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="store_address">Address:</label>
+                                    <label class="control-label col-sm-2" for="store_address">Alamat:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="store_address" name="store_address" placeholder="" value="<?= $store_address; ?>">
                                     </div>
@@ -100,7 +92,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="store_picture">Picture:</label>
+                                    <label class="control-label col-sm-2" for="store_picture">Logo:</label>
                                     <div class="col-sm-10">
                                         <input type="file" autofocus class="form-control" id="store_picture" name="store_picture" placeholder="" value="<?= $store_picture; ?>">
                                         <?php if($store_picture!=""){$user_image="images/store_picture/".$store_picture;}else{$user_image="images/store_picture/no_image.png";}?>
@@ -150,7 +142,7 @@
                                         <?php if (!isset($_GET["report"])) { ?>
                                             <th>Action</th>
                                         <?php } ?>
-                                        <th>Store</th>
+                                        <th>Toko</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -201,7 +193,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Master Store";
+    var title = "Master Toko";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

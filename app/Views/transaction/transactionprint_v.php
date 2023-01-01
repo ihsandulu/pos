@@ -70,9 +70,9 @@ if($builder->countAll()>0){
                     <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                     <thead class="">
                         <tr>
-                            <th>Product</th>
+                            <th>Produk</th>
                             <th>Qty</th>
-                            <th>Price</th>
+                            <th>Harga</th>
                         </tr>
                     </thead>
                     <tbody>

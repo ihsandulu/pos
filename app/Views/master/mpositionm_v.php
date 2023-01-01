@@ -17,14 +17,6 @@
                             <h4 class="card-title"></h4>
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
                         </div>
-                        <?php if (isset($_GET['report'])) { ?>
-                            <form method="post" class="col-md-2">
-                                <h1 class="page-header col-md-12">
-                                    <a href="<?= site_url("saran"); ?>" class="btn btn-danger btn-block btn-lg" value="OK" style="">Suggestion</a>
-
-                                </h1>
-                            </form>
-                        <?php } ?>
                         <?php if (!isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) { ?>
                             <?php if (isset($_GET["user_id"])) { ?>
                                 <form action="<?= site_url("user"); ?>" method="get" class="col-md-2">
@@ -61,10 +53,10 @@
                         <div class="">
                             <?php if (isset($_POST['edit'])) {
                                 $namabutton = 'name="change"';
-                                $judul = "Update positionm";
+                                $judul = "Update Grade Member";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Add positionm";
+                                $judul = "Tambah Grade Member";
                             } ?>
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
@@ -72,7 +64,7 @@
                             <form class="form-horizontal" method="post" enctype="multipart/form-data">
 
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="positionm_name">positionm:</label>
+                                    <label class="control-label col-sm-2" for="positionm_name">Grade Member:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="positionm_name" name="positionm_name" placeholder="" value="<?= $positionm_name; ?>">
 
@@ -105,8 +97,8 @@
                                             <th>Action</th>
                                         <?php } ?>
                                         <th>No.</th>
-                                        <th>Store</th>
-                                        <th>positionm</th>
+                                        <th>Toko</th>
+                                        <th>Grade Member</th>
                                     </tr>
                                 </thead>
                                 <tbody>

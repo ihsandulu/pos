@@ -41,7 +41,7 @@
                             ) { ?>
                             <form method="post" class="col-md-4">
                                 <h1 class="page-header col-md-12">
-                                    <button name="updatebuy" class="btn btn-warning btn-block btn-lg" value="OK" style="">Buy Price Updates</button>
+                                    <button name="updatebuy" class="btn btn-warning btn-block btn-lg" value="OK" style="">Update Harga Beli</button>
                                 </h1>
                             </form>
                             <form method="post" class="col-md-2">
@@ -58,10 +58,10 @@
                         <div class="">
                             <?php if (isset($_POST['edit'])) {
                                 $namabutton = 'name="change"';
-                                $judul = "Update Product";
+                                $judul = "Update Produk";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Add Product";
+                                $judul = "Tambah Produk";
                             } ?>
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
@@ -108,37 +108,37 @@
                                     </div>
                                 </div>                             
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_name">Product Name:</label>
+                                    <label class="control-label col-sm-2" for="product_name">Nama Produk:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="product_name" name="product_name" placeholder="" value="<?= $product_name; ?>">
                                     </div>
                                 </div>                            
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_description">Description:</label>
+                                    <label class="control-label col-sm-2" for="product_description">Deskripsi:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="product_description" name="product_description" placeholder="" value="<?= $product_description; ?>">
                                     </div>
                                 </div>                            
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_countlimit">Limit Stock:</label>
+                                    <label class="control-label col-sm-2" for="product_countlimit">Limit Stok:</label>
                                     <div class="col-sm-10">
                                         <input type="number" autofocus class="form-control" id="product_countlimit" name="product_countlimit" placeholder="" value="<?= $product_countlimit; ?>">
                                     </div>
                                 </div>                            
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_stock">Stock Real Time:</label>
+                                    <label class="control-label col-sm-2" for="product_stock">Stok Real Time:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="product_stock" name="product_stock" placeholder="" value="<?= $product_stock; ?>">
                                     </div>
                                 </div>                                 
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_buy">Buy:</label>
+                                    <label class="control-label col-sm-2" for="product_buy">Beli:</label>
                                     <div class="col-sm-10">
                                         <input type="number" autofocus class="form-control" id="product_buy" name="product_buy" placeholder="" value="<?= $product_buy; ?>">
                                     </div>
                                 </div>                            
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_sell">Sell:</label>
+                                    <label class="control-label col-sm-2" for="product_sell">Jual:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="product_sell" name="product_sell" placeholder="" value="<?= $product_sell; ?>">
                                     </div>
@@ -162,7 +162,7 @@
                                     </div>
                                 </div>                            
                                <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_picture">Picture:</label>
+                                    <label class="control-label col-sm-2" for="product_picture">Photo Produk:</label>
                                     <div class="col-sm-10">
                                         <input type="file" autofocus class="form-control" id="product_picture" name="product_picture" placeholder="" value="<?= $product_picture; ?>">
                                         <?php if($product_picture!=""&&$product_picture!="product.png"){$user_image="images/product_picture/".$product_picture;}else{$user_image="images/product_picture/no_image.png";}?>
@@ -213,16 +213,16 @@
                                             <th>Action</th>
                                         <?php } ?>
                                         <th>No.</th>
-                                        <th>Category</th>
+                                        <th>Kategori</th>
                                         <th>Unit</th>
-                                        <th>Product</th>
+                                        <th>Produk</th>
                                         <th>Ube</th>
                                         <th>Batch</th>
                                         <th>Exp Date</th>
                                         <th>Limit</th>
-                                        <th>Stock</th>
-                                        <th>Buy</th>
-                                        <th>Sell</th>
+                                        <th>Stok</th>
+                                        <th>Beli</th>
+                                        <th>Jual</th>
                                         <th>Margin</th>
                                     </tr>
                                 </thead>
@@ -318,7 +318,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Master Product";
+    var title = "Master Produk";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

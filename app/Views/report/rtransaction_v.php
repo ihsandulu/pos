@@ -19,13 +19,27 @@
                         </div>
                     </div>
 
-                    <form class="form-inline" >
-                        <label for="from">Dari:</label>&nbsp;
-                        <input type="date" id="from" name="from" class="form-control">&nbsp;
-                        <label for="to">Ke:</label>&nbsp;
-                        <input type="date" id="to" name="to" class="form-control">&nbsp;
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                        <?php 
+                        if(isset($_GET["from"])&&$_GET["from"]!=""){
+                            $from=$_GET["from"];
+                        }else{
+                            $from=date("Y-m-d");
+                        }
+
+                        if(isset($_GET["to"])&&$_GET["to"]!=""){
+                            $to=$_GET["to"];
+                        }else{
+                            $to=date("Y-m-d");
+                        }
+
+                        ?>
+                        <form class="form-inline" >
+                            <label for="from">Dari:</label>&nbsp;
+                            <input type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
+                            <label for="to">Ke:</label>&nbsp;
+                            <input type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
 
                         <?php if ($message != "") { ?>
                             <div class="alert alert-info alert-dismissable">
@@ -40,14 +54,15 @@
                                 <thead class="">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Date</th>
-                                        <th>Store</th>
-                                        <th>Trans No.</th>
+                                        <th>Tanggal</th>
+                                        <th>Toko</th>
+                                        <th>No. Transaksi</th>
                                         <th>Shift</th>
-                                        <th>Cashier</th>
-                                        <th>Bill</th>
-                                        <th>Pay</th>
-                                        <th>Change</th>
+                                        <th>Kasir</th>
+                                        <th>Produk</th>
+                                        <th>Tagihan</th>
+                                        <th>Bayar</th>
+                                        <th>Kembalian</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -60,15 +75,22 @@
                                         ->where("transaction.store_id",session()->get("store_id"));
                                     if(isset($_GET["from"])&&$_GET["from"]!=""){
                                         $builder->where("transaction.transaction_date >=",$this->request->getGet("from"));
+                                    }else{
+                                        $builder->where("transaction.transaction_date",date("Y-m-d"));
                                     }
                                     if(isset($_GET["to"])&&$_GET["to"]!=""){
                                         $builder->where("transaction.transaction_date <=",$this->request->getGet("to"));
+                                    }else{
+                                        $builder->where("transaction.transaction_date",date("Y-m-d"));
                                     }
                                     $usr= $builder
-                                        ->orderBy("transaction_id", "DESC")
+                                        ->orderBy("transaction_id", "ASC")
                                         ->get();
                                     //echo $this->db->getLastquery();
                                     $no = 1;
+                                    $tbill=0;
+                                    $tpay=0;
+                                    $tchange=0;
                                     foreach ($usr->getResult() as $usr) { 
                                         if($usr->transaction_bill==null){$usr->transaction_bill=0;}
                                         if($usr->transaction_pay==null){$usr->transaction_pay=0;}
@@ -81,9 +103,19 @@
                                             <td><?= $usr->transaction_no; ?></td>
                                             <td><?= $usr->transaction_shift; ?></td>
                                             <td><?= $usr->user_name; ?></td>
-                                            <td><?= number_format($usr->transaction_bill,0,",","."); ?></td>
-                                            <td><?= number_format($usr->transaction_pay,0,",","."); ?></td>
-                                            <td><?= number_format($usr->transaction_change,0,",","."); ?></td>
+                                            <td>
+                                                <?php $product=$this->db->table("transactiond")
+                                                ->join("product","product.product_id=transactiond.product_id","left")
+                                                ->where("transaction_id",$usr->transaction_id)
+                                                ->get();
+                                                foreach ($product->getResult() as $product) {
+                                                    echo $product->product_name." (".$product->transactiond_qty."), ";
+                                                }
+                                                ?>
+                                            </td>
+                                            <td><?= number_format($usr->transaction_bill,0,",","."); $tbill+=$usr->transaction_bill;?></td>
+                                            <td><?= number_format($usr->transaction_pay,0,",","."); $tpay+=$usr->transaction_pay;?></td>
+                                            <td><?= number_format($usr->transaction_change,0,",","."); $tchange+=$usr->transaction_change; ?></td>
                                             <td>
                                                 <?php
                                                 $status=array("sukses", "batal","pending");
@@ -91,6 +123,20 @@
                                             </td>
                                         </tr>
                                     <?php } ?>
+                                    
+                                        <tr>
+                                            <td><?= $no; ?></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right">Total&nbsp;</td>
+                                            <td><?= number_format($tbill,0,",","."); ?></td>
+                                            <td><?= number_format($tpay,0,",","."); ?></td>
+                                            <td><?= number_format($tchange,0,",","."); ?></td>
+                                            <td></td>
+                                        </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -101,7 +147,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Report Transaction";
+    var title = "Laporan Penjualan";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

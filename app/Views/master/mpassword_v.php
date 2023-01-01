@@ -31,7 +31,7 @@
                     <div class="">
                         <?php
                         $namabutton = 'name="change"';
-                        $judul = "Update Change Password";
+                        $judul = "Update Rubah Password";
                         ?>
                         <div class="lead">
                             <h3><?= $judul; ?></h3>
@@ -53,7 +53,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="user_confirm">Confirm Password:</label>
+                                <label class="control-label col-sm-2" for="user_confirm">Konfirmasi Password:</label>
                                 <div class="col-sm-10">
                                     <input onkeyup="cek()" type="password" class="form-control pass" id="user_confirm" placeholder="" value="">
                                 </div>
@@ -103,7 +103,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Change Password";
+    var title = "Rubah Password";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

@@ -18,12 +18,25 @@
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
                         </div>
                     </div>
+                    <?php 
+                    if(isset($_GET["from"])&&$_GET["from"]!=""){
+                        $from=$_GET["from"];
+                    }else{
+                        $from=date("Y-m-d");
+                    }
 
+                    if(isset($_GET["to"])&&$_GET["to"]!=""){
+                        $to=$_GET["to"];
+                    }else{
+                        $to=date("Y-m-d");
+                    }
+
+                    ?>
                     <form class="form-inline" >
                         <label for="from">Dari:</label>&nbsp;
-                        <input type="date" id="from" name="from" class="form-control">&nbsp;
+                        <input type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
                         <label for="to">Ke:</label>&nbsp;
-                        <input type="date" id="to" name="to" class="form-control">&nbsp;
+                        <input type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
 
@@ -41,10 +54,10 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Date</th>
-                                        <th>Store</th>
+                                        <th>Toko</th>
                                         <th>Shift</th>
                                         <th>Kas</th>
-                                        <th>Type</th>
+                                        <th>Tipe</th>
                                         <th>Nominal</th>
                                     </tr>
                                 </thead>
@@ -56,15 +69,20 @@
                                     ->where("kas.store_id",session()->get("store_id"));
                                     if(isset($_GET["from"])&&$_GET["from"]!=""){
                                         $builder->where("kas.kas_date >=",$this->request->getGet("from"));
+                                    }else{
+                                        $builder->where("kas.kas_date",date("Y-m-d"));
                                     }
                                     if(isset($_GET["to"])&&$_GET["to"]!=""){
                                         $builder->where("kas.kas_date <=",$this->request->getGet("to"));
+                                    }else{
+                                        $builder->where("kas.kas_date",date("Y-m-d"));
                                     }
                                     $usr= $builder
                                         ->orderBy("kas_id", "DESC")
                                         ->get();
                                     //echo $this->db->getLastquery();
                                     $no = 1;
+                                    $tkasnom=0;
                                     foreach ($usr->getResult() as $usr) { ?>
                                         <tr>                                            
                                             <td><?= $no++; ?></td>
@@ -73,9 +91,19 @@
                                             <td><?= $usr->kas_shift; ?></td>
                                             <td><?= $usr->kas_description; ?></td>
                                             <td><?= $usr->kas_type; ?></td>
-                                            <td><?= number_format($usr->kas_nominal,0,",","."); ?></td>
+                                            <td><?= number_format($usr->kas_nominal,0,",","."); $tkasnom+=$usr->kas_nominal; ?></td>
                                         </tr>
                                     <?php } ?>
+                                    
+                                        <tr>
+                                            <td><?= $no; ?></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right">Total&nbsp;</td>
+                                            <td><?= number_format($tkasnom,0,",","."); ?></td>
+                                        </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -86,7 +114,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Report Kas";
+    var title = "Laporan Kas";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

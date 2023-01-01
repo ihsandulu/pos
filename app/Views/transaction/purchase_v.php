@@ -17,14 +17,7 @@
                             <h4 class="card-title"></h4>
                             <!-- <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6> -->
                         </div>
-                        <?php if (isset($_GET['report'])) { ?>
-                            <form method="post" class="col-md-2">
-                                <h1 class="page-header col-md-12">
-                                    <a href="<?= site_url("saran"); ?>" class="btn btn-danger btn-block btn-lg" value="OK" style="">Suggestion</a>
-
-                                </h1>
-                            </form>
-                        <?php } ?>
+                       
                         <?php if (!isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) { ?>
                             <?php if (isset($_GET["user_id"])) { ?>
                                 <form action="<?= site_url("user"); ?>" method="get" class="col-md-2">
@@ -60,10 +53,10 @@
                         <div class="">
                             <?php if (isset($_POST['edit'])) {
                                 $namabutton = 'name="change"';
-                                $judul = "Update Product";
+                                $judul = "Update Pembelian";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Add Product";
+                                $judul = "Tambah Pembelian";
                             } ?>
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
@@ -122,9 +115,9 @@
 
                         ?>
                         <form class="form-inline" >
-                            <label for="from">From:</label>&nbsp;
+                            <label for="from">Dari:</label>&nbsp;
                             <input type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
-                            <label for="to">To:</label>&nbsp;
+                            <label for="to">Ke:</label>&nbsp;
                             <input type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
@@ -142,11 +135,15 @@
                                 <thead class="">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Date</th>
-                                        <th>Store</th>
+                                        <?php if (!isset($_GET["report"])) { ?>
+                                        <th>Aksi.</th>
+                                        <?php }?>
+                                        <th>Tanggal</th>
+                                        <th>Toko</th>
                                         <th>Supplier</th>
-                                        <th>Purchase No.</th>
-                                        <th>Cashier</th>
+                                        <th>No. Pembelian</th>
+                                        <th>Kasir</th>
+                                        <th>Produk</th>
                                         <th>Nominal</th>
                                         <th>PPN</th>
                                         <th>Total</th>
@@ -155,11 +152,12 @@
                                 <tbody>
                                     <?php
                                     $currentURL = current_url();
+                                    $currentURL = str_replace('/index.php', '', $currentURL);
                                     $params   = $_SERVER['QUERY_STRING'];
-                                    $fullURL = $currentURL . '?' . $params;
+                                    $fullURL = urlencode($currentURL . '?' . $params);
                                     $builder = $this->db
                                         ->table("purchase")
-                                        ->join("(SELECT purchase_id AS purchaseid,SUM(purchased_price)AS nominal FROM purchased GROUP BY purchase_id)purchased", "purchased.purchaseid=purchase.purchase_id", "left")
+                                        ->join("(SELECT purchase_id AS purchaseid,SUM(purchased_price)AS nominal,SUM(purchased_bill)AS stlhppn FROM purchased GROUP BY purchase_id)purchased", "purchased.purchaseid=purchase.purchase_id", "left")
                                         ->join("supplier", "supplier.supplier_id=purchase.supplier_id", "left")
                                         ->join("store", "store.store_id=purchase.store_id", "left")
                                         ->join("user", "user.user_id=purchase.cashier_id", "left")
@@ -176,13 +174,20 @@
                                         $builder->where("purchase.purchase_date",date("Y-m-d"));
                                     }
                                     $usr= $builder
-                                        ->orderBy("purchase.purchase_id", "DESC")
+                                        ->orderBy("purchase.purchase_id", "ASC")
                                         ->get();
                                     // echo $this->db->getLastquery();die;
                                     $no = 1;
+                                    $thargasetelahppn=0;
+                                    $tnominal=0;
                                     foreach ($usr->getResult() as $usr) { 
                                         if($usr->nominal>0){$usr->nominal=$usr->nominal;}else{$usr->nominal=0;}
-                                        $hargasetelahppn=$usr->nominal+($usr->nominal*$usr->purchase_ppn/100);
+                                        if($usr->purchase_ppn==0){
+                                            $hargasetelahppn=$usr->stlhppn;
+                                            $usr->nominal=$hargasetelahppn;
+                                        }else{
+                                            $hargasetelahppn=$usr->nominal+($usr->nominal*$usr->purchase_ppn/100);
+                                        }
                                         $payment=$this->db
                                         ->table("payment")
                                         ->select("SUM(payment_nominal)AS bayar")
@@ -194,7 +199,8 @@
                                         }
                                         $sisa=$hargasetelahppn-$bayar;
                                         ?>
-                                        <tr>      
+                                        <tr>    
+                                            <td><?= $no++; ?></td>  
                                             <?php if (!isset($_GET["report"])) { ?>
                                                 <td style="padding-left:0px; padding-right:0px;">
                                                     <?php 
@@ -211,7 +217,7 @@
                                                             && session()->get("halaman")['18']['act_read'] == "1"
                                                         )
                                                     ) { ?>
-                                                    <a href="<?=base_url("purchased?supplier_id=".$usr->supplier_id."&purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&purchase_ppn=".$usr->purchase_ppn);?>" class="btn btn-xs btn-info"><span class="fa fa-cubes"></span> <?= $no++; ?></a>
+                                                    <a href="<?=base_url("purchased?supplier_id=".$usr->supplier_id."&purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&purchase_ppn=".$usr->purchase_ppn);?>" class="btn btn-xs btn-info"><span class="fa fa-cubes"></span></a>
                                                     <?php }?>
                                                     <?php 
                                                     if (
@@ -275,10 +281,22 @@
                                             <td><?= $usr->supplier_name; ?></td>
                                             <td><?= $usr->purchase_no; ?></td>
                                             <td><?= $usr->user_name; ?></td>
-                                            <td><?= number_format($usr->nominal,0,",","."); ?></td>
+                                            <td>
+                                                <?php $purchased=$this->db
+                                                ->table("purchased")
+                                                ->join("product","product.product_id=purchased.product_id","left")
+                                                ->where("purchase_id",$usr->purchase_id)
+                                                ->get();
+                                                $bayar=0;
+                                                foreach ($purchased->getResult() as $purchased) {
+                                                    echo $purchased->product_name." (".$purchased->purchased_qty."), ";
+                                                }
+                                                ?>
+                                            </td>
+                                            <td><?= number_format($usr->nominal,0,",",".");$tnominal+=$usr->nominal; ?></td>
                                             <td><?= $usr->purchase_ppn; ?> %</td>
                                             <td>
-                                                <?= number_format($hargasetelahppn,0,",","."); ?>
+                                                <?= number_format($hargasetelahppn,0,",",".");$thargasetelahppn+=$hargasetelahppn; ?>
                                                 <?php if($bayar>0){?>
                                                 <a href="<?=base_url("payment?purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&kas_nominal=".$hargasetelahppn."&supplier_id=".$usr->supplier_id."&url=".$fullURL);?>">
                                                 <br/><small>(Bayar:<?=number_format($bayar,0,",","."); ?>)</small> 
@@ -288,6 +306,22 @@
                                             </td>
                                         </tr>
                                     <?php } ?>
+                                    
+                                    <tr>
+                                        <td><?= $no; ?></td>
+                                        <?php if (!isset($_GET["report"])) { ?>
+                                        <td></td>
+                                        <?php }?>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right">Total&nbsp;</td>
+                                        <td><?= number_format($tnominal,0,",","."); ?></td>
+                                        <td></td>
+                                        <td><?= number_format($thargasetelahppn,0,",","."); ?></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>                        
@@ -299,7 +333,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Report Purchase";
+    var title = "<?=(isset($_GET["report"]))?"Laporan":"";?> Pembelian";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

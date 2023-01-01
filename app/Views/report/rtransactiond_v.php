@@ -46,9 +46,9 @@
                                 <thead class="">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Store</th>
-                                        <th>Trans No.</th>
-                                        <th>Product</th>
+                                        <th>Toko</th>
+                                        <th>No. Transaksi</th>
+                                        <th>Produk</th>
                                         <th>Qty</th>
                                         <th>Nominal</th>
                                     </tr>
@@ -93,7 +93,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Report Detail Transaction";
+    var title = "Laporan Detil Penjualan";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

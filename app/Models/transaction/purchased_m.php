@@ -54,12 +54,24 @@ class purchased_m extends core_m
             
             $input1["supplier_bill"] = $supplier_bill-$this->request->getPost("purchased_bill");
             $supplier=$builder->update($input1, $where1);
+
+            //update stok
+            $stock=$this->db->table("product")
+            ->where("product_id",$this->request->getPost("product_id"))
+            ->get()
+            ->getRow()
+            ->product_stock;
+
+            $inputp["product_stock"]=$stock-$this->request->getPost("purchased_qty");
+            $wherep["product_id"]=$this->request->getPost("product_id");
+            $this->db->table("product")
+            ->update($inputp,$wherep);
         }
 
         //insert
         if ($this->request->getPost("create") == "OK") {
             foreach ($this->request->getPost() as $e => $f) {
-                if ($e != 'create' && $e != 'purchased_id' && $e != 'purchased_bill_before') {
+                if ($e != 'create' && $e != 'purchased_id' && $e != 'purchased_bill_before' && $e != 'purchased_qtyb') {
                     $input[$e] = $this->request->getPost($e);
                 }
             }
@@ -82,13 +94,25 @@ class purchased_m extends core_m
             
             $input1["supplier_bill"] = $supplier_bill+ $input["purchased_bill"];
             $supplier=$builder->update($input1, $where1);
+
+            //update stok
+            $stock=$this->db->table("product")
+            ->where("product_id",$input["product_id"])
+            ->get()
+            ->getRow()
+            ->product_stock;
+
+            $inputp["product_stock"]=$stock+$input["purchased_qty"];
+            $wherep["product_id"]=$input["product_id"];
+            $this->db->table("product")
+            ->update($inputp,$wherep);
         }
         //echo $_POST["create"];die;
         
         //update
         if ($this->request->getPost("change") == "OK") {
             foreach ($this->request->getPost() as $e => $f) {
-                if ($e != 'change' && $e != 'purchased_picture' && $e != 'purchased_bill_before') {
+                if ($e != 'change' && $e != 'purchased_picture' && $e != 'purchased_bill_before' && $e != 'purchased_qtyb') {
                     $input[$e] = $this->request->getPost($e);
                 }
             }
@@ -105,6 +129,20 @@ class purchased_m extends core_m
             $supplier_bill=$builder->getWhere($where1)->getRow()->supplier_bill;
             $input1["supplier_bill"] = $supplier_bill-intVal($this->request->getPost("purchased_bill_before"))+intVal($this->request->getPost("purchased_bill"));
             $supplier=$builder->update($input1, $where1);
+
+            
+
+            //update stok
+            $stock=$this->db->table("product")
+            ->where("product_id",$this->request->getPost("product_id"))
+            ->get()
+            ->getRow()
+            ->product_stock;
+
+            $inputp["product_stock"]=$stock-$this->request->getPost("purchased_qtyb")+$this->request->getPost("purchased_qty");
+            $wherep["product_id"]=$this->request->getPost("product_id");
+            $this->db->table("product")
+            ->update($inputp,$wherep);
         }
         return $data;
     }

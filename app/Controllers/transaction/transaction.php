@@ -625,9 +625,9 @@ class transaction extends baseController
                         <th></th>
                         <th>No.</th>
                         <th>Batch</th>
-                        <th>Product</th>
+                        <th>Produk</th>
                         <th>Qty</th>
-                        <th>Price</th>
+                        <th>Harga</th>
                     </tr>
                 </thead>
                 <tbody>
