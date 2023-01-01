@@ -300,9 +300,21 @@ class transaction extends baseController
     }
 
     public function listnota(){
-        $listnota=$this->db->table("transaction")
+        $builder=$this->db->table("transaction")
         ->where("store_id",session()->get("store_id"))
-        ->where("transaction_status",$this->request->getGet("transaction_status"))
+        ->where("transaction_status",$this->request->getGet("transaction_status"));
+        if(isset($_GET["from"])&&$_GET["from"]!=""){
+            $builder->where("transaction.transaction_date >=",$this->request->getGet("from"));
+        }else{
+            $builder->where("transaction.transaction_date",date("Y-m-d"));
+        }
+
+        if(isset($_GET["to"])&&$_GET["to"]!=""){
+            $builder->where("transaction.transaction_date <=",$this->request->getGet("to"));
+        }else{
+            $builder->where("transaction.transaction_date",date("Y-m-d"));
+        }
+        $listnota= $builder
         ->get();
         foreach ($listnota->getResult() as $listnota) {
         ?>

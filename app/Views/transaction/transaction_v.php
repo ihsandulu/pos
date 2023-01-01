@@ -148,8 +148,29 @@
                         </div>
                         <div id="keterangan" class="alert alert-info col-5  p-1 text-center" role="alert"></div>          
                         
+                        <?php 
+                        if(isset($_GET["from"])&&$_GET["from"]!=""){
+                            $from=$_GET["from"];
+                        }else{
+                            $from=date("Y-m-d");
+                        }
+
+                        if(isset($_GET["to"])&&$_GET["to"]!=""){
+                            $to=$_GET["to"];
+                        }else{
+                            $to=date("Y-m-d");
+                        }
+
+                        ?>
+                        <form class="form-inline" >
+                            <label for="from">From:</label>&nbsp;
+                            <input onchange="listnota(-1)" type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
+                            <label for="to">To:</label>&nbsp;
+                            <input onchange="listnota(-1)" type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
+                            <button onclick="hariini()" type="button" class="btn btn-primary">Today</button>
+                        </form>
                         
-                        <span id="listnota"></span>   
+                        <div class="my-1" id="listnota"></div>   
                         <div class="separator my-3"></div>                    
                     </div>
                     <div class="col-12" id="nota">
@@ -224,6 +245,11 @@
                         </div>
                     </div>
                     <script>
+                        function hariini(){
+                            $("#from").val('<?=date("Y-m-d");?>');
+                            $("#to").val('<?=date("Y-m-d");?>');
+                            listnota(-1);
+                        }
                         function modalstatus(){
                             $.get("<?=base_url("posisishift");?>")
                             .done(function(data){ 
@@ -456,8 +482,12 @@
                             }  
                             // fokus('barcode');                          
                         }
-                        function listnota(transaction_status){
-                            $.get("<?=base_url("listnota");?>",{transaction_status:transaction_status})
+                        function listnota(transaction_status){                         
+                            let from =$("#from").val();
+                            let to =$("#to").val();
+                            if(transaction_status=='-1'){transaction_status=$("#listnotastatus").val();}
+                            // alert("<?=base_url("listnota");?>?transaction_status="+transaction_status+"&from="+from+"&to="+to);
+                            $.get("<?=base_url("listnota");?>",{transaction_status:transaction_status,from:from,to:to})
                             .done(function(data){
                                 $("#listnota").html(data);
                                 $("#listnotastatus").val(transaction_status);

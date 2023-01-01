@@ -107,11 +107,25 @@
                             </form>
                         </div>
                     <?php } else { ?>
+                        <?php 
+                        if(isset($_GET["from"])&&$_GET["from"]!=""){
+                            $from=$_GET["from"];
+                        }else{
+                            $from=date("Y-m-d");
+                        }
+
+                        if(isset($_GET["to"])&&$_GET["to"]!=""){
+                            $to=$_GET["to"];
+                        }else{
+                            $to=date("Y-m-d");
+                        }
+
+                        ?>
                         <form class="form-inline" >
-                            <label for="from">Dari:</label>&nbsp;
-                            <input type="date" id="from" name="from" class="form-control">&nbsp;
-                            <label for="to">Ke:</label>&nbsp;
-                            <input type="date" id="to" name="to" class="form-control">&nbsp;
+                            <label for="from">From:</label>&nbsp;
+                            <input type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
+                            <label for="to">To:</label>&nbsp;
+                            <input type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
 
@@ -140,6 +154,9 @@
                                 </thead>
                                 <tbody>
                                     <?php
+                                    $currentURL = current_url();
+                                    $params   = $_SERVER['QUERY_STRING'];
+                                    $fullURL = $currentURL . '?' . $params;
                                     $builder = $this->db
                                         ->table("purchase")
                                         ->join("(SELECT purchase_id AS purchaseid,SUM(purchased_price)AS nominal FROM purchased GROUP BY purchase_id)purchased", "purchased.purchaseid=purchase.purchase_id", "left")
@@ -149,17 +166,33 @@
                                         ->where("purchase.store_id",session()->get("store_id"));
                                     if(isset($_GET["from"])&&$_GET["from"]!=""){
                                         $builder->where("purchase.purchase_date >=",$this->request->getGet("from"));
+                                    }else{
+                                        $builder->where("purchase.purchase_date",date("Y-m-d"));
                                     }
+
                                     if(isset($_GET["to"])&&$_GET["to"]!=""){
                                         $builder->where("purchase.purchase_date <=",$this->request->getGet("to"));
+                                    }else{
+                                        $builder->where("purchase.purchase_date",date("Y-m-d"));
                                     }
                                     $usr= $builder
-                                        ->orderBy("purchase_id", "DESC")
+                                        ->orderBy("purchase.purchase_id", "DESC")
                                         ->get();
                                     // echo $this->db->getLastquery();die;
                                     $no = 1;
                                     foreach ($usr->getResult() as $usr) { 
                                         if($usr->nominal>0){$usr->nominal=$usr->nominal;}else{$usr->nominal=0;}
+                                        $hargasetelahppn=$usr->nominal+($usr->nominal*$usr->purchase_ppn/100);
+                                        $payment=$this->db
+                                        ->table("payment")
+                                        ->select("SUM(payment_nominal)AS bayar")
+                                        ->where("purchase_id",$usr->purchase_id)
+                                        ->get();
+                                        $bayar=0;
+                                        foreach ($payment->getResult() as $payment) {
+                                            $bayar=$payment->bayar;
+                                        }
+                                        $sisa=$hargasetelahppn-$bayar;
                                         ?>
                                         <tr>      
                                             <?php if (!isset($_GET["report"])) { ?>
@@ -194,7 +227,7 @@
                                                             && session()->get("halaman")['18']['act_create'] == "1"
                                                         )
                                                     ) { ?>
-                                                   <a href="<?=base_url("payment?purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&kas_nominal=".$usr->nominal."&supplier_id=".$usr->supplier_id);?>" class="btn btn-xs btn-success"><span class="fa fa-money"></span></a>
+                                                   <a href="<?=base_url("payment?purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&kas_nominal=".$hargasetelahppn."&supplier_id=".$usr->supplier_id."&url=".$fullURL);?>" class="btn btn-xs btn-success"><span class="fa fa-money"></span></a>
                                                     <?php }?>
                                                     <?php 
                                                     if (
@@ -244,7 +277,15 @@
                                             <td><?= $usr->user_name; ?></td>
                                             <td><?= number_format($usr->nominal,0,",","."); ?></td>
                                             <td><?= $usr->purchase_ppn; ?> %</td>
-                                            <td><?= number_format($usr->nominal+($usr->nominal*$usr->purchase_ppn/100),0,",","."); ?></td>
+                                            <td>
+                                                <?= number_format($hargasetelahppn,0,",","."); ?>
+                                                <?php if($bayar>0){?>
+                                                <a href="<?=base_url("payment?purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&kas_nominal=".$hargasetelahppn."&supplier_id=".$usr->supplier_id."&url=".$fullURL);?>">
+                                                <br/><small>(Bayar:<?=number_format($bayar,0,",","."); ?>)</small> 
+                                                <br/><small>(Sisa:<?=number_format($sisa,0,",","."); ?>)</small> 
+                                                </a> 
+                                                <?php }?>
+                                            </td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
