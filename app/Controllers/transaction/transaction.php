@@ -386,7 +386,7 @@ class transaction extends baseController
             }else{
                 $where["store_id"]=session()->get("store_id");
                 $where["transactiond_qty"] = $transactiond_qty;
-                $where["transactiond_price"] = $sell;
+                $where["transactiond_price"] = $sell*$transactiond_qty;
                 $transactiond->insert($where);
                 $transactiond_id = $this->db->insertID();
 
