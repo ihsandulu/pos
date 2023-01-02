@@ -861,7 +861,7 @@ class transaction extends baseController
                             )
                         ) {
                             if($usr->product_stock>0){
-                                $insertnota = "insertnota(".$usr->product_id.")";
+                                $insertnota = "insertjmlnota(".$usr->product_id.")";
                                 $disabled="";
                             }else{
                                 $insertnota = "toast('Info Stock', 'Stock Kosong!')";
