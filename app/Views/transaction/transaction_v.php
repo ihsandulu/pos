@@ -103,7 +103,7 @@
         <div class='col-5'>
             <div class="card">
                 <div class="card-body row">
-                    <input id="fokus" type="text" value="barcode"/>
+                    <input id="fokus" type="hidden" value="barcode"/>
                     <div id="test"></div>
                     <div class="col-12">                       
                         <div class="input-group mb-3">
