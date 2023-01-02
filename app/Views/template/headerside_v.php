@@ -114,8 +114,8 @@
                     )
                 ) { ?>
                 <li> 
-                    <a class="has-arrow  " href="#" aria-expanded="false" data-toggle="collapse" data-target="#demo"><i class="fa fa-users"></i><span class="hide-menu">Manajemen Member <span class="label label-rouded label-warning pull-right">2</span></span></a>
-                    <ul aria-expanded="false" id="demo" class="collapse">
+                    <a class="has-arrow  " href="#" aria-expanded="false" data-toggle="collapse" data-target="#demo1"><i class="fa fa-users"></i><span class="hide-menu">Manajemen Member <span class="label label-rouded label-warning pull-right">2</span></span></a>
+                    <ul aria-expanded="false" id="demo1" class="collapse">
                         <?php 
                         if (
                             (

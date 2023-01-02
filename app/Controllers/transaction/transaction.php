@@ -351,6 +351,10 @@ class transaction extends baseController
             $product_batch=$this->request->getGet("product_batch");
             $product=$builder->where("product_batch",$product_batch);
         }
+        $transactiond_qty=1;
+        if(isset($_GET["transactiond_qty"])){
+            $transactiond_qty=$this->request->getGet("transactiond_qty");
+        }
         $pro=$product->get();
         $sell=$pro->getRow()->product_sell;
         if($pro->getNumRows()>0){
@@ -367,7 +371,7 @@ class transaction extends baseController
                 foreach ($cari->getResult() as $cari) {
                     $qty=$cari->transactiond_qty;
                     $price=$cari->transactiond_price;
-                    $input["transactiond_qty"] = $qty+1;
+                    $input["transactiond_qty"] = $qty+$transactiond_qty;
                     $input["transactiond_price"] = $price+$sell;
                     $transactiond->update($input,$where);
 
@@ -375,13 +379,13 @@ class transaction extends baseController
                     $where1["product_id"] = $pro->getRow()->product_id;
                     $product = $this->db->table('product');
                     $product_stock=$product->getWhere($where1)->getRow()->product_stock;
-                    $product_stock=$product_stock-1;
+                    $product_stock=$product_stock-$transactiond_qty;
                     $input1["product_stock"] = $product_stock;
                     $product->update($input1,$where1);
                 }
             }else{
                 $where["store_id"]=session()->get("store_id");
-                $where["transactiond_qty"] = 1;
+                $where["transactiond_qty"] = $transactiond_qty;
                 $where["transactiond_price"] = $sell;
                 $transactiond->insert($where);
                 $transactiond_id = $this->db->insertID();
@@ -389,13 +393,13 @@ class transaction extends baseController
                 $where1["product_id"] = $pro->getRow()->product_id;
                 $product = $this->db->table('product');
                 $product_stock=$product->getWhere($where1)->getRow()->product_stock;
-                $product_stock=$product_stock-1;
+                $product_stock=$product_stock-$transactiond_qty;
                 $input1["product_stock"] = $product_stock;
                 $product->update($input1,$where1);
             }
 
             // $data["message"] = $this->db->getLastQuery();
-            $data["message"] = 1;
+            $data["message"] = $transactiond_qty;
         }else{
             $data["message"] = 0;    
         }
@@ -464,6 +468,7 @@ class transaction extends baseController
     public function updateqty(){
         $transactiond_id=$this->request->getGet("transactiond_id");
         $type=$this->request->getGet("type");
+        $transactiond_qty=$this->request->getGet("transactiond_qty");
 
         $input["transactiond_id"] = $transactiond_id;
         //cek qty
@@ -472,19 +477,23 @@ class transaction extends baseController
         ->where($input)
         ->get();
         foreach ($transactiond->getResult() as $transactiond) {
-            $sell=$transactiond->product_sell;
+            $sell=$transactiond->product_sell*$transactiond_qty;
             $product_id=$transactiond->product_id;
         
             $qty=$transactiond->transactiond_qty;
             $price=$transactiond->transactiond_price;
             // $data["message"] = $qty;
             if($type=="tambah"){
-                $qty++;
+                $qty+=$transactiond_qty;
                 $price+=$sell;
             }
             if($type=="kurang"){
-                $qty--;
+                $qty-=$transactiond_qty;
                 $price-=$sell;
+            }
+            if($type=="update"){
+                $qty=$transactiond_qty;
+                $price=$sell;
             }
 
             $input2["transactiond_qty"] = $qty;
@@ -500,13 +509,17 @@ class transaction extends baseController
             $product = $this->db->table('product');
             $product_stock=$product->getWhere($wherep)->getRow()->product_stock;
              if($type=="tambah"){                
-                $product_stock=$product_stock-1;
+                $product_stock=$product_stock-$transactiond_qty;
             }
             if($type=="kurang"){        
-                $product_stock=$product_stock+1;
+                $product_stock=$product_stock+$transactiond_qty;
+            }
+            if($type=="update"){
+                $product_stock=$product_stock+$transactiond->transactiond_qty-$transactiond_qty;
             }
             $inputp["product_stock"] = $product_stock;
             $product->update($inputp,$wherep);
+            // $data["message"] = $this->db->getLastQuery();
         }
         echo $data["message"];
     }
@@ -617,6 +630,7 @@ class transaction extends baseController
         <div>
             <input type="hidden" id="transaction_status" value="<?=$transaction->transaction_status;?>"/>
             <input type="hidden" id="transaction_id" value="<?=$transaction->transaction_id;?>"/>
+            <input type="hidden" id="transactiond_id" value="0"/>
             <input type="hidden" id="transaction_no" value="<?=$transaction->transaction_no;?>"/>
             <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
@@ -692,11 +706,11 @@ class transaction extends baseController
                                     )
                                 ) { ?>
                                 <?php if($qty>0){?>
-                                <i onclick="updateqty(<?= $usr->transactiond_id; ?>,'kurang')" class="fa fa-minus text-small text-danger pointer"></i> 
+                                <i onclick="updateqty(<?= $usr->transactiond_id; ?>,'kurang','1')" class="fa fa-minus text-small text-danger pointer"></i> 
                                 <?php }?>
-                                <?= number_format($qty,0,",",".") ?> <?= $usr->unit_name; ?> 
+                                <button type="button" class="btn btn-xs btn-warning" onclick="insertjmlnota(<?= $usr->product_id; ?>);$('#transactiond_id').val(<?= $usr->transactiond_id; ?>);"> <?= number_format($qty,0,",",".") ?> <?= $usr->unit_name; ?> </button>
                                 <?php if($usr->product_stock>0){?>
-                                <i onclick="updateqty(<?= $usr->transactiond_id; ?>,'tambah')" class="fa fa-plus text-small text-success pointer"></i>
+                                <i onclick="updateqty(<?= $usr->transactiond_id; ?>,'tambah','1')" class="fa fa-plus text-small text-success pointer"></i>
                                 <?php }?>
                                 <?php }else{?>
                                     <?= number_format($qty,0,",",".") ?> <?= $usr->unit_name; ?>     
@@ -755,7 +769,9 @@ class transaction extends baseController
             $builder->like("product.product_name",$this->request->getGet("product_name"),"BOTH");
         }
         $builder->where("product.store_id",session()->get("store_id"));
-        $product=$builder->orderBy("product_name")->get();
+        $product=$builder->orderBy("product_name")
+        ->limit(20)
+        ->get();
         foreach ($product->getResult() as $product) {?>
         <?php 
         if (
@@ -772,7 +788,8 @@ class transaction extends baseController
             )
         ) {
             if($product->product_stock>0){
-                $insertnota = "insertnota(".$product->product_id.")";
+                // $insertnota = "insertnota(".$product->product_id.")";
+                $insertnota = "insertjmlnota(".$product->product_id.")";
                 $disabled="";
             }else{
                 $insertnota = "toast('Info Stock', 'Stock Kosong!')";
@@ -824,6 +841,7 @@ class transaction extends baseController
                         $usr1->like("product.product_name",$this->request->getGet("product_name"),"BOTH");
                     }
                     $usr=$usr1->orderBy("product_name", "ASC")
+                        ->limit(20)
                         ->get();
                     // echo $this->db->getLastquery();
                     $no = 1;

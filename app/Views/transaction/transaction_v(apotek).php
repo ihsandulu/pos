@@ -244,6 +244,26 @@
                             </div>
                         </div>
                     </div>
+                    <div onclick=""  class="modal " id="jmlnota">                       
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Tambah Jumlah Produk</h4>
+                                </div>
+                                <div class="modal-body" id="listmember">
+                                    <form class="form-inline" action="/action_page.php">
+                                        <label for="member_name" class="mr-sm-2">Jml:</label>
+                                        <input onkeyup="insertnotaproduk();" type="number" class="form-control mb-2 mr-sm-2" placeholder="Masukkan Jumlah" id="qtyproduct" value="1"> &nbsp
+                                        <input id="qtyproduct_id" value="0"/>
+                                        <button onclick="insertnotaproduk();" type="button" class="btn btn-primary">Submit</button>
+                                    </form>                               
+                                </div>
+                                <div class="modal-footer">
+                                    <button onclick="fokus('barcode');" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <script>
                         function hariini(){
                             $("#from").val('<?=date("Y-m-d");?>');
@@ -378,6 +398,10 @@
                                 case 'modalakhir':
                                     $("#modalakhir").focus();
                                     $("#fokus").val("modalakhir"); 
+                                break;            
+                                case 'insertqty':
+                                    $("#qtyproduct").focus();
+                                    $("#fokus").val("insertqty"); 
                                 break;                                                             
                                 default:
                                     $("#inputbarcode").focus();
@@ -515,6 +539,30 @@
                                 nota(data);
                             });
                         }
+                        function insertnotaproduk(){
+                            let product_id = $("#qtyproduct_id").val();
+                            let qty = $("#qtyproduct").val();
+                            insertnotaqty(product_id,qty);
+                        }
+                        function insertjmlnota(product_id){
+                            fokus('insertqty');
+                            $("#jmlnota").modal();
+                            $("#qtyproduct_id").val(product_id);                            
+                        }
+                        //masukin product hanya multi qty
+                        function insertnotaqty(product_id,transactiond_qty){
+                            let transaction_id = $("#transaction_id").val();
+                            // alert("<?=base_url("insertnota");?>?transaction_id="+transaction_id+"&product_id="+product_id);
+                            $.get("<?=base_url("insertnota");?>",{transaction_id:transaction_id,product_id:product_id,transactiond_qty:transactiond_qty})
+                            .done(function(data){
+                                // alert(data);
+                                listnota($("#listnotastatus").val());
+                                nota(transaction_id);
+                                
+                                refreshlistproduct();
+                            });
+                        }
+                        //masukin product hanya satu pcs
                         function insertnota(product_id){
                             let transaction_id = $("#transaction_id").val();
                             // alert("<?=base_url("insertnota");?>?transaction_id="+transaction_id+"&product_id="+product_id);

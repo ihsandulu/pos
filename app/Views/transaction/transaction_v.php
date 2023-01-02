@@ -86,7 +86,7 @@
                         <div class="col-6">
                             <div class="input-group mb-3">
                                 <input type="hidden" id="typesearch" value="gambar"/>
-                                <input  onkeyup="cariproduk();" id="cariproduk" type="text" class="form-control" placeholder="Cari Produk" aria-label="Cari Produk" aria-describedby="basic-addon2">
+                                <input  onfocusin="$('#fokus').val('cari')"  onkeyup="cariproduk();" id="cariproduk" type="text" class="form-control" placeholder="Cari Produk" aria-label="Cari Produk" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary fa fa-search" type="button"></button>
                                 </div>
@@ -103,11 +103,11 @@
         <div class='col-5'>
             <div class="card">
                 <div class="card-body row">
-                    <input id="fokus" type="hidden" value="barcode"/>
+                    <input id="fokus" type="text" value="barcode"/>
                     <div id="test"></div>
                     <div class="col-12">                       
                         <div class="input-group mb-3">
-                            <input id="inputbarcode" autofocus type="text" class="form-control" placeholder="Scan Barcode" aria-label="Scan Barcode" aria-describedby="basic-addon2">
+                            <input onfocusin="$('#fokus').val('barcode')" id="inputbarcode" autofocus type="text" class="form-control" placeholder="Scan Barcode" aria-label="Scan Barcode" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary fa fa-edit" type="button"></button>
                             </div>
@@ -119,8 +119,8 @@
                         <input type="hidden" id="kasterakhirval"/>                        
                         <input type="hidden" id="kasshift" value="0"/>
                         <div class="col-12 p-0">                             
-                            <button id="btnmodalawal"  data-toggle="tooltip" data-placement="top" title="Modal Awal dari Owner" onclick="modalkas('masuk');" class="btn  btn-primary fa fa-money mb-2" type="button"></button>   
-                            <button  data-toggle="tooltip" data-placement="top" title="Stor Uang ke Owner" onclick="modalkas('keluar');" class="btn fa fa-mail-forward btn-primary mb-2 btn-child" type="button">
+                            <button id="btnmodalawal"  data-toggle="tooltip" data-placement="top" title="Modal Awal dari Owner" onclick="modalkas('masuk');" class="btn  btn-success fa fa-money mb-2" type="button"></button>   
+                            <button  data-toggle="tooltip" data-placement="top" title="Stor Uang ke Owner" onclick="modalkas('keluar');" class="btn fa fa-mail-forward btn-danger mb-2 btn-child" type="button">
                                 <!-- <span class="fa-stack fa-xs">
                                     <i class="fa fa-money fa-stack-1x"></i>
                                     <i class="fa fa-ban fa-stack-2x text-danger"></i>
@@ -128,7 +128,7 @@
                             </button>    
                             <button  data-toggle="tooltip" data-placement="top" title="Transaksi Pending" onclick="listnota(2);nota(0);" class="btn  btn-warning fa fa-flag-checkered mb-2 btn-child" type="button"></button>
                             <button  data-toggle="tooltip" data-placement="top" title="Transaksi Sukses" onclick="listnota(0);nota(0);" class="btn  btn-success fa fa-check mb-2 btn-child" type="button"></button>
-                            <button  data-toggle="tooltip" data-placement="top" title="Refresh Halaman" onclick="listnota(2);nota(0);" class="btn  btn-info fa fa-refresh mb-2 btn-child" type="button"></button>
+                            <button  data-toggle="tooltip" data-placement="top" title="Refresh Halaman" onclick="refresh();" class="btn  btn-info fa fa-refresh mb-2 btn-child" type="button"></button>
                             <?php 
                             if (
                                 (
@@ -143,10 +143,13 @@
                                     && session()->get("halaman")['13']['act_create'] == "1"
                                 )
                             ) { ?>
-                            <button data-toggle="tooltip" data-placement="top" title="Buat Nota Baru" onclick="createnota();" class="btn  btn-primary fa fa-plus mb-2 btn-child" type="button"></button>
+                                <button data-toggle="tooltip" data-placement="top" title="Buat Nota Baru" onclick="createnota();" class="btn  btn-primary fa fa-plus mb-2 btn-child" type="button"></button>
+                                <?php if(session()->get("store_member")==1){?>
+                                    <button data-toggle="tooltip" data-placement="top" title="Masukkan Member" onclick="member();" class="btn  btn-primary fa fa-user mb-2 btn-child" type="button"></button>
+                                <?php }?>
                             <?php }?>
                         </div>
-                        <div id="keterangan" class="alert alert-info col-12  p-1 text-center" role="alert"></div>          
+                        <div id="keterangan" class="alert alert-info col-12  p-1 text-center" role="alert"></div>           
                         
                         <?php 
                         if(isset($_GET["from"])&&$_GET["from"]!=""){
@@ -170,7 +173,7 @@
                             <button onclick="hariini()" type="button" class="btn btn-primary">Hari Ini</button>
                         </form>
                         
-                        <div class="my-1" id="listnota"></div>   
+                        <div class="my-1" id="listnota"></div>  
                         <div class="separator my-3"></div>                    
                     </div>
                     <div class="col-12" id="nota">
@@ -244,11 +247,73 @@
                             </div>
                         </div>
                     </div>
+                    <div onclick=""  class="modal " id="showmember">                       
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Member</h4>
+                                </div>
+                                <div class="modal-body" id="listmember">
+                                    <form class="form-inline" action="/action_page.php">
+                                        <label for="member_no" class="mr-sm-2">Member No.:</label>
+                                        <input onkeyup="carimember('member_no',this.value)" type="text" class="form-control mb-2 mr-sm-2" placeholder="Masukkan Whatsapp" id="member_no">
+                                        <label for="member_name" class="mr-sm-2">Name:</label>
+                                        <input onkeyup="carimember('member_name',this.value)" type="text" class="form-control mb-2 mr-sm-2" placeholder="Masukkan Nama" id="member_name">
+                                    </form>    
+                                    <div class="table-responsive m-t-40" id="listmembernya">
+                            
+                                    </div>                                
+                                </div>
+                                <div class="modal-footer">
+                                    <button onclick="fokus('barcode');" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div onclick="fokus('insertqty');"  class="modal " id="jmlnota">                       
+                        <div class="modal-dialog modal-xs">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Tambah Jumlah Produk</h4>
+                                </div>
+                                <div class="modal-body" id="listmember">
+                                    <div class="form-inline" >
+                                        <label for="member_name" class="mr-sm-2">Jml:</label>
+                                        <input type="number" class="form-control mb-2 mr-sm-2" placeholder="Masukkan Jumlah" id="qtyproduct" value="1"> &nbsp
+                                        <input id="qtyproduct_id" value="0" type="hidden"/>
+                                        <button onclick="insertnotaproduk();" type="button" class="btn btn-primary">Submit</button>
+                                    </div>                               
+                                </div>
+                                <div class="modal-footer">
+                                    <button onclick="fokus('barcode');" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <script>
                         function hariini(){
                             $("#from").val('<?=date("Y-m-d");?>');
                             $("#to").val('<?=date("Y-m-d");?>');
-                            listnota(-1);
+                        }
+                        function insertmember(transaction_id,member_id){ 
+                             $.get("<?=base_url("insertmember");?>",{transaction_id:transaction_id,member_id:member_id})
+                            .done(function(data){ 
+                                $("#showmember").modal('hide');
+                                nota(transaction_id);
+                            });   
+                        }
+                        function carimember(tipe,isi){
+                            let transaction_id= $("#transaction_id").val();
+                            let arraycarimember;
+                            if(tipe=='member_no'){
+                                arraycarimember={transaction_id:transaction_id,member_no:isi};
+                            }else if(tipe=='member_name'){
+                                arraycarimember={transaction_id:transaction_id,member_name:isi};
+                            }
+                            $.get("<?=base_url("listmember");?>",arraycarimember)
+                            .done(function(data){ 
+                                $("#listmembernya").html(data);
+                            });     
                         }
                         function modalstatus(){
                             $.get("<?=base_url("posisishift");?>")
@@ -307,6 +372,11 @@
 
                             datamodalkas();
                             
+                        }
+                        function member(){
+                            $("#showmember").modal();
+                            fokus('memberno');  
+                                                     
                         }
                         </script>
                         <script>
@@ -378,7 +448,21 @@
                                 case 'modalakhir':
                                     $("#modalakhir").focus();
                                     $("#fokus").val("modalakhir"); 
-                                break;                                                             
+                                break;              
+                                case 'memberno':
+                                    $("#member_name").val('');
+                                    $('#member_no').focus(); 
+                                    $("#fokus").val("memberno"); 
+                                break;               
+                                case 'membername':
+                                    $("#member_no").val('');
+                                    $("#member_name").focus();
+                                    $("#fokus").val("membername"); 
+                                break;           
+                                case 'insertqty':
+                                    $("#fokus").val("insertqty"); 
+                                    $("#qtyproduct").focus();
+                                break;                                                               
                                 default:
                                     $("#inputbarcode").focus();
                                     $("#fokus").val("barcode"); 
@@ -460,6 +544,11 @@
                             let type=$("#typesearch").val();
                             plistproduct(type,product_name);
                         }
+                        function refresh(){
+                            listnota(-1);
+                            nota(0);
+                            refreshlistproduct();
+                        }
                         function refreshlistproduct(){
                             let typelist=$("#typesearch").val();
                             plistproduct(typelist,'');
@@ -482,7 +571,7 @@
                             }  
                             // fokus('barcode');                          
                         }
-                        function listnota(transaction_status){                         
+                        function listnota(transaction_status){                           
                             let from =$("#from").val();
                             let to =$("#to").val();
                             if(transaction_status=='-1'){transaction_status=$("#listnotastatus").val();}
@@ -515,6 +604,44 @@
                                 nota(data);
                             });
                         }
+                        function insertnotaproduk(){
+                            let product_id = $("#qtyproduct_id").val();
+                            let transactiond_id = $("#transactiond_id").val();
+                            let qty = $("#qtyproduct").val();
+                            if(transactiond_id>0){
+                                updateqty(transactiond_id,'update',qty);
+                            }else{
+                                insertnotaqty(product_id,qty);
+                            }
+                            
+                            $("#jmlnota").modal("hide");
+                            $("#qtyproduct").val(1);
+                        }
+                        function insertjmlnota(product_id){
+                            if($("#transaction_id").val()>0){
+                                $("#jmlnota").modal();
+                                $("#qtyproduct_id").val(product_id);  
+                                fokus('insertqty');    
+                            }else{
+                                toast('INFO >>>', 'Nota tidak ditemukan!');
+                            }                     
+                        }
+                        //masukin product hanya multi qty
+                        function insertnotaqty(product_id,transactiond_qty){
+                            let transaction_id = $("#transaction_id").val();
+                            let transactiond_id = $("#transactiond_id").val();
+                            $("#transactiond_id").val(0);
+                            // alert("<?=base_url("insertnota");?>?transaction_id="+transaction_id+"&product_id="+product_id);
+                            $.get("<?=base_url("insertnota");?>",{transaction_id:transaction_id,transactiond_id:transactiond_id,product_id:product_id,transactiond_qty:transactiond_qty})
+                            .done(function(data){
+                                // alert(data);
+                                listnota($("#listnotastatus").val());
+                                nota(transaction_id);
+                                
+                                refreshlistproduct();
+                            });
+                        }
+                        //masukin product hanya satu pcs
                         function insertnota(product_id){
                             let transaction_id = $("#transaction_id").val();
                             // alert("<?=base_url("insertnota");?>?transaction_id="+transaction_id+"&product_id="+product_id);
@@ -559,9 +686,9 @@
                                 cekstatus(transaction_id);
                             });
                         }
-                        function updateqty(transactiond_id, type){
-                            // alert("<?=base_url("updateqty");?>?transactiond_id="+transactiond_id+"&type="+type);                            
-                            $.get("<?=base_url("updateqty");?>",{transactiond_id:transactiond_id,type:type})
+                        function updateqty(transactiond_id, type, transactiond_qty){
+                            // alert("<?=base_url("updateqty");?>?transactiond_id="+transactiond_id+"&type="+type+"&transactiond_qty="+transactiond_qty);                            
+                            $.get("<?=base_url("updateqty");?>",{transactiond_id:transactiond_id,type:type,transactiond_qty:transactiond_qty})
                             .done(function(data){
                                 // alert(data);
                                 listnota($("#listnotastatus").val());
@@ -592,54 +719,76 @@
                             closebayar();
                             modalstatus();
                             shift();
+                            $('#showmember').on('hidden.bs.modal', function (e) {
+                                fokus('barcode');
+                            })
                         });
                         $(document).on("keyup", function(e){ 
-                            let ifokus = $("#fokus").val();                           
-                            if(e.which == 9 && (ifokus=="" || ifokus=="barcode")){
-                                fokus('cari');
-                            }                          
-                            if(e.which == 9 && ifokus=="cari"){
-                                fokus('barcode');
-                            }
-                            // alert(e.which);
-                            <?php 
-                            if (
-                                (
-                                    isset(session()->get("position_administrator")[0][0]) 
-                                    && (
-                                        session()->get("position_administrator") == "1" 
-                                        || session()->get("position_administrator") == "2"
+                            let ifokus = $("#fokus").val();   
+                            let transaction_id =   $("#transaction_id").val();  
+                            
+                            if (e.which==9) {
+                                // alert(ifokus);
+                                if(ifokus=="" || ifokus=="barcode"){
+                                    fokus('cari');
+                                }else if(ifokus=="cari"){
+                                    fokus('barcode');
+                                }else if(ifokus=="memberno"){
+                                    fokus('membername');
+                                }else if(ifokus=="membername"){
+                                    fokus('memberno');
+                                }
+                            }else if(e.which=="13"){
+                                <?php 
+                                if (
+                                    (
+                                        isset(session()->get("position_administrator")[0][0]) 
+                                        && (
+                                            session()->get("position_administrator") == "1" 
+                                            || session()->get("position_administrator") == "2"
+                                        )
+                                    ) ||
+                                    (
+                                        isset(session()->get("halaman")['13']['act_create']) 
+                                        && session()->get("halaman")['13']['act_create'] == "1"
                                     )
-                                ) ||
-                                (
-                                    isset(session()->get("halaman")['13']['act_create']) 
-                                    && session()->get("halaman")['13']['act_create'] == "1"
-                                )
-                            ) {?>
-                            let transaction_id =   $("#transaction_id").val();                
-                            if(e.which == 17 && transaction_id>0){
-                               bayar();
-                            }
-                                                   
-                            if(e.which == 13 && ifokus=="barcode"){
-                                let product_batch = $("#inputbarcode").val();
-                                if(product_batch==""){alert("Barcode tidak boleh kosong!");}
-                                insertnotabarcode(product_batch);
-                                $("#inputbarcode").val("");
-                            }    
-                                                      
-                            if(e.which == 13 && ifokus=="bayar"){
-                                pelunasan();
-                            }     
-                                                      
-                            if(e.which == 13 && ifokus=="modalawal"){
-                                kasmodal('masuk');
-                            }     
-                                                      
-                            if(e.which == 13 && ifokus=="modalakhir"){
-                                kasmodal('keluar');
-                            }   
-                            <?php }?>                       
+                                ) {?>            
+                                if(ifokus=="barcode"){
+                                    let product_batch = $("#inputbarcode").val();
+                                    if(product_batch==""){alert("Barcode tidak boleh kosong!");}
+                                    insertnotabarcode(product_batch);
+                                    $("#inputbarcode").val("");
+                                }else if(ifokus=="bayar"){
+                                    pelunasan();
+                                }else if(ifokus=="modalawal"){
+                                    kasmodal('masuk');
+                                }else if(ifokus=="modalakhir"){
+                                    kasmodal('keluar');
+                                }else if(ifokus=="insertqty"){
+                                    insertnotaproduk();
+                                }   
+                                <?php }?>  
+                                
+                            }else if(e.which==17){
+                                <?php 
+                                if (
+                                    (
+                                        isset(session()->get("position_administrator")[0][0]) 
+                                        && (
+                                            session()->get("position_administrator") == "1" 
+                                            || session()->get("position_administrator") == "2"
+                                        )
+                                    ) ||
+                                    (
+                                        isset(session()->get("halaman")['13']['act_create']) 
+                                        && session()->get("halaman")['13']['act_create'] == "1"
+                                    )
+                                ) {?>              
+                                if(transaction_id>0){
+                                    bayar();
+                                }
+                                <?php }?> 
+                            }                                                   
                         });
                     </script>
                 </div>
