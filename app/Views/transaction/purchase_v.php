@@ -293,10 +293,10 @@
                                                 }
                                                 ?>
                                             </td>
-                                            <td><?= number_format($usr->nominal,0,",",".");$tnominal+=$usr->nominal; ?></td>
+                                            <td><?= number_format(floatval($usr->nominal),0,",",".");$tnominal+=$usr->nominal; ?></td>
                                             <td><?= $usr->purchase_ppn; ?> %</td>
                                             <td>
-                                                <?= number_format($hargasetelahppn,0,",",".");$thargasetelahppn+=$hargasetelahppn; ?>
+                                                <?= number_format(floatval($hargasetelahppn),0,",",".");$thargasetelahppn+=$hargasetelahppn; ?>
                                                 <?php if($bayar>0){?>
                                                 <a href="<?=base_url("payment?purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&kas_nominal=".$hargasetelahppn."&supplier_id=".$usr->supplier_id."&url=".$fullURL);?>">
                                                 <br/><small>(Bayar:<?=number_format($bayar,0,",","."); ?>)</small> 
