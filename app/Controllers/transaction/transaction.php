@@ -525,6 +525,7 @@ class transaction extends baseController
     }
 
     public function pelunasan(){
+        $account_id = $this->request->getGet("account_id");
         $transaction_id = $this->request->getGet("transaction_id");
         $transaction_no = $this->request->getGet("transaction_no");
         $transaction_bill = $this->request->getGet("transaction_bill");
@@ -537,6 +538,7 @@ class transaction extends baseController
         $input["transaction_pay"]=$transaction_pay;
         $input["transaction_change"]=$transaction_change;
         $input["transaction_status"]=$transaction_status;
+        $input["account_id"]=$account_id;
 
         $this->db->table("transaction")
         ->where("transaction_id",$transaction_id)
@@ -549,6 +551,7 @@ class transaction extends baseController
         $input1["transaction_id"]= $transaction_id;
         $input1["kas_nominal"]= $transaction_bill;
         $input1["kas_type"]= 'masuk';
+        $input1["account_id"]= $account_id;
         $input1["kas_description"]= "Pembayaran ".$transaction_no;
         $input1["kas_date"]= date("Y-m-d");
         $builder=$this->db->table("kas")

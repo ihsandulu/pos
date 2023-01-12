@@ -103,25 +103,25 @@ if($builder->countAll()>0){
                                 $tprice+=$price; 
                                 ?>
                                 <td>
-                                    <?= number_format($qty,0,",",".") ?> <?= $usr->unit_name; ?> 
+                                    <?= number_format($qty,0,".",",") ?> <?= $usr->unit_name; ?> 
                                 </td>
-                                <td><?= number_format($price,0,",",".") ?></td>
+                                <td><?= number_format($price,0,".",",") ?></td>
                             </tr>
                         <?php } ?>
                         <tr>
                             <th colspan="2" class="text-right">Total</th>
                             <th>
-                                <?= number_format($tprice,0,",","."); ?>
+                                <?= number_format($tprice,0,".",","); ?>
                                 <input type="hidden" id="tagihan" value="<?=$tprice;?>"/>
                             </th>
                         </tr>
                         <tr>
                             <th colspan="2" class="text-right">Bayar</th>
-                            <th class="dibayar"><?=number_format($transaction->transaction_pay,0,",",".");?></th>
+                            <th class="dibayar"><?=number_format($transaction->transaction_pay,0,".",",");?></th>
                         </tr>
                         <tr>
                             <th colspan="2" class="text-right">Kembalian</th>
-                            <th class="kembalian"><?=number_format($transaction->transaction_change,0,",",".");?></th>
+                            <th class="kembalian"><?=number_format($transaction->transaction_change,0,".",",");?></th>
                         </tr>
                     </tbody>
                 </table>                        

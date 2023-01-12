@@ -25,13 +25,7 @@
                         </form>
                     </div>
 
-                    <form class="form-inline" >
-                        <label for="from">Dari:</label>&nbsp;
-                        <input type="date" id="from" name="from" class="form-control">&nbsp;
-                        <label for="to">Ke:</label>&nbsp;
-                        <input type="date" id="to" name="to" class="form-control">&nbsp;
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                   
 
                         <?php if ($message != "") { ?>
                             <div class="alert alert-info alert-dismissable">
@@ -79,8 +73,8 @@
                                             <td><?= $usr->store_name; ?></td>
                                             <td><?= $usr->transaction_no; ?></td>
                                             <td><?= $usr->product_name; ?></td>
-                                            <td><?= number_format($usr->transactiond_qty,0,",","."); ?></td>
-                                            <td><?= number_format($usr->transactiond_price,0,",","."); ?></td>
+                                            <td><?= number_format($usr->transactiond_qty,0,".",","); ?></td>
+                                            <td><?= number_format($usr->transactiond_price,0,".",","); ?></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>

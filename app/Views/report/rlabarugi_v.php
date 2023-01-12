@@ -108,7 +108,7 @@
                                             <td><?= $usr->kas_shift; ?></td>
                                             <td><?= $usr->kas_description; ?></td>
                                             <td><?= $usr->kas_type; ?></td>
-                                            <td><?= number_format($usr->kas_nominal,0,",",".");$pemasukan+=$usr->kas_nominal; ?></td>
+                                            <td><?= number_format($usr->kas_nominal,0,".",",");$pemasukan+=$usr->kas_nominal; ?></td>
                                         </tr>
                                     <?php } ?>
                                     
@@ -119,7 +119,7 @@
                                         <td></td>
                                         <td></td>
                                         <td class="text-right">Total&nbsp;</td>
-                                        <td><?= number_format($pemasukan,0,",","."); ?></td>
+                                        <td><?= number_format($pemasukan,0,".",","); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -175,7 +175,7 @@
                                             <td><?= $usr->kas_shift; ?></td>
                                             <td><?= $usr->kas_description; ?></td>
                                             <td><?= $usr->kas_type; ?></td>
-                                            <td><?= number_format($usr->kas_nominal,0,",",".");$pengeluaran+=$usr->kas_nominal; ?></td>
+                                            <td><?= number_format($usr->kas_nominal,0,".",",");$pengeluaran+=$usr->kas_nominal; ?></td>
                                         </tr>
                                     <?php } ?>                                    
                                     <tr>
@@ -185,18 +185,18 @@
                                         <td></td>
                                         <td></td>
                                         <td class="text-right">Total&nbsp;</td>
-                                        <td><?= number_format($pengeluaran,0,",","."); ?></td>
+                                        <td><?= number_format($pengeluaran,0,".",","); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <script>
-                            $("#pemasukan").html('Rp. <?= number_format($pemasukan,0,",",".");?>');
-                            $("#pengeluaran").html('Rp. <?= number_format($pengeluaran,0,",",".");?>');
+                            $("#pemasukan").html('Rp. <?= number_format($pemasukan,0,".",",");?>');
+                            $("#pengeluaran").html('Rp. <?= number_format($pengeluaran,0,".",",");?>');
                         </script>
                         <div class="table-responsive m-t-40">
-                        <div class="bold text-success h3">Laba/Rugi : <span class="text-info">Rp. <?=number_format($pemasukan-$pengeluaran,0,",",".");?></span></div>
+                        <div class="bold text-success h3">Laba/Rugi : <span class="text-info">Rp. <?=number_format($pemasukan-$pengeluaran,0,".",",");?></span></div>
                         </div>
                 </div>
             </div>

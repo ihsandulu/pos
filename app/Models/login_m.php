@@ -57,6 +57,7 @@ class login_m extends core_m
                         $this->session->set("store_noteinvoice", $user->store_noteinvoice);
                         $this->session->set("store_web", $user->store_web);
                         $this->session->set("store_member", $user->store_member);
+                        $this->session->set("store_akun", $user->store_akun);
 
                          //tambahkan modul di sini                         
                         $pages = $this->db->table("positionpages")

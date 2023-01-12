@@ -47,6 +47,11 @@ $(document).ready(function () {
   });
 });
 $("#example23").DataTable({
+  order: [
+    [0, "asc"],
+    [1, "asc"],
+    [2, "asc"],
+  ],
   dom: "Bfrtip",
   buttons: ["copy", "csv", "excel", "pdf", "print"],
 });

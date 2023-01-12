@@ -250,6 +250,44 @@
                 </li>
                 <?php }?>
 
+                <?php 
+                if (
+                    (
+                        isset(session()->get("position_administrator")[0][0]) 
+                        && (
+                            session()->get("position_administrator") == "1" 
+                            || session()->get("position_administrator") == "2"
+                        )
+                    ) ||
+                    (
+                        isset(session()->get("halaman")['22']['act_read']) 
+                        && session()->get("halaman")['22']['act_read'] == "1"
+                    )
+                ) { ?>
+                <li> 
+                    <a class="  " href="<?= base_url("maccount"); ?>" aria-expanded="false"><i class="fa fa-bookmark-o"></i><span class="hide-menu">Akun</span></a>
+                </li>
+                <?php }?>
+
+                <?php 
+                if (
+                    (
+                        isset(session()->get("position_administrator")[0][0]) 
+                        && (
+                            session()->get("position_administrator") == "1" 
+                            || session()->get("position_administrator") == "2"
+                        )
+                    ) ||
+                    (
+                        isset(session()->get("halaman")['23']['act_read']) 
+                        && session()->get("halaman")['23']['act_read'] == "1"
+                    )
+                ) { ?>
+                <li> 
+                    <a class="  " href="<?= base_url("mbank"); ?>" aria-expanded="false"><i class="fa fa-bank"></i><span class="hide-menu">Bank</span></a>
+                </li>
+                <?php }?>
+
                 <?php }?>
 
                
@@ -400,6 +438,60 @@
                 ) { ?>
                 <li> 
                     <a class="  " href="<?= base_url("rtransaction"); ?>" aria-expanded="false"><i class="fa fa-file-text-o"></i><span class="hide-menu">Penjualan</span></a>
+                </li>
+                <?php }?>
+                <?php 
+                if (
+                    (
+                        isset(session()->get("position_administrator")[0][0]) 
+                        && (
+                            session()->get("position_administrator") == "1" 
+                            || session()->get("position_administrator") == "2"
+                        )
+                    ) ||
+                    (
+                        isset(session()->get("halaman")['25']['act_read']) 
+                        && session()->get("halaman")['25']['act_read'] == "1"
+                    )
+                ) { ?>
+                <li> 
+                    <a class="  " href="<?= base_url("rprodukmasuk"); ?>" aria-expanded="false"><i class="fa fa-cubes"></i><span class="hide-menu">Produk Masuk</span></a>
+                </li>
+                <?php }?>
+                <?php 
+                if (
+                    (
+                        isset(session()->get("position_administrator")[0][0]) 
+                        && (
+                            session()->get("position_administrator") == "1" 
+                            || session()->get("position_administrator") == "2"
+                        )
+                    ) ||
+                    (
+                        isset(session()->get("halaman")['24']['act_read']) 
+                        && session()->get("halaman")['24']['act_read'] == "1"
+                    )
+                ) { ?>
+                <li> 
+                    <a class="  " href="<?= base_url("rprodukkeluar"); ?>" aria-expanded="false"><i class="fa fa-cubes"></i><span class="hide-menu">Produk Keluar</span></a>
+                </li>
+                <?php }?>
+                <?php 
+                if (
+                    (
+                        isset(session()->get("position_administrator")[0][0]) 
+                        && (
+                            session()->get("position_administrator") == "1" 
+                            || session()->get("position_administrator") == "2"
+                        )
+                    ) ||
+                    (
+                        isset(session()->get("halaman")['21']['act_read']) 
+                        && session()->get("halaman")['21']['act_read'] == "1"
+                    )
+                ) { ?>
+                <li> 
+                    <a class="  " href="<?= base_url("rneraca"); ?>" aria-expanded="false"><i class="fa fa-book"></i><span class="hide-menu">Neraca</span></a>
                 </li>
                 <?php }?>
                 <?php 

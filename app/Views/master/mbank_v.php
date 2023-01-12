@@ -26,6 +26,7 @@
                                 </form>
                             <?php } ?>
                             <?php 
+                            if(session()->get("store_akun")==1){
                             if (
                                 (
                                     isset(session()->get("position_administrator")[0][0]) 
@@ -35,57 +36,45 @@
                                     )
                                 ) ||
                                 (
-                                    isset(session()->get("halaman")['19']['act_create']) 
-                                    && session()->get("halaman")['19']['act_create'] == "1"
+                                    isset(session()->get("halaman")['23']['act_create']) 
+                                    && session()->get("halaman")['23']['act_create'] == "1"
                                 )
                             ) { ?>
                             <form method="post" class="col-md-2">
                                 <h1 class="page-header col-md-12">
                                     <button name="new" class="btn btn-info btn-block btn-lg" value="OK" style="">New</button>
-                                    <input type="hidden" name="supplier_id" />
+                                    <input type="hidden" name="bank_id" />
                                 </h1>
                             </form>
                             <?php } ?>
-                        <?php } ?>
+                        <?php }} ?>
                     </div>
 
                     <?php if (isset($_POST['new']) || isset($_POST['edit'])) { ?>
                         <div class="">
                             <?php if (isset($_POST['edit'])) {
                                 $namabutton = 'name="change"';
-                                $judul = "Update Supplier";
+                                $judul = "Update Bank";
                             } else {
                                 $namabutton = 'name="create"';
-                                $judul = "Tambah Supplier";
+                                $judul = "Tambah Bank";
                             } ?>
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
                             </div>
-                            <form class="form-horizontal" method="post" enctype="multipart/form-data">                                
+                            <form class="form-horizontal" method="post" enctype="multipart/form-data">  
                                 <div class="form-group">
-                                    <label class="control-label col-sm-2" for="supplier_name">Supplier:</label>
+                                    <label class="control-label col-sm-2" for="bank_name">Nama Bank:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="supplier_name" name="supplier_name" placeholder="" value="<?= $supplier_name; ?>">
+                                        <input type="text" class="form-control" id="bank_name" name="bank_name" placeholder="" value="<?= $bank_name; ?>">
                                     </div>
-                                </div>                              
-                                <div class="form-group">
-                                    <label class="control-label col-sm-2" for="supplier_address">Alamat:</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="supplier_address" name="supplier_address" placeholder="" value="<?= $supplier_address; ?>">
-                                    </div>
-                                </div>                              
-                                <div class="form-group">
-                                    <label class="control-label col-sm-2" for="supplier_phone">Phone:</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="supplier_phone" name="supplier_phone" placeholder="" value="<?= $supplier_phone; ?>">
-                                    </div>
-                                </div>
+                                </div>  
 
-                                <input type="hidden" name="supplier_id" value="<?= $supplier_id; ?>" />
+                                <input type="hidden" name="bank_id" value="<?= $bank_id; ?>" />
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" id="submit" class="btn btn-primary col-md-5" <?= $namabutton; ?> value="OK">Submit</button>
-                                        <button class="btn btn-warning col-md-offset-1 col-md-5" onClick="location.href=<?= site_url("supplier"); ?>">Back</button>
+                                        <button class="btn btn-warning col-md-offset-1 col-md-5" onClick="location.href=<?= site_url("bank"); ?>">Back</button>
                                     </div>
                                 </div>
                             </form>
@@ -106,21 +95,17 @@
                                         <?php if (!isset($_GET["report"])) { ?>
                                             <th>Action</th>
                                         <?php } ?>
-                                        <th>No.</th>
                                         <th>Toko</th>
-                                        <th>Supplier</th>
-                                        <th>Alamat</th>
-                                        <th>Phone</th>
-                                        <th>Sisa Hutang</th>
+                                        <th>Bank</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $usr = $this->db
-                                        ->table("supplier")
-                                        ->join("store", "store.store_id=supplier.store_id", "left")
-                                        ->where("supplier.store_id",session()->get("store_id"))
-                                        ->orderBy("supplier_name", "ASC")
+                                        ->table("bank")
+                                        ->join("store", "store.store_id=bank.store_id", "left")
+                                        ->where("bank.store_id",session()->get("store_id"))
+                                        ->orderBy("bank_name", "ASC")
                                         ->get();
                                     //echo $this->db->getLastquery();
                                     $no = 1;
@@ -128,6 +113,7 @@
                                         <tr>
                                             <?php if (!isset($_GET["report"])) { ?>
                                                 <td style="padding-left:0px; padding-right:0px;">
+                                                <?php  if(session()->get("store_akun")==1){?>
                                                     <?php 
                                                     if (
                                                         (
@@ -138,13 +124,13 @@
                                                             )
                                                         ) ||
                                                         (
-                                                            isset(session()->get("halaman")['19']['act_update']) 
-                                                            && session()->get("halaman")['19']['act_update'] == "1"
+                                                            isset(session()->get("halaman")['23']['act_update']) 
+                                                            && session()->get("halaman")['23']['act_update'] == "1"
                                                         )
                                                     ) { ?>
                                                     <form method="post" class="btn-action" style="">
                                                         <button class="btn btn-sm btn-warning " name="edit" value="OK"><span class="fa fa-edit" style="color:white;"></span> </button>
-                                                        <input type="hidden" name="supplier_id" value="<?= $usr->supplier_id; ?>" />
+                                                        <input type="hidden" name="bank_id" value="<?= $usr->bank_id; ?>" />
                                                     </form>
                                                     <?php }?>
                                                     
@@ -158,23 +144,20 @@
                                                             )
                                                         ) ||
                                                         (
-                                                            isset(session()->get("halaman")['19']['act_delete']) 
-                                                            && session()->get("halaman")['19']['act_delete'] == "1"
+                                                            isset(session()->get("halaman")['23']['act_delete']) 
+                                                            && session()->get("halaman")['23']['act_delete'] == "1"
                                                         )
                                                     ) { ?>
                                                     <form method="post" class="btn-action" style="">
                                                         <button class="btn btn-sm btn-danger delete" onclick="return confirm(' you want to delete?');" name="delete" value="OK"><span class="fa fa-close" style="color:white;"></span> </button>
-                                                        <input type="hidden" name="supplier_id" value="<?= $usr->supplier_id; ?>" />
+                                                        <input type="hidden" name="bank_id" value="<?= $usr->bank_id; ?>" />
                                                     </form>
                                                     <?php }?>
+                                                <?php }?>
                                                 </td>
                                             <?php } ?>
-                                            <td><?= $no++; ?></td>
                                             <td><?= $usr->store_name; ?></td>
-                                            <td><?= $usr->supplier_name; ?></td>
-                                            <td><?= $usr->supplier_address; ?></td>
-                                            <td><?= $usr->supplier_phone; ?></td>
-                                            <td><?= number_format($usr->supplier_bill,0,".",","); ?></td>
+                                            <td><?= $usr->bank_name; ?></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
@@ -188,7 +171,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Master Supplier";
+    var title = "Master Bank";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

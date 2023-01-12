@@ -242,7 +242,7 @@
                                                 <?php if($usr->purchase_no!=''){echo "<br/>(".$usr->purchase_no.")";}?>
                                             </td>
                                             <td><?= $usr->user_name; ?></td>
-                                            <td><?= number_format($usr->payment_nominal,0,",","."); $tnominal+=$usr->payment_nominal;?></td>
+                                            <td><?= number_format($usr->payment_nominal,0,".",","); $tnominal+=$usr->payment_nominal;?></td>
                                         </tr>
                                     <?php } ?>
                                     
@@ -256,7 +256,7 @@
                                         <td></td>
                                         <td></td>
                                         <td class="text-right">Total&nbsp;</td>
-                                        <td><?= number_format($tnominal,0,",","."); ?></td>
+                                        <td><?= number_format($tnominal,0,".",","); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -269,7 +269,7 @@
 </div>
 <script>
     $('.select').select2();
-    <?php if(isset($_GET["purchase_no"])){$purchase_no=$_GET["purchase_no"]." (Tagihan ".number_format($_GET["kas_nominal"],0,",",".").")";}else{$purchase_no="";}?>
+    <?php if(isset($_GET["purchase_no"])){$purchase_no=$_GET["purchase_no"]." (Tagihan ".number_format($_GET["kas_nominal"],0,".",",").")";}else{$purchase_no="";}?>
     var title = "Pembayaran <?=$purchase_no;?>";
     $("title").text(title);
     $(".card-title").text(title);

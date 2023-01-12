@@ -9,7 +9,7 @@
 
                     <div class="row">
                         <?php if (!isset($_GET['user_id']) && !isset($_POST['new']) && !isset($_POST['edit']) && !isset($_GET['report'])) {
-                            $coltitle = "col-md-8";
+                            $coltitle = "col-md-10";
                             $report="";
                         } else {
                             $coltitle = "col-md-10";
@@ -28,29 +28,7 @@
                                 <?php }?>
                             </h1>
                         </form>
-                        <?php if (!isset($_GET["report"])) { ?>
-                         <?php 
-                            if (
-                                (
-                                    isset(session()->get("position_administrator")[0][0]) 
-                                    && (
-                                        session()->get("position_administrator") == "1" 
-                                        || session()->get("position_administrator") == "2"
-                                    )
-                                ) ||
-                                (
-                                    isset(session()->get("halaman")['18']['act_create']) 
-                                    && session()->get("halaman")['18']['act_create'] == "1"
-                                )
-                            ) { ?>
-                            <form method="post" class="col-md-2">
-                                <h1 class="page-header col-md-12">
-                                    <button name="new" class="btn btn-info btn-block btn-lg" value="OK" style="">New</button>
-                                    <input type="hidden" name="purchased_id" />
-                                </h1>
-                            </form>
-                            <?php } ?>
-                        <?php } ?>
+                        
                     </div>
                     <?php if (isset($_POST['new']) || isset($_POST['edit'])) { ?>
                         <div class="">
@@ -157,7 +135,26 @@
                             </form>
                         </div>
                     <?php } else { ?>
-                        
+                         <?php 
+                        if(isset($_GET["from"])&&$_GET["from"]!=""){
+                            $from=$_GET["from"];
+                        }else{
+                            $from=date("Y-m-d");
+                        }
+
+                        if(isset($_GET["to"])&&$_GET["to"]!=""){
+                            $to=$_GET["to"];
+                        }else{
+                            $to=date("Y-m-d");
+                        }
+                        ?>
+                        <form class="form-inline" >
+                            <label for="from">Dari:</label>&nbsp;
+                            <input type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
+                            <label for="to">Ke:</label>&nbsp;
+                            <input type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
 
                         <?php if ($message != "") { ?>
                             <div class="alert alert-info alert-dismissable">
@@ -171,13 +168,11 @@
                                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                                 <thead class="">
                                     <tr>
-                                        <?php if (!isset($_GET["report"])) { ?>
-                                        <th>Aksi</th>
-                                        <?php }?>
                                         <th>No.</th>
                                         <th>Toko</th>
                                         <th>Kadaluarsa</th>
                                         <th>Produk</th>
+                                        <th>No. Pembelian</th>
                                         <th>Qty</th>
                                         <th>Nominal</th>                                        
                                         <?php if($this->request->getGET("purchase_ppn")==0){?>  
@@ -193,8 +188,7 @@
                                         ->join("purchase", "purchase.purchase_id=purchased.purchase_id", "left")
                                         ->join("store", "store.store_id=purchased.store_id", "left")
                                         ->join("product", "product.product_id=purchased.product_id", "left")
-                                        ->where("purchased.store_id",session()->get("store_id"))
-                                        ->where("purchased.purchase_id",$this->request->getGet("purchase_id"));
+                                        ->where("purchased.store_id",session()->get("store_id"));
                                     if(isset($_GET["from"])&&$_GET["from"]!=""){
                                         $builder->where("purchased.purchased_date >=",$this->request->getGet("from"));
                                     }
@@ -208,62 +202,17 @@
                                     $no = 1;
                                     foreach ($usr->getResult() as $usr) { 
                                         ?>
-                                        <tr>     
-                                            <?php if (!isset($_GET["report"])) { ?>
-                                                <td style="padding-left:0px; padding-right:0px;">
-                                                    <?php 
-                                                    if (
-                                                        (
-                                                            isset(session()->get("position_administrator")[0][0]) 
-                                                            && (
-                                                                session()->get("position_administrator") == "1" 
-                                                                || session()->get("position_administrator") == "2"
-                                                            )
-                                                        ) ||
-                                                        (
-                                                            isset(session()->get("halaman")['18']['act_update']) 
-                                                            && session()->get("halaman")['18']['act_update'] == "1"
-                                                        )
-                                                    ) { ?>
-                                                    <form method="post" class="btn-action" style="">
-                                                        <button class="btn btn-sm btn-warning " name="edit" value="OK"><span class="fa fa-edit" style="color:white;"></span> </button>
-                                                        <input type="hidden" name="purchased_id" value="<?= $usr->purchased_id; ?>" />
-                                                    </form>
-                                                    <?php }?>
-                                                    
-                                                    <?php 
-                                                    if (
-                                                        (
-                                                            isset(session()->get("position_administrator")[0][0]) 
-                                                            && (
-                                                                session()->get("position_administrator") == "1" 
-                                                                || session()->get("position_administrator") == "2"
-                                                            )
-                                                        ) ||
-                                                        (
-                                                            isset(session()->get("halaman")['18']['act_delete']) 
-                                                            && session()->get("halaman")['18']['act_delete'] == "1"
-                                                        )
-                                                    ) { ?>
-                                                    <form method="post" class="btn-action" style="">
-                                                        <button class="btn btn-sm btn-danger delete" onclick="return confirm(' you want to delete?');" name="delete" value="OK"><span class="fa fa-close" style="color:white;"></span> </button>
-                                                        <input type="hidden" name="purchased_id" value="<?= $usr->purchased_id; ?>" />
-                                                        <input type="hidden" name="purchased_bill" value="<?= $usr->purchased_bill; ?>" />
-                                                        <input type="hidden" name="purchased_qty" value="<?= $usr->purchased_qty; ?>" />
-                                                        <input type="hidden" name="product_id" value="<?= $usr->product_id; ?>" />
-                                                    </form>
-                                                    <?php }?>
-                                                </td>
-                                            <?php } ?>                                       
+                                        <tr>                                   
                                             <td><?= $no++; ?></td>
                                             <td><?= $usr->store_name; ?></td>
                                             <td><?= $usr->purchased_outdate; ?></td>
-                                            <td><?= $usr->product_name; ?></td>
-                                            <td><?= number_format($usr->purchased_qty,0,".",","); ?></td>
-                                            <td><?= number_format($usr->purchased_price,0,".",","); ?></td>
+                                            <td class="text-left"><?= $usr->product_name; ?></td>
+                                            <td><?= $usr->purchase_no; ?></td>
+                                            <td class="text-right"><?= number_format($usr->purchased_qty,0,".",","); ?></td>
+                                            <td class="text-right"><?= number_format($usr->purchased_price,0,".",","); ?></td>
                                             <?php if($this->request->getGET("purchase_ppn")==0){?>  
                                             <td><?= $usr->purchased_ppn; ?> %</td>
-                                            <td><?= number_format($usr->purchased_bill,0,".",","); ?></td>
+                                            <td class="text-right"><?= number_format($usr->purchased_bill,0,".",","); ?></td>
                                             <?php }?>
                                         </tr>
                                     <?php } ?>
@@ -278,7 +227,7 @@
 </div>
 <script>
     $('.select').select2();
-    var title = "Laporan Detil Pembelian <?=$this->request->getGET("purchase_no");?>";
+    var title = "Laporan Produk Masuk";
     $("title").text(title);
     $(".card-title").text(title);
     $("#page-title").text(title);

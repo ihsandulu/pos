@@ -177,7 +177,7 @@
                                             <td><?= $no++; ?></td>
                                             <td><?= $usr->store_name; ?></td>
                                             <td><?= ($usr->ppn_type==1)?"Pembelian":"Penjualan"; ?></td>
-                                            <td><?= number_format($usr->ppn_nominal,0,",","."); ?></td>
+                                            <td><?= number_format($usr->ppn_nominal,0,".",","); ?></td>
                                             <td><?= $usr->ppn_activedate; ?></td>
                                             <td><?= $usr->ppn_datetime; ?></td>
                                         </tr>

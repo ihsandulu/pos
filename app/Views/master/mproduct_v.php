@@ -295,16 +295,16 @@
                                             $stock=$usr->product_stock;
                                             if($limit>=$stock){$alstock="danger";}else{$alstock="default";}
                                             ?>
-                                            <td><?= number_format($limit,0,",","."); ?></td>
-                                            <td><i class="text-<?=$alstock;?>"><?= number_format($stock,0,",","."); ?></i></td>
+                                            <td><?= number_format($limit,0,".",","); ?></td>
+                                            <td><i class="text-<?=$alstock;?>"><?= number_format($stock,0,".",","); ?></i></td>
                                             <?php 
                                             $buy=$usr->product_buy; 
                                             $sell=$usr->product_sell;
                                             $margin=$sell-$buy;
                                             ?>
-                                            <td><?= number_format($buy,0,",","."); ?></td>
-                                            <td><?= number_format($sell,0,",","."); ?></td>
-                                            <td><?= number_format($margin,0,",","."); ?></td>
+                                            <td><?= number_format($buy,0,".",","); ?></td>
+                                            <td><?= number_format($sell,0,".",","); ?></td>
+                                            <td><?= number_format($margin,0,".",","); ?></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>

@@ -187,9 +187,21 @@
                                 </div>
                                 <div class="modal-body">
                                     <div>Tagihan : Rp. <span class="bill"></span></div>
-                                    <div class="form-inline">
+                                    <div>
+                                        <div class="form-group">
                                         <label for="uang">Jumlah Uang:</label> &nbsp
                                         <input onclick="fokus('bayar')" onkeyup="kembalian();" type="number" class="form-control" id="uang"> &nbsp
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="account_id">Tipe Pembayaran:</label>
+                                            <select readonly id="account_id" class="form-control" >
+                                                <?php $account=$this->db->table("account")->orderBy("account_id")->get();
+                                                foreach ($account->getResult() as $account) {
+                                                    if($account->account_id==2){$selected="selected";}else{$selected="";}?>                                                    
+                                                <option value="<?=$account->account_id;?>" <?=$selected;?>><?=$account->account_name;?></option>
+                                                <?php }?>
+                                            </select>
+                                        </div>
                                         <button onclick="pelunasan();" type="button" class="btn btn-primary">Submit</button>
                                     </div>
                                     <div>Pembayaran : Rp. <span class="dibayar"></span></div>
@@ -485,6 +497,7 @@
                             });
                         }
                         function pelunasan(){                           
+                            let account_id = $("#account_id").val();
                             let transaction_id = $("#transaction_id").val();
                             let transaction_no = $("#transaction_no").val();
                             let transaction_bill = $("#tagihan").val();
@@ -492,7 +505,7 @@
                             let transaction_change=$("#kembaliannya").val();
                             let shift=$("#kasshift").val();
                             // $('#test').html('<?=base_url("pelunasan");?>?transaction_id='+transaction_id+"&transaction_bill="+transaction_bill+"&transaction_pay="+transaction_pay+"&transaction_change="+transaction_change+"&shift="+shift+"&transaction_no="+transaction_no);
-                            $.get("<?=base_url("pelunasan");?>",{transaction_id:transaction_id,transaction_bill:transaction_bill,transaction_pay:transaction_pay,transaction_change:transaction_change,shift:shift,transaction_no:transaction_no})
+                            $.get("<?=base_url("pelunasan");?>",{account_id:account_id,transaction_id:transaction_id,transaction_bill:transaction_bill,transaction_pay:transaction_pay,transaction_change:transaction_change,shift:shift,transaction_no:transaction_no})
                             .done(function(data){                                 
                                 updatestatus(transaction_id, data);
                                 print(transaction_id);                                

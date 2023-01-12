@@ -113,9 +113,9 @@
                                                 }
                                                 ?>
                                             </td>
-                                            <td><?= number_format($usr->transaction_bill,0,",","."); $tbill+=$usr->transaction_bill;?></td>
-                                            <td><?= number_format($usr->transaction_pay,0,",","."); $tpay+=$usr->transaction_pay;?></td>
-                                            <td><?= number_format($usr->transaction_change,0,",","."); $tchange+=$usr->transaction_change; ?></td>
+                                            <td><?= number_format($usr->transaction_bill,0,".",","); $tbill+=$usr->transaction_bill;?></td>
+                                            <td><?= number_format($usr->transaction_pay,0,".",","); $tpay+=$usr->transaction_pay;?></td>
+                                            <td><?= number_format($usr->transaction_change,0,".",","); $tchange+=$usr->transaction_change; ?></td>
                                             <td>
                                                 <?php
                                                 $status=array("sukses", "batal","pending");
@@ -132,9 +132,9 @@
                                             <td></td>
                                             <td></td>
                                             <td class="text-right">Total&nbsp;</td>
-                                            <td><?= number_format($tbill,0,",","."); ?></td>
-                                            <td><?= number_format($tpay,0,",","."); ?></td>
-                                            <td><?= number_format($tchange,0,",","."); ?></td>
+                                            <td><?= number_format($tbill,0,".",","); ?></td>
+                                            <td><?= number_format($tpay,0,".",","); ?></td>
+                                            <td><?= number_format($tchange,0,".",","); ?></td>
                                             <td></td>
                                         </tr>
                                 </tbody>

@@ -119,6 +119,9 @@
                             <input type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
                             <label for="to">Ke:</label>&nbsp;
                             <input type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
+                            <?php if(isset($_GET["report"])){?>                                
+                            <input type="hidden" id="report" name="report" class="form-control" value="<?=$this->request->getGet("report");?>">&nbsp;
+                            <?php }?>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
 
@@ -201,8 +204,8 @@
                                         ?>
                                         <tr>    
                                             <td><?= $no++; ?></td>  
-                                            <?php if (!isset($_GET["report"])) { ?>
                                                 <td style="padding-left:0px; padding-right:0px;">
+                                                    
                                                     <?php 
                                                     if (
                                                         (
@@ -217,8 +220,12 @@
                                                             && session()->get("halaman")['18']['act_read'] == "1"
                                                         )
                                                     ) { ?>
-                                                    <a href="<?=base_url("purchased?supplier_id=".$usr->supplier_id."&purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&purchase_ppn=".$usr->purchase_ppn);?>" class="btn btn-xs btn-info"><span class="fa fa-cubes"></span></a>
+                                                    
+                                                    <?php if (isset($_GET["report"])) {$report="&report=OK";}else{$report="";} ?>
+                                                    <a href="<?=base_url("purchased?supplier_id=".$usr->supplier_id."&purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&purchase_ppn=".$usr->purchase_ppn.$report);?>" class="btn btn-xs btn-info"><span class="fa fa-cubes"></span></a>
                                                     <?php }?>
+                                                    
+                                                    <?php if (!isset($_GET["report"])) { ?>
                                                     <?php 
                                                     if (
                                                         (
@@ -235,6 +242,9 @@
                                                     ) { ?>
                                                    <a href="<?=base_url("payment?purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&kas_nominal=".$hargasetelahppn."&supplier_id=".$usr->supplier_id."&url=".$fullURL);?>" class="btn btn-xs btn-success"><span class="fa fa-money"></span></a>
                                                     <?php }?>
+                                                    <?php }?>
+                                                    
+                                                    <?php if (!isset($_GET["report"])) { ?>
                                                     <?php 
                                                     if (
                                                         (
@@ -254,7 +264,9 @@
                                                         <input type="hidden" name="purchase_id" value="<?= $usr->purchase_id; ?>" />
                                                     </form>
                                                     <?php }?>
+                                                    <?php }?>
                                                     
+                                                    <?php if (!isset($_GET["report"])) { ?>                                                    
                                                     <?php 
                                                     if (
                                                         (
@@ -274,8 +286,8 @@
                                                         <input type="hidden" name="purchase_id" value="<?= $usr->purchase_id; ?>" />
                                                     </form>
                                                     <?php }?>
+                                                    <?php } ?>
                                                 </td>
-                                            <?php } ?>
                                             <td><?= $usr->purchase_date; ?></td>
                                             <td><?= $usr->store_name; ?></td>
                                             <td><?= $usr->supplier_name; ?></td>
@@ -293,14 +305,14 @@
                                                 }
                                                 ?>
                                             </td>
-                                            <td><?= number_format(floatval($usr->nominal),0,",",".");$tnominal+=$usr->nominal; ?></td>
+                                            <td><?= number_format(floatval($usr->nominal),0,".",",");$tnominal+=$usr->nominal; ?></td>
                                             <td><?= $usr->purchase_ppn; ?> %</td>
                                             <td>
-                                                <?= number_format(floatval($hargasetelahppn),0,",",".");$thargasetelahppn+=$hargasetelahppn; ?>
+                                                <?= number_format(floatval($hargasetelahppn),0,".",",");$thargasetelahppn+=$hargasetelahppn; ?>
                                                 <?php if($bayar>0){?>
                                                 <a href="<?=base_url("payment?purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&kas_nominal=".$hargasetelahppn."&supplier_id=".$usr->supplier_id."&url=".$fullURL);?>">
-                                                <br/><small>(Bayar:<?=number_format($bayar,0,",","."); ?>)</small> 
-                                                <br/><small>(Sisa:<?=number_format($sisa,0,",","."); ?>)</small> 
+                                                <br/><small>(Bayar:<?=number_format($bayar,0,".",","); ?>)</small> 
+                                                <br/><small>(Sisa:<?=number_format($sisa,0,".",","); ?>)</small> 
                                                 </a> 
                                                 <?php }?>
                                             </td>
@@ -318,9 +330,9 @@
                                         <td></td>
                                         <td></td>
                                         <td class="text-right">Total&nbsp;</td>
-                                        <td><?= number_format($tnominal,0,",","."); ?></td>
+                                        <td><?= number_format($tnominal,0,".",","); ?></td>
                                         <td></td>
-                                        <td><?= number_format($thargasetelahppn,0,",","."); ?></td>
+                                        <td><?= number_format($thargasetelahppn,0,".",","); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
