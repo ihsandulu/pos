@@ -123,16 +123,18 @@ class transaction extends baseController
                     $input["kas_shift"]= $store_shift;
                     $input["kas_nominal"]= $kas_nominal;
                     $input["kas_type"]= $kas_typeinput;
+                    $input["account_id"]= '1';
                     $input["kas_description"]= "Modal Awal";
                     $input["kas_date"]= date("Y-m-d");
                     $builder=$this->db->table("kas")
                     ->insert($input);
                     $kas_id = $this->db->insertID();
-                    $data["message"]="Store modal awal berhasil, ID=".$kas_id;
+                    $data["message"]="Store modal awal berhasil.";
 
                     //insert modal
                     $input2["kas_id"]=$kas_id;
                     $input2["store_id"]=session()->get("store_id");
+                    $input2["account_id"]= '1';
                     $input2["modal_shift"]= $store_shift;
                     $input2["modal_nominal"]= $kasrealtime+$kas_nominal;
                     $input2["modal_date"]= date("Y-m-d");
@@ -194,10 +196,11 @@ class transaction extends baseController
                     $input["kas_type"]= $kas_typeinput;
                     $input["kas_description"]= "Penarikan Kas";
                     $input["kas_date"]= date("Y-m-d");
+                    $input["account_id"]= '15';
                     $builder=$this->db->table("kas")
                     ->insert($input);
                     $kas_id = $this->db->insertID();
-                    $data["message"]="Penarikan kas berhasil, ID=".$kas_id;                   
+                    $data["message"]="Penarikan kas berhasil.";                   
 
                      //update store
                     $kastoko=$kasrealtime-$kas_nominal;
@@ -244,10 +247,11 @@ class transaction extends baseController
             $input["kas_type"]= $kas_typeinput;
             $input["kas_description"]= "Modal Awal";
             $input["kas_date"]= date("Y-m-d");
+            $input["account_id"]= '1';
             $builder=$this->db->table("kas")
             ->insert($input);
             $kas_id = $this->db->insertID();
-            $data["message"]="Store modal awal berhasil, ID=".$kas_id;
+            $data["message"]="Store modal awal berhasil.";
 
             
             //insert modal
@@ -256,6 +260,7 @@ class transaction extends baseController
             $input2["modal_shift"]= $store_shift;
             $input2["modal_nominal"]= $kas_nominal;
             $input2["modal_date"]= date("Y-m-d");
+            $input2["account_id"]= '1';
             $this->db->table("modal")
             ->insert($input2);
             $modal_id = $this->db->insertID();

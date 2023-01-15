@@ -77,6 +77,7 @@ class payment_m extends core_m
             $input["store_id"] = session()->get("store_id");
             $input["payment_date"] = date("Y-m-d");
             $input["cashier_id"] = session()->get("user_id");
+            $input["account_id"] = '16';
             $input["payment_no"] = "PAY".date("YmdHis").session()->get("store_id");
 
             if(isset($_GET["purchase_id"])){                
@@ -109,6 +110,7 @@ class payment_m extends core_m
             $input2["kas_shift"] = $store->store_shift;
             $input2["payment_id"] = $payment_id;
             $input2["payment_no"] = $input["payment_no"];
+            $input2["account_id"] = '16';
             if(isset($_GET["purchase_id"])){                
                 $input2["kas_description"] = 'Pembayaran Tagihan '.$this->request->getGet("purchase_no");
                 $input2["purchase_id"] = $this->request->getGet("purchase_id");

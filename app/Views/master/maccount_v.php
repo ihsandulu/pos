@@ -114,6 +114,7 @@
                                         <th>Tipe</th>
                                         <th>Urutan</th>
                                         <th>Toko</th>
+                                        <th>ID</th>
                                         <th>Akun</th>
                                     </tr>
                                 </thead>
@@ -177,6 +178,7 @@
                                             <td><?= $usr->account_type; ?></td>
                                             <td><?= $usr->account_sort; ?></td>
                                             <td><?= $usr->store_name; ?></td>
+                                            <td><?= $usr->account_id; ?></td>
                                             <td><?= $usr->account_name; ?></td>
                                         </tr>
                                     <?php } ?>

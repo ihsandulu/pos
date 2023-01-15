@@ -12,7 +12,7 @@
                             $coltitle = "col-md-8";
                             $report="";
                         } else {
-                            $coltitle = "col-md-10";
+                            $coltitle = "col-md-8";
                             $report="?report=OK";
                         } ?>
                         <div class="<?= $coltitle; ?>">

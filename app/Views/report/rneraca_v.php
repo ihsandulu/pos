@@ -94,6 +94,7 @@ td{padding: 0px  10px 0px 10px  !important;}
                             // echo $this->db->getLastquery();
                                     $tnom=0;
                                     foreach($kas->getResult() as $kas){$tnom=$kas->tnom;}
+                                    if($tnom==null){$tnom=0;}
                                 ?>
                                 <tr>                        
                                     <td class="text-left"><?= $usr->account_name; ?></td>
@@ -133,7 +134,7 @@ td{padding: 0px  10px 0px 10px  !important;}
                                 ->join("store", "store.store_id=kas.store_id", "left")
                                 ->where("kas.account_id",$usr->account_id)
                                 ->where("kas.store_id",session()->get("store_id"))
-                                ->where("kas.kas_type",'masuk');
+                                ->where("kas.kas_type",'keluar');
                                 if(isset($_GET["from"])&&$_GET["from"]!=""){
                                     $builder->where("kas.kas_date >=",$this->request->getGet("from"));
                                 }else{
@@ -149,6 +150,7 @@ td{padding: 0px  10px 0px 10px  !important;}
                                     ->get();
                                     $tnom=0;
                                     foreach($kas->getResult() as $kas){$tnom=$kas->tnom;}
+                                    if($tnom==null){$tnom=0;}
                                 ?>
                                 <tr>                        
                                     <td class="text-left"><?= $usr->account_name; ?></td>
@@ -189,6 +191,7 @@ td{padding: 0px  10px 0px 10px  !important;}
                                     ->get();
                                     $tnom=0;
                                     foreach($transactiond->getResult() as $transactiond){$tnom=$transactiond->tnom;}
+                                    if($tnom==null){$tnom=0;}
                                 echo number_format($tnom,0,".",",");
                                 ?></td>
                             </tr>
