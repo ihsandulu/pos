@@ -190,10 +190,10 @@
                                         ->join("product", "product.product_id=purchased.product_id", "left")
                                         ->where("purchased.store_id",session()->get("store_id"));
                                     if(isset($_GET["from"])&&$_GET["from"]!=""){
-                                        $builder->where("purchased.purchased_date >=",$this->request->getGet("from"));
+                                        $builder->where("purchase_date >=",$this->request->getGet("from"));
                                     }
                                     if(isset($_GET["to"])&&$_GET["to"]!=""){
-                                        $builder->where("purchased.purchased_date <=",$this->request->getGet("to"));
+                                        $builder->where("purchase_date <=",$this->request->getGet("to"));
                                     }
                                     $usr= $builder
                                         ->orderBy("purchased_id", "DESC")

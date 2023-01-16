@@ -62,10 +62,10 @@
                                         ->join("product", "product.product_id=transactiond.product_id", "left")
                                         ->where("transactiond.store_id",session()->get("store_id"));
                                     if(isset($_GET["from"])&&$_GET["from"]!=""){
-                                        $builder->where("transactiond.transactiond_date >=",$this->request->getGet("from"));
+                                        $builder->where("transaction_date >=",$this->request->getGet("from"));
                                     }
                                     if(isset($_GET["to"])&&$_GET["to"]!=""){
-                                        $builder->where("transactiond.transactiond_date <=",$this->request->getGet("to"));
+                                        $builder->where("transaction_date <=",$this->request->getGet("to"));
                                     }
                                     $usr= $builder
                                         ->orderBy("product_name", "ASC")
