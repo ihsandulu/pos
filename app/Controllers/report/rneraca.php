@@ -28,7 +28,7 @@ class rneraca extends baseController
     
     public function shift()
     {?>
-        <option value="0" <?=(isset($_GET["shift"])&&$_GET["shift"]=='0')?"selected":"";?>>Pilih Shift</option>
+        <option value="0" <?=(isset($_GET["shift"])&&$_GET["shift"]=='0')?"selected":"";?>>Semua Shift</option>
         <?php $builder=$this->db->table("kas")
         ->select("kas_shift");
             if(isset($_GET["from"])&&$_GET["from"]!=""){

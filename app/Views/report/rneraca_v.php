@@ -43,7 +43,7 @@ td{padding: 0px  10px 0px 10px  !important;}
                         <input oninput="shift()" type="date" id="to" name="to" class="form-control tgl" value="<?=$to;?>">&nbsp;
                         <label for="to">Shift:</label>&nbsp;
                         <select id="shift" name="shift" class="form-control">
-                            <option value="0"  <?=(isset($_GET["shift"])&&$_GET["shift"]=='0')?"selected":"";?>>Pilih Shift</option>
+                            <option value="0"  <?=(isset($_GET["shift"])&&$_GET["shift"]=='0')?"selected":"";?>>Semua Shift</option>
                             <?php $builder=$this->db->table("kas")
                             ->select("kas_shift");
                              if(isset($_GET["from"])&&$_GET["from"]!=""){
