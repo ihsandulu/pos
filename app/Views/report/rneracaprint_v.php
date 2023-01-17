@@ -47,7 +47,7 @@
 </style>
     <div class='container-fluid'>
         <div class='row'>
-            <div class="bold text-primary mt-5 h4">Pemasukan : <span id="pemasukan" class=""></span></div>
+            <div class="bold text-primary mt-5 h4">Pemasukan <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="pemasukan" class=""></span></div>
             <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                 <thead class="">
@@ -84,6 +84,9 @@
                         }else{
                             $builder->where("kas.kas_date",date("Y-m-d"));
                         }
+                        if(isset($_GET["shift"])&&$_GET["shift"]>0){
+                            $builder->where("kas.kas_shift",$this->request->getGet("shift"));
+                        }
                         $kas= $builder
                             ->groupBy("kas.account_id")
                             ->get();
@@ -103,7 +106,7 @@
                 </tbody>
             </table>
 
-            <div class="bold text-primary mt-1 h4">Pengeluaran : <span id="pemasukan" class=""></span></div>
+            <div class="bold text-primary mt-1 h4">Pengeluaran <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="pengeluaran" class=""></span></div>
             <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                 <thead class="">
@@ -128,7 +131,7 @@
                         ->join("store", "store.store_id=kas.store_id", "left")
                         ->where("kas.account_id",$usr->account_id)
                         ->where("kas.store_id",session()->get("store_id"))
-                        ->where("kas.kas_type",'masuk');
+                        ->where("kas.kas_type",'keluar');
                         if(isset($_GET["from"])&&$_GET["from"]!=""){
                             $builder->where("kas.kas_date >=",$this->request->getGet("from"));
                         }else{
@@ -138,6 +141,9 @@
                             $builder->where("kas.kas_date <=",$this->request->getGet("to"));
                         }else{
                             $builder->where("kas.kas_date",date("Y-m-d"));
+                        }
+                        if(isset($_GET["shift"])&&$_GET["shift"]>0){
+                            $builder->where("kas.kas_shift",$this->request->getGet("shift"));
                         }
                         $kas= $builder
                             ->groupBy("kas.account_id")
@@ -158,7 +164,7 @@
                 </tbody>
             </table>
 
-            <div class="bold text-primary mt-1 h4">Produk Terjual : <span id="pemasukan" class=""></span></div>
+            <div class="bold text-primary mt-1 h4">Produk Terjual <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="produk_terjual" class=""></span></div>
             <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">                        
                 <tbody>                           
                     <tr>                        
@@ -180,10 +186,14 @@
                         }else{
                             $builder->where("transaction.transaction_date",date("Y-m-d"));
                         }
+                        if(isset($_GET["shift"])&&$_GET["shift"]>0){
+                            $builder->where("transaction.transaction_shift",$this->request->getGet("shift"));
+                        }
                         $transactiond= $builder
                             ->get();
                             $tnom=0;
-                            foreach($transactiond->getResult() as $transactiond){$tnom=$transactiond->tnom;}
+                            $produk_terjual=0;
+                            foreach($transactiond->getResult() as $transactiond){$tnom=$transactiond->tnom;$produk_terjual=$tnom;}
                         echo number_format($tnom,0,".",",");
                         ?></td>
                     </tr>
@@ -195,6 +205,7 @@
             <script>
                 $("#pemasukan").html('Rp. <?= number_format($pemasukan,0,".",",");?>');
                 $("#pengeluaran").html('Rp. <?= number_format($pengeluaran,0,".",",");?>');
+                $("#produk_terjual").html('<?= number_format($produk_terjual,0,".",",");?> pcs');
             </script>
         </div>
     </div>

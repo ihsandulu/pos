@@ -84,12 +84,14 @@ $routes->add('/insertmember', 'transaction\transaction::insertmember');
 
 $routes->add('/rneraca', 'report\rneraca::index');
 $routes->add('/rneracaprint', 'report\rneraca::print');
+$routes->add('/rneracashift', 'report\rneraca::shift');
+
 $routes->add('/maccount', 'master\maccount::index');
 $routes->add('/mbank', 'master\mbank::index');
 
-
 $routes->add('/rprodukkeluar', 'report\rprodukkeluar::index');
 $routes->add('/rprodukmasuk', 'report\rprodukmasuk::index');
+
 
 
 

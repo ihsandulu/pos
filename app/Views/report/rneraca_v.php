@@ -38,9 +38,45 @@ td{padding: 0px  10px 0px 10px  !important;}
 
                     <form class="form-inline" >
                         <label for="from">Dari:</label>&nbsp;
-                        <input type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
+                        <input oninput="shift()" type="date" id="from" name="from" class="form-control tgl" value="<?=$from;?>">&nbsp;
                         <label for="to">Ke:</label>&nbsp;
-                        <input type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
+                        <input oninput="shift()" type="date" id="to" name="to" class="form-control tgl" value="<?=$to;?>">&nbsp;
+                        <label for="to">Shift:</label>&nbsp;
+                        <select id="shift" name="shift" class="form-control">
+                            <option value="0"  <?=(isset($_GET["shift"])&&$_GET["shift"]=='0')?"selected":"";?>>Pilih Shift</option>
+                            <?php $builder=$this->db->table("kas")
+                            ->select("kas_shift");
+                             if(isset($_GET["from"])&&$_GET["from"]!=""){
+                                    $builder->where("kas.kas_date >=",$this->request->getGet("from"));
+                                }else{
+                                    $builder->where("kas.kas_date",date("Y-m-d"));
+                                }
+                                if(isset($_GET["to"])&&$_GET["to"]!=""){
+                                    $builder->where("kas.kas_date <=",$this->request->getGet("to"));
+                                }else{
+                                    $builder->where("kas.kas_date",date("Y-m-d"));
+                                }
+                            $kas=$builder->groupBy("kas_shift")
+                            ->orderBy("kas_shift","ASC")
+                            ->get();
+                            foreach ($kas->getResult() as $kas) {?>                                
+                                <option value="<?=$kas->kas_shift;?>" <?=(isset($_GET["shift"])&&$_GET["shift"]==$kas->kas_shift)?"selected":"";?>>Shift <?=$kas->kas_shift;?></option>
+                            <?php }?>
+                        </select>&nbsp;
+                        <script>
+                        $(document).on('input', '.tgl', function(){
+                            shift();
+                        });
+                        function shift(){
+                            let from = $("#from").val();
+                            let to = $("#to").val();
+                            // alert('<?=base_url("rneracashift");?>?from='+from+'&to='+to);
+                            $.get("<?=base_url("rneracashift");?>",{from:from,to:to})
+                            .done(function(data){
+                                $("#shift").html(data);
+                            });
+                        }
+                        </script>
                         <?php 
                         if(isset($_GET["tanpamodal"])&&$_GET["tanpamodal"]!=""){
                             $checked="checked";
@@ -51,7 +87,7 @@ td{padding: 0px  10px 0px 10px  !important;}
 
                        
 
-                    <div class="bold text-primary mt-5 h4">Pemasukan : <span id="pemasukan" class=""></span></div>
+                    <div class="bold text-primary mt-5 h4">Pemasukan <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="pemasukan" class=""></span></div>
                     <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                         <thead class="">
@@ -88,6 +124,9 @@ td{padding: 0px  10px 0px 10px  !important;}
                                 }else{
                                     $builder->where("kas.kas_date",date("Y-m-d"));
                                 }
+                                if(isset($_GET["shift"])&&$_GET["shift"]>0){
+                                    $builder->where("kas.kas_shift",$this->request->getGet("shift"));
+                                }
                                 $kas= $builder
                                     ->groupBy("kas.account_id")
                                     ->get();
@@ -109,7 +148,7 @@ td{padding: 0px  10px 0px 10px  !important;}
                         </tbody>
                     </table>
 
-                    <div class="bold text-primary mt-1 h4">Pengeluaran : <span id="pemasukan" class=""></span></div>
+                    <div class="bold text-primary mt-1 h4">Pengeluaran <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="pengeluaran" class=""></span></div>
                     <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                         <thead class="">
@@ -145,6 +184,9 @@ td{padding: 0px  10px 0px 10px  !important;}
                                 }else{
                                     $builder->where("kas.kas_date",date("Y-m-d"));
                                 }
+                                if(isset($_GET["shift"])&&$_GET["shift"]>0){
+                                    $builder->where("kas.kas_shift",$this->request->getGet("shift"));
+                                }
                                 $kas= $builder
                                     ->groupBy("kas.account_id")
                                     ->get();
@@ -165,7 +207,7 @@ td{padding: 0px  10px 0px 10px  !important;}
                         </tbody>
                     </table>
 
-                    <div class="bold text-primary mt-1 h4">Produk Terjual : <span id="pemasukan" class=""></span></div>
+                    <div class="bold text-primary mt-1 h4">Produk Terjual <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="produk_terjual" class=""></span></div>
                     <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">                        
                         <tbody>                           
                             <tr>                        
@@ -187,10 +229,14 @@ td{padding: 0px  10px 0px 10px  !important;}
                                 }else{
                                     $builder->where("transaction.transaction_date",date("Y-m-d"));
                                 }
+                                if(isset($_GET["shift"])&&$_GET["shift"]>0){
+                                    $builder->where("transaction.transaction_shift",$this->request->getGet("shift"));
+                                }
                                 $transactiond= $builder
                                     ->get();
                                     $tnom=0;
-                                    foreach($transactiond->getResult() as $transactiond){$tnom=$transactiond->tnom;}
+                                    $produk_terjual=0;
+                                    foreach($transactiond->getResult() as $transactiond){$tnom=$transactiond->tnom;$produk_terjual=$tnom;}
                                     if($tnom==null){$tnom=0;}
                                 echo number_format($tnom,0,".",",");
                                 ?></td>
@@ -203,8 +249,27 @@ td{padding: 0px  10px 0px 10px  !important;}
                     <script>
                         $("#pemasukan").html('Rp. <?= number_format($pemasukan,0,".",",");?>');
                         $("#pengeluaran").html('Rp. <?= number_format($pengeluaran,0,".",",");?>');
+                        $("#produk_terjual").html('<?= number_format($produk_terjual,0,".",",");?> pcs');
                         function print(){
-                            window.open('<?=base_url("rneracaprint?");?>','_blank');
+                            <?php 
+                                if(isset($_GET["from"])&&$_GET["from"]!=""){
+                                    $from="&from=".$_GET["from"];
+                                }else{
+                                    $from="";
+                                }
+                                if(isset($_GET["to"])&&$_GET["to"]!=""){
+                                    $to="&to=".$_GET["to"];
+                                }else{
+                                    $to="";
+                                }
+                                if(isset($_GET["shift"])&&$_GET["shift"]>0){
+                                    $shift="&shift=".$_GET["shift"];
+                                }else{
+                                    $shift="";
+                                }
+                                $url=base_url("rneracaprint?")."?print=OK".$from.$to.$shift;
+                            ?>
+                            window.open('<?=$url;?>','_blank');
                         }
                     </script>
                 </div>
