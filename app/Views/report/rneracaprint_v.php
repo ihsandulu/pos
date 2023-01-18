@@ -47,7 +47,14 @@
 </style>
     <div class='container-fluid'>
         <div class='row'>
-            <div class="bold text-primary mt-5 h4">Pemasukan <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="pemasukan" class=""></span></div>
+
+            <div class="bold  mt-5 pb-3 h4 col-12 text-center" style="border-bottom:black solid 1px;">
+                Neraca :
+                <?=(isset($_GET["from"]))?date("d M Y",strtotime($_GET["from"])):date("d M Y");?> s/d
+                <?=(isset($_GET["to"]))?date("d M Y",strtotime($_GET["to"])):date("d M Y");?>
+            </div>
+
+            <div class="bold text-primary pl-0 mt-5 mb-3 h4 col-12">Pemasukan <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="pemasukan" class=""></span></div>
             <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                 <thead class="">
@@ -106,7 +113,7 @@
                 </tbody>
             </table>
 
-            <div class="bold text-primary mt-1 h4">Pengeluaran <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="pengeluaran" class=""></span></div>
+            <div class="bold text-primary pl-0 mt-5 mb-3 h4 col-12">Pengeluaran <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="pengeluaran" class=""></span></div>
             <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                 <thead class="">
@@ -164,7 +171,7 @@
                 </tbody>
             </table>
 
-            <div class="bold text-primary mt-1 h4">Produk Terjual <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="produk_terjual" class=""></span></div>
+            <div class="bold text-primary pl-0 mt-5 mb-3 h4 col-12">Produk Terjual <?=(isset($_GET["shift"])&&$_GET["shift"]>0)?"Shift ".$_GET["shift"]:"";?> : <span id="produk_terjual" class=""></span></div>
             <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">                        
                 <tbody>                           
                     <tr>                        
@@ -193,13 +200,18 @@
                             ->get();
                             $tnom=0;
                             $produk_terjual=0;
-                            foreach($transactiond->getResult() as $transactiond){$tnom=$transactiond->tnom;$produk_terjual=$tnom;}
-                        echo number_format($tnom,0,".",",");
+                            foreach($transactiond->getResult() as $transactiond){
+                                $tnom=$transactiond->tnom;
+                                $produk_terjual=$tnom;
+                            }
+                            if($tnom==null){$tnom=0;}
+                            if($produk_terjual==null){$produk_terjual=0;}
+                            echo number_format($tnom,0,".",",");
                         ?></td>
                     </tr>
                 </tbody>
             </table>
-            <div class="bold text-success mt-1 h4">
+            <div class="bold text-success pl-0 mt-5 mb-3 h4 col-12">
                 Laba/Rugi : <span class="text-info">Rp. <?=number_format($pemasukan-$pengeluaran,0,".",",");?></span>
             </div>
             <script>
