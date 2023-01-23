@@ -138,9 +138,9 @@
                                 <thead class="">
                                     <tr>
                                         <th>No.</th>
-                                        <?php if (!isset($_GET["report"])) { ?>
+                                        <?php //if (!isset($_GET["report"])) { ?>
                                         <th>Aksi.</th>
-                                        <?php }?>
+                                        <?php //}?>
                                         <th>Tanggal</th>
                                         <th>Toko</th>
                                         <th>Supplier</th>

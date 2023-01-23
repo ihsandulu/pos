@@ -191,9 +191,13 @@
                                         ->where("purchased.store_id",session()->get("store_id"));
                                     if(isset($_GET["from"])&&$_GET["from"]!=""){
                                         $builder->where("purchase_date >=",$this->request->getGet("from"));
+                                    }else{
+                                        $builder->where("purchase.purchase_date",date("Y-m-d"));
                                     }
                                     if(isset($_GET["to"])&&$_GET["to"]!=""){
                                         $builder->where("purchase_date <=",$this->request->getGet("to"));
+                                    }else{
+                                        $builder->where("purchase.purchase_date",date("Y-m-d"));
                                     }
                                     $usr= $builder
                                         ->orderBy("purchased_id", "DESC")

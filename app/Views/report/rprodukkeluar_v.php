@@ -24,12 +24,24 @@
                             </h1>
                         </form>
                     </div>
+                    <?php 
+                    if(isset($_GET["from"])&&$_GET["from"]!=""){
+                        $from=$_GET["from"];
+                    }else{
+                        $from=date("Y-m-d");
+                    }
 
+                    if(isset($_GET["to"])&&$_GET["to"]!=""){
+                        $to=$_GET["to"];
+                    }else{
+                        $to=date("Y-m-d");
+                    }
+                    ?>
                     <form class="form-inline" >
                         <label for="from">Dari:</label>&nbsp;
-                        <input type="date" id="from" name="from" class="form-control">&nbsp;
+                        <input type="date" id="from" name="from" class="form-control" value="<?=$from;?>">&nbsp;
                         <label for="to">Ke:</label>&nbsp;
-                        <input type="date" id="to" name="to" class="form-control">&nbsp;
+                        <input type="date" id="to" name="to" class="form-control" value="<?=$to;?>">&nbsp;
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
 
@@ -60,12 +72,17 @@
                                         ->join("transaction", "transaction.transaction_id=transactiond.transaction_id", "left")
                                         ->join("store", "store.store_id=transactiond.store_id", "left")
                                         ->join("product", "product.product_id=transactiond.product_id", "left")
-                                        ->where("transactiond.store_id",session()->get("store_id"));
+                                        ->where("transactiond.store_id",session()->get("store_id"))
+                                        ->where("transaction.transaction_status","0");
                                     if(isset($_GET["from"])&&$_GET["from"]!=""){
                                         $builder->where("transaction_date >=",$this->request->getGet("from"));
+                                    }else{
+                                        $builder->where("transaction_date",date("Y-m-d"));
                                     }
                                     if(isset($_GET["to"])&&$_GET["to"]!=""){
                                         $builder->where("transaction_date <=",$this->request->getGet("to"));
+                                    }else{
+                                        $builder->where("transaction_date",date("Y-m-d"));
                                     }
                                     $usr= $builder
                                         ->orderBy("product_name", "ASC")
