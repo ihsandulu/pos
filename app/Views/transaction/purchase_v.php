@@ -321,9 +321,9 @@
                                     
                                     <tr>
                                         <td><?= $no; ?></td>
-                                        <?php if (!isset($_GET["report"])) { ?>
+                                        <?php //if (!isset($_GET["report"])) { ?>
                                         <td></td>
-                                        <?php }?>
+                                        <?php //}?>
                                         <td></td>
                                         <td></td>
                                         <td></td>

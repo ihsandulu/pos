@@ -53,7 +53,23 @@ $("#example23").DataTable({
     [2, "asc"],
   ],
   dom: "Bfrtip",
-  buttons: ["copy", "csv", "excel", "pdf", "print"],
+  buttons: [
+    "copy",
+    "csv",
+    {
+      extend: 'excel',
+      exportOptions: {
+          columns: ':visible',
+          format: {
+            body: function(data, row, column, node) {
+                return data.replace(/[\,]/g, '');
+            }
+          }
+      }
+    },
+    "pdf",
+    "print",
+  ],
 });
 $("#example231").DataTable({
   dom: "Bfrtip",
