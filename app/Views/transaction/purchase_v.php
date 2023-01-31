@@ -137,10 +137,10 @@
                                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                                 <thead class="">
                                     <tr>
-                                        <th>No.</th>
                                         <?php //if (!isset($_GET["report"])) { ?>
                                         <th>Aksi.</th>
                                         <?php //}?>
+                                        <th>No.</th>
                                         <th>Tanggal</th>
                                         <th>Toko</th>
                                         <th>Supplier</th>
@@ -203,91 +203,90 @@
                                         $sisa=$hargasetelahppn-$bayar;
                                         ?>
                                         <tr>    
-                                            <td><?= $no++; ?></td>  
-                                                <td style="padding-left:0px; padding-right:0px;">
-                                                    
-                                                    <?php 
-                                                    if (
-                                                        (
-                                                            isset(session()->get("position_administrator")[0][0]) 
-                                                            && (
-                                                                session()->get("position_administrator") == "1" 
-                                                                || session()->get("position_administrator") == "2"
-                                                            )
-                                                        ) ||
-                                                        (
-                                                            isset(session()->get("halaman")['18']['act_read']) 
-                                                            && session()->get("halaman")['18']['act_read'] == "1"
+                                            <td style="padding-left:0px; padding-right:0px;">                                                    
+                                                <?php 
+                                                if (
+                                                    (
+                                                        isset(session()->get("position_administrator")[0][0]) 
+                                                        && (
+                                                            session()->get("position_administrator") == "1" 
+                                                            || session()->get("position_administrator") == "2"
                                                         )
-                                                    ) { ?>
-                                                    
-                                                    <?php if (isset($_GET["report"])) {$report="&report=OK";}else{$report="";} ?>
-                                                    <a href="<?=base_url("purchased?supplier_id=".$usr->supplier_id."&purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&purchase_ppn=".$usr->purchase_ppn.$report);?>" class="btn btn-xs btn-info"><span class="fa fa-cubes"></span></a>
-                                                    <?php }?>
-                                                    
-                                                    <?php if (!isset($_GET["report"])) { ?>
-                                                    <?php 
-                                                    if (
-                                                        (
-                                                            isset(session()->get("position_administrator")[0][0]) 
-                                                            && (
-                                                                session()->get("position_administrator") == "1" 
-                                                                || session()->get("position_administrator") == "2"
-                                                            )
-                                                        ) ||
-                                                        (
-                                                            isset(session()->get("halaman")['18']['act_create']) 
-                                                            && session()->get("halaman")['18']['act_create'] == "1"
+                                                    ) ||
+                                                    (
+                                                        isset(session()->get("halaman")['18']['act_read']) 
+                                                        && session()->get("halaman")['18']['act_read'] == "1"
+                                                    )
+                                                ) { ?>
+                                                
+                                                <?php if (isset($_GET["report"])) {$report="&report=OK";}else{$report="";} ?>
+                                                <a href="<?=base_url("purchased?supplier_id=".$usr->supplier_id."&purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&purchase_ppn=".$usr->purchase_ppn.$report);?>" class="btn btn-xs btn-info"><span class="fa fa-cubes"></span></a>
+                                                <?php }?>
+                                                
+                                                <?php if (!isset($_GET["report"])) { ?>
+                                                <?php 
+                                                if (
+                                                    (
+                                                        isset(session()->get("position_administrator")[0][0]) 
+                                                        && (
+                                                            session()->get("position_administrator") == "1" 
+                                                            || session()->get("position_administrator") == "2"
                                                         )
-                                                    ) { ?>
-                                                   <a href="<?=base_url("payment?purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&kas_nominal=".$hargasetelahppn."&supplier_id=".$usr->supplier_id."&url=".$fullURL);?>" class="btn btn-xs btn-success"><span class="fa fa-money"></span></a>
-                                                    <?php }?>
-                                                    <?php }?>
-                                                    
-                                                    <?php if (!isset($_GET["report"])) { ?>
-                                                    <?php 
-                                                    if (
-                                                        (
-                                                            isset(session()->get("position_administrator")[0][0]) 
-                                                            && (
-                                                                session()->get("position_administrator") == "1" 
-                                                                || session()->get("position_administrator") == "2"
-                                                            )
-                                                        ) ||
-                                                        (
-                                                            isset(session()->get("halaman")['18']['act_update']) 
-                                                            && session()->get("halaman")['18']['act_update'] == "1"
+                                                    ) ||
+                                                    (
+                                                        isset(session()->get("halaman")['18']['act_create']) 
+                                                        && session()->get("halaman")['18']['act_create'] == "1"
+                                                    )
+                                                ) { ?>
+                                                <a href="<?=base_url("payment?purchase_id=".$usr->purchase_id."&purchase_no=".$usr->purchase_no."&kas_nominal=".$hargasetelahppn."&supplier_id=".$usr->supplier_id."&url=".$fullURL);?>" class="btn btn-xs btn-success"><span class="fa fa-money"></span></a>
+                                                <?php }?>
+                                                <?php }?>
+                                                
+                                                <?php if (!isset($_GET["report"])) { ?>
+                                                <?php 
+                                                if (
+                                                    (
+                                                        isset(session()->get("position_administrator")[0][0]) 
+                                                        && (
+                                                            session()->get("position_administrator") == "1" 
+                                                            || session()->get("position_administrator") == "2"
                                                         )
-                                                    ) { ?>
-                                                    <form method="post" class="btn-action" style="">
-                                                        <button class="btn btn-sm btn-warning " name="edit" value="OK"><span class="fa fa-edit" style="color:white;"></span> </button>
-                                                        <input type="hidden" name="purchase_id" value="<?= $usr->purchase_id; ?>" />
-                                                    </form>
-                                                    <?php }?>
-                                                    <?php }?>
-                                                    
-                                                    <?php if (!isset($_GET["report"])) { ?>                                                    
-                                                    <?php 
-                                                    if (
-                                                        (
-                                                            isset(session()->get("position_administrator")[0][0]) 
-                                                            && (
-                                                                session()->get("position_administrator") == "1" 
-                                                                || session()->get("position_administrator") == "2"
-                                                            )
-                                                        ) ||
-                                                        (
-                                                            isset(session()->get("halaman")['18']['act_delete']) 
-                                                            && session()->get("halaman")['18']['act_delete'] == "1"
+                                                    ) ||
+                                                    (
+                                                        isset(session()->get("halaman")['18']['act_update']) 
+                                                        && session()->get("halaman")['18']['act_update'] == "1"
+                                                    )
+                                                ) { ?>
+                                                <form method="post" class="btn-action" style="">
+                                                    <button class="btn btn-sm btn-warning " name="edit" value="OK"><span class="fa fa-edit" style="color:white;"></span> </button>
+                                                    <input type="hidden" name="purchase_id" value="<?= $usr->purchase_id; ?>" />
+                                                </form>
+                                                <?php }?>
+                                                <?php }?>
+                                                
+                                                <?php if (!isset($_GET["report"])) { ?>                                                    
+                                                <?php 
+                                                if (
+                                                    (
+                                                        isset(session()->get("position_administrator")[0][0]) 
+                                                        && (
+                                                            session()->get("position_administrator") == "1" 
+                                                            || session()->get("position_administrator") == "2"
                                                         )
-                                                    ) { ?>
-                                                    <form method="post" class="btn-action" style="">
-                                                        <button class="btn btn-sm btn-danger delete" onclick="return confirm(' you want to delete?');" name="delete" value="OK"><span class="fa fa-close" style="color:white;"></span> </button>
-                                                        <input type="hidden" name="purchase_id" value="<?= $usr->purchase_id; ?>" />
-                                                    </form>
-                                                    <?php }?>
-                                                    <?php } ?>
-                                                </td>
+                                                    ) ||
+                                                    (
+                                                        isset(session()->get("halaman")['18']['act_delete']) 
+                                                        && session()->get("halaman")['18']['act_delete'] == "1"
+                                                    )
+                                                ) { ?>
+                                                <form method="post" class="btn-action" style="">
+                                                    <button class="btn btn-sm btn-danger delete" onclick="return confirm(' you want to delete?');" name="delete" value="OK"><span class="fa fa-close" style="color:white;"></span> </button>
+                                                    <input type="hidden" name="purchase_id" value="<?= $usr->purchase_id; ?>" />
+                                                </form>
+                                                <?php }?>
+                                                <?php } ?>
+                                            </td>
+                                            <td><?= $no++; ?></td>                                                  
                                             <td><?= $usr->purchase_date; ?></td>
                                             <td><?= $usr->store_name; ?></td>
                                             <td><?= $usr->supplier_name; ?></td>
@@ -320,10 +319,10 @@
                                     <?php } ?>
                                     
                                     <tr>
-                                        <td><?= $no; ?></td>
                                         <?php //if (!isset($_GET["report"])) { ?>
                                         <td></td>
                                         <?php //}?>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

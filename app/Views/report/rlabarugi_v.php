@@ -60,7 +60,7 @@
 
                         <div class="table-responsive m-t-40">
                         <div class="bold text-primary h3">Pemasukan : <span id="pemasukan" class=""></span></div>
-                            <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                            <table id="" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                                 <thead class="">
                                     <tr>

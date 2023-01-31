@@ -146,10 +146,10 @@
                                 <!-- <table id="dataTable" class="table table-condensed table-hover w-auto dtable"> -->
                                 <thead class="">
                                     <tr>
-                                        <th>No.</th>
                                         <?php if (!isset($_GET["report"])) { ?>
                                         <th>Aksi</th>
                                         <?php }?>
+                                        <th>No.</th>
                                         <th>Tanggal</th>
                                         <th>Toko</th>
                                         <th>Supplier</th>
@@ -187,8 +187,7 @@
                                     $no = 1;
                                     $tnominal=0;
                                     foreach ($usr->getResult() as $usr) { ?>
-                                        <tr>
-                                            <td><?= $no++; ?></td>      
+                                        <tr>    
                                             <?php if (!isset($_GET["report"])) { ?>
                                                 <td style="padding-left:0px; padding-right:0px;">                                                    
                                                     <?php 
@@ -234,6 +233,7 @@
                                                     <?php }?>
                                                 </td>
                                             <?php } ?>
+                                            <td><?= $no++; ?></td>  
                                             <td><?= $usr->payment_date; ?></td>
                                             <td><?= $usr->store_name; ?></td>
                                             <td><?= $usr->supplier_name; ?></td>
@@ -247,10 +247,10 @@
                                     <?php } ?>
                                     
                                     <tr>
-                                        <td><?= $no; ?></td>
                                         <?php if (!isset($_GET["report"])) { ?>
                                         <td></td>
                                         <?php }?>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

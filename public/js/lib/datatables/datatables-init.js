@@ -48,7 +48,6 @@ $(document).ready(function () {
 });
 $("#example23").DataTable({
   order: [
-    [0, "asc"],
     [1, "asc"],
     [2, "asc"],
   ],
@@ -57,15 +56,15 @@ $("#example23").DataTable({
     "copy",
     "csv",
     {
-      extend: 'excel',
+      extend: "excel",
       exportOptions: {
-          columns: ':visible',
-          format: {
-            body: function(data, row, column, node) {
-                return data.replace(/[\,]/g, '');
-            }
-          }
-      }
+        columns: ":visible",
+        format: {
+          body: function (data, row, column, node) {
+            return column === 0 ? "" : data.replace(/[\,]/g, "");
+          },
+        },
+      },
     },
     "pdf",
     "print",
