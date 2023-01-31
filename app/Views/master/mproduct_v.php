@@ -221,6 +221,7 @@
                                         <th>Exp Date</th>
                                         <th>Limit</th>
                                         <th>Stok</th>
+                                        <th>Status</th>
                                         <th>Beli</th>
                                         <th>Jual</th>
                                         <th>Margin</th>
@@ -293,10 +294,11 @@
                                             <?php 
                                             $limit=$usr->product_countlimit; 
                                             $stock=$usr->product_stock;
-                                            if($limit>=$stock){$alstock="danger";}else{$alstock="default";}
+                                            if($limit>=$stock){$alstock="danger";$salstock="Peringatan";}else{$alstock="default";$salstock="Aman";}
                                             ?>
                                             <td><?= number_format($limit,0,".",","); ?></td>
-                                            <td><i class="text-<?=$alstock;?>"><?= number_format($stock,0,".",","); ?></i></td>
+                                            <td><?= number_format($stock,0,".",","); ?></td>
+                                            <td class="text-<?=$alstock;?>"><?=$salstock;?></td>
                                             <?php 
                                             $buy=$usr->product_buy; 
                                             $sell=$usr->product_sell;
