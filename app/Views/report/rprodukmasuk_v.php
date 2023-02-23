@@ -171,6 +171,7 @@
                                         <th>No.</th>
                                         <th>Toko</th>
                                         <th>Kadaluarsa</th>
+                                        <th>Batch</th>
                                         <th>Produk</th>
                                         <th>No. Pembelian</th>
                                         <th>Qty</th>
@@ -210,6 +211,7 @@
                                             <td><?= $no++; ?></td>
                                             <td><?= $usr->store_name; ?></td>
                                             <td><?= $usr->purchased_outdate; ?></td>
+                                            <td><?= $usr->purchased_batch; ?></td>
                                             <td class="text-left"><?= $usr->product_name; ?></td>
                                             <td><?= $usr->purchase_no; ?></td>
                                             <td class="text-right"><?= number_format($usr->purchased_qty,0,".",","); ?></td>
