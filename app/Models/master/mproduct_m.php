@@ -148,7 +148,7 @@ class mproduct_m extends core_m
             ->get();
             foreach ($product->getResult() as $product) {
                 $purchased=$this->db->table("purchased")
-                ->select("*,COUNT(purchased_id)")
+                // ->select("*,COUNT(purchased_id)")
                 ->where("product_id",$product->product_id)
                 ->orderBy("purchased_id ","DESC")
                 ->limit(1)

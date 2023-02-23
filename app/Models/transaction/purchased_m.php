@@ -36,6 +36,7 @@ class purchased_m extends core_m
                 $data[$field] = "0";
             }
             $data["purchased_outdate"] = "";
+            $data["purchased_batch"] = "";
         }
 
         
