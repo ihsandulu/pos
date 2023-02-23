@@ -148,19 +148,7 @@
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="product_ube" name="product_ube" placeholder="" value="<?= $product_ube; ?>">
                                     </div>
-                                </div>                                
-                                <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_batch">Batch No.:</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="product_batch" name="product_batch" placeholder="" value="<?= $product_batch; ?>">
-                                    </div>
-                                </div>                                
-                                <div class="form-group">
-                                    <label class="control-label col-sm-2" for="product_expiredate">Exp Date:</label>
-                                    <div class="col-sm-10">
-                                        <input type="date" autofocus class="form-control" id="product_expiredate" name="product_expiredate" placeholder="" value="<?= $product_expiredate; ?>">
-                                    </div>
-                                </div>                            
+                                </div>                       
                                <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_picture">Photo Produk:</label>
                                     <div class="col-sm-10">
@@ -217,8 +205,6 @@
                                         <th>Unit</th>
                                         <th>Produk</th>
                                         <th>Ube</th>
-                                        <th>Batch</th>
-                                        <th>Exp Date</th>
                                         <th>Limit</th>
                                         <th>Stok</th>
                                         <th>Status</th>
@@ -289,8 +275,6 @@
                                             <td><?= $usr->unit_name; ?></td>
                                             <td><?= $usr->product_name; ?></td>
                                             <td><?= $usr->product_ube; ?></td>
-                                            <td><?= $usr->product_batch; ?></td>
-                                            <td><?= $usr->product_expiredate; ?></td>
                                             <?php 
                                             $limit=$usr->product_countlimit; 
                                             $stock=$usr->product_stock;
