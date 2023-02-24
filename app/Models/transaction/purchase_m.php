@@ -36,6 +36,7 @@ class purchase_m extends core_m
                 $data[$field] = "";
             }
             $data["purchase_ppn"] = "0";
+            $data["purchase_date"] = date("Y-m-d");
         }
 
         
@@ -65,9 +66,12 @@ class purchase_m extends core_m
                 }
             }
             $input["store_id"] = session()->get("store_id");
-            $input["purchase_date"] = date("Y-m-d");
             $input["cashier_id"] = session()->get("user_id");
-            $input["purchase_no"] = "PUR".date("YmdHis").session()->get("store_id");
+            if(isset($_POST["purchase_no"])){
+                $input["purchase_no"] = $_POST["purchase_no"];
+            }else{
+                $input["purchase_no"] = "PUR".date("YmdHis").session()->get("store_id");
+            }
 
             $builder = $this->db->table('purchase');
             $builder->insert($input);

@@ -61,7 +61,19 @@
                             <div class="lead">
                                 <h3><?= $judul; ?></h3>
                             </div>
-                            <form class="form-horizontal" method="post" enctype="multipart/form-data">   
+                            <form class="form-horizontal" method="post" enctype="multipart/form-data">     
+                                <div class="form-group">
+                                    <label class="control-label col-sm-2" for="purchase_date">Tgl Pembelian:</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" autofocus class="form-control" id="purchase_date" name="purchase_date" placeholder="" value="<?= $purchase_date; ?>">
+                                    </div>
+                                </div>    
+                                <div class="form-group">
+                                    <label class="control-label col-sm-2" for="purchase_no">Nomor Pembelian/Faktur:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" autofocus class="form-control" id="purchase_no" name="purchase_no" placeholder="Penomoran akan otomatis jika dikosongkan" value="<?= $purchase_no; ?>">
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="supplier_id">Supplier:</label>
                                     <div class="col-sm-10">
