@@ -67,7 +67,7 @@ class purchase_m extends core_m
             }
             $input["store_id"] = session()->get("store_id");
             $input["cashier_id"] = session()->get("user_id");
-            if(isset($_POST["purchase_no"])){
+            if(isset($_POST["purchase_no"])&&$_POST["purchase_no"]!=""){
                 $input["purchase_no"] = $_POST["purchase_no"];
             }else{
                 $input["purchase_no"] = "PUR".date("YmdHis").session()->get("store_id");
