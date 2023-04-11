@@ -92,6 +92,10 @@ $routes->add('/mbank', 'master\mbank::index');
 $routes->add('/rprodukkeluar', 'report\rprodukkeluar::index');
 $routes->add('/rprodukmasuk', 'report\rprodukmasuk::index');
 
+$routes->add('/stockopname', 'transaction\stockopname::index');
+
+$routes->add('/rhistorystock', 'report\rhistorystock::index');
+
 
 
 

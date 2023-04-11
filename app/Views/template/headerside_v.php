@@ -367,6 +367,25 @@
                 </li>
                 <?php }?>
 
+                <?php 
+                if (
+                    (
+                        isset(session()->get("position_administrator")[0][0]) 
+                        && (
+                            session()->get("position_administrator") == "1" 
+                            || session()->get("position_administrator") == "2"
+                        )
+                    ) ||
+                    (
+                        isset(session()->get("halaman")['26']['act_read']) 
+                        && session()->get("halaman")['26']['act_read'] == "1"
+                    )
+                ) { ?>
+                <li> 
+                    <a class="  " href="<?= base_url("stockopname"); ?>" aria-expanded="false"><i class="fa fa-cubes"></i><span class="hide-menu">Stockopname</span></a>
+                </li>
+                <?php }?>
+
                 <?php }?>
 
                 <!-- //Report// -->
@@ -474,6 +493,24 @@
                 ) { ?>
                 <li> 
                     <a class="  " href="<?= base_url("rprodukkeluar"); ?>" aria-expanded="false"><i class="fa fa-cubes"></i><span class="hide-menu">Produk Keluar</span></a>
+                </li>
+                <?php }?>
+                <?php 
+                if (
+                    (
+                        isset(session()->get("position_administrator")[0][0]) 
+                        && (
+                            session()->get("position_administrator") == "1" 
+                            || session()->get("position_administrator") == "2"
+                        )
+                    ) ||
+                    (
+                        isset(session()->get("halaman")['27']['act_read']) 
+                        && session()->get("halaman")['27']['act_read'] == "1"
+                    )
+                ) { ?>
+                <li> 
+                    <a class="  " href="<?= base_url("rhistorystock"); ?>" aria-expanded="false"><i class="fa fa-th-list"></i><span class="hide-menu">History Stok</span></a>
                 </li>
                 <?php }?>
                 <?php 

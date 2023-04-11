@@ -383,10 +383,16 @@ class transaction extends baseController
                     
                     $where1["product_id"] = $pro->getRow()->product_id;
                     $product = $this->db->table('product');
-                    $product_stock=$product->getWhere($where1)->getRow()->product_stock;
-                    $product_stock=$product_stock-$transactiond_qty;
+                    $product_stockawal=$product->getWhere($where1)->getRow()->product_stock;
+                    $product_stock=$product_stockawal-$transactiond_qty;
                     $input1["product_stock"] = $product_stock;
                     $product->update($input1,$where1);
+
+                    
+                    $input2["transactiond_stokawal"] = $product_stockawal;
+                    $input2["transactiond_stokakhir"] = $product_stock;
+                    $transactiondp=$this->db->table("transactiond");
+                    $transactiondp->update($input2,$where);
                 }
             }else{
                 $where["store_id"]=session()->get("store_id");
@@ -397,10 +403,17 @@ class transaction extends baseController
 
                 $where1["product_id"] = $pro->getRow()->product_id;
                 $product = $this->db->table('product');
-                $product_stock=$product->getWhere($where1)->getRow()->product_stock;
-                $product_stock=$product_stock-$transactiond_qty;
+                $product_stockawal=$product->getWhere($where1)->getRow()->product_stock;
+                $product_stock=$product_stockawal-$transactiond_qty;
                 $input1["product_stock"] = $product_stock;
                 $product->update($input1,$where1);
+
+                    
+                $where2["transactiond_id"] = $transactiond_id;
+                $input2["transactiond_stokawal"] = $product_stockawal;
+                $input2["transactiond_stokakhir"] = $product_stock;
+                $transactiondp=$this->db->table("transactiond");
+                $transactiondp->update($input2,$where2);
             }
 
             // $data["message"] = $this->db->getLastQuery();
@@ -512,19 +525,26 @@ class transaction extends baseController
 
             $wherep["product_id"] = $product_id;
             $product = $this->db->table('product');
-            $product_stock=$product->getWhere($wherep)->getRow()->product_stock;
+            $product_stockawal=$product->getWhere($wherep)->getRow()->product_stock;
              if($type=="tambah"){                
-                $product_stock=$product_stock-$transactiond_qty;
+                $product_stock=$product_stockawal-$transactiond_qty;
             }
             if($type=="kurang"){        
-                $product_stock=$product_stock+$transactiond_qty;
+                $product_stock=$product_stockawal+$transactiond_qty;
             }
             if($type=="update"){
-                $product_stock=$product_stock+$transactiond->transactiond_qty-$transactiond_qty;
+                $product_stock=$product_stockawal+$transactiond->transactiond_qty-$transactiond_qty;
             }
             $inputp["product_stock"] = $product_stock;
             $product->update($inputp,$wherep);
             // $data["message"] = $this->db->getLastQuery();
+
+                    
+            $where2["transactiond_id"] = $transactiond_id;
+            $input2["transactiond_stokawal"] = $product_stockawal;
+            $input2["transactiond_stokakhir"] = $product_stock;
+            $transactiond=$this->db->table("transactiond");
+            $transactiond->update($input2,$where2);
         }
         echo $data["message"];
     }

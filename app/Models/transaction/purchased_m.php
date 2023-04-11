@@ -107,6 +107,12 @@ class purchased_m extends core_m
             $wherep["product_id"]=$input["product_id"];
             $this->db->table("product")
             ->update($inputp,$wherep);
+
+                    
+            $where2["purchased_id"] = $purchased_id;
+            $input2["purchased_stokawal"] = $stock;
+            $input2["purchased_stokakhir"] = $inputp["product_stock"];
+            $product->update($input2,$where2);
         }
         //echo $_POST["create"];die;
         
