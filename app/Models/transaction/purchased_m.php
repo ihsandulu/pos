@@ -112,7 +112,7 @@ class purchased_m extends core_m
             $where2["purchased_id"] = $purchased_id;
             $input2["purchased_stokawal"] = $stock;
             $input2["purchased_stokakhir"] = $inputp["product_stock"];
-            $product->update($input2,$where2);
+            $this->db->table("purchased")->update($input2,$where2);
         }
         //echo $_POST["create"];die;
         
@@ -123,10 +123,10 @@ class purchased_m extends core_m
                     $input[$e] = $this->request->getPost($e);
                 }
             }
-            
+            $purchased_id=$this->request->getPost("purchased_id");
             if($this->request->getPost("purchased_ppn")==""){$input["purchased_ppn"]=0;}
             $input["store_id"] = session()->get("store_id");
-            $this->db->table('purchased')->update($input, array("purchased_id" => $this->request->getPost("purchased_id")));
+            $this->db->table('purchased')->update($input, array("purchased_id" => $purchased_id));
             $data["message"] = "Update Success";
             //echo $this->db->last_query();die;
 
@@ -145,11 +145,16 @@ class purchased_m extends core_m
             ->get()
             ->getRow()
             ->product_stock;
-
-            $inputp["product_stock"]=$stock-$this->request->getPost("purchased_qtyb")+$this->request->getPost("purchased_qty");
+            $stockawal=$stock-$this->request->getPost("purchased_qtyb");
+            $inputp["product_stock"]=$stockawal+$this->request->getPost("purchased_qty");
             $wherep["product_id"]=$this->request->getPost("product_id");
             $this->db->table("product")
             ->update($inputp,$wherep);
+
+            $where2["purchased_id"] = $purchased_id;
+            $input2["purchased_stokawal"] = $stockawal;
+            $input2["purchased_stokakhir"] = $inputp["product_stock"];
+            $this->db->table("purchased")->update($input2,$where2);
         }
         return $data;
     }
