@@ -65,8 +65,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="ppn_type">Tipe:</label>
                                     <div class="col-sm-10">
-                                        <select class="form-control select" id="ppn_type" name="ppn_type">
-                                            <option value="0" <?= ($ppn_type == "0") ? "selected" : ""; ?>>Pilih Tipe</option>
+                                        <select required class="form-control select" id="ppn_type" name="ppn_type">
+                                            <option value="" <?= ($ppn_type == "") ? "selected" : ""; ?>>Pilih Tipe</option>
                                             <option value="1" <?= ($ppn_type == "1") ? "selected" : ""; ?>>Pembelian</option>
                                             <option value="2" <?= ($ppn_type == "2") ? "selected" : ""; ?>>Penjualan</option>                                            
                                         </select>
@@ -76,13 +76,13 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="ppn_nominal">Nominal:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="ppn_nominal" name="ppn_nominal" placeholder="" value="<?= $ppn_nominal; ?>">
+                                        <input required type="text" autofocus class="form-control" id="ppn_nominal" name="ppn_nominal" placeholder="" value="<?= $ppn_nominal; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="ppn_activedate">Active Date:</label>
                                     <div class="col-sm-10">
-                                        <input type="date" autofocus class="form-control" id="ppn_activedate" name="ppn_activedate" placeholder="" value="<?= $ppn_activedate; ?>">
+                                        <input required type="date" autofocus class="form-control" id="ppn_activedate" name="ppn_activedate" placeholder="" value="<?= $ppn_activedate; ?>">
                                     </div>
                                 </div>
 

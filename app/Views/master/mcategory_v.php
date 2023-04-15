@@ -66,7 +66,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="category_name">Nama Kategori:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="category_name" name="category_name" placeholder="" value="<?= $category_name; ?>">
+                                        <input required type="text" autofocus class="form-control" id="category_name" name="category_name" placeholder="" value="<?= $category_name; ?>">
                                     </div>
                                 </div>  
 

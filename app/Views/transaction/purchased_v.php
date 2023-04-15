@@ -76,8 +76,8 @@
                                             ->get();
                                         //echo $this->db->getLastQuery();
                                         ?>
-                                        <select onchange="unitname()" class="form-control select" id="product_id" name="product_id">
-                                            <option unit_name="" value="0" <?= ($product_id == "0") ? "selected" : ""; ?>>Pilih Produk</option>
+                                        <select required onchange="unitname()" class="form-control select" id="product_id" name="product_id">
+                                            <option unit_name="" value="" <?= ($product_id == "") ? "selected" : ""; ?>>Pilih Produk</option>
                                             <?php
                                             foreach ($product->getResult() as $product) { ?>
                                                 <option unit_name="<?= $product->unit_name; ?>" value="<?= $product->product_id; ?>" <?= ($product_id == $product->product_id) ? "selected" : ""; ?>><?= $product->product_name; ?></option>
@@ -106,13 +106,13 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="purchased_qty">Qty (<span id="unit_name"></span>):</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="purchased_qty" name="purchased_qty" placeholder="" value="<?= $purchased_qty; ?>">
+                                        <input required type="text" autofocus class="form-control" id="purchased_qty" name="purchased_qty" placeholder="" value="<?= $purchased_qty; ?>">
                                     </div>
                                 </div>    
                                 <div class="form-group">
                                     <label class="control-label col-sm-12" for="purchased_price">Total Harga Keseluruhan (bukan satuan):</label>
                                     <div class="col-sm-12">
-                                        <input onkeyup="tagihan()" type="number" autofocus class="form-control" id="purchased_price" name="purchased_price" placeholder="" value="<?= $purchased_price; ?>">
+                                        <input required onkeyup="tagihan()" type="number" autofocus class="form-control" id="purchased_price" name="purchased_price" placeholder="" value="<?= $purchased_price; ?>">
                                     </div>
                                 </div>     
                                 <?php if($this->request->getGET("purchase_ppn")==0){

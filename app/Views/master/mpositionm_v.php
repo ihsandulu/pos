@@ -66,7 +66,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="positionm_name">Grade Member:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="positionm_name" name="positionm_name" placeholder="" value="<?= $positionm_name; ?>">
+                                        <input required type="text" autofocus class="form-control" id="positionm_name" name="positionm_name" placeholder="" value="<?= $positionm_name; ?>">
 
                                     </div>
                                 </div>

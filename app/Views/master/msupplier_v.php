@@ -65,7 +65,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="supplier_name">Supplier:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="supplier_name" name="supplier_name" placeholder="" value="<?= $supplier_name; ?>">
+                                        <input required type="text" autofocus class="form-control" id="supplier_name" name="supplier_name" placeholder="" value="<?= $supplier_name; ?>">
                                     </div>
                                 </div>                              
                                 <div class="form-group">

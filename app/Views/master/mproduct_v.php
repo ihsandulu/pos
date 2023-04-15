@@ -77,8 +77,8 @@
                                             ->get();
                                         //echo $this->db->getLastQuery();
                                         ?>
-                                        <select class="form-control select" id="category_id" name="category_id">
-                                            <option value="0" <?= ($category_id == "0") ? "selected" : ""; ?>>Pilih Kategori</option>
+                                        <select required class="form-control select" id="category_id" name="category_id">
+                                            <option value="" <?= ($category_id == "") ? "selected" : ""; ?>>Pilih Kategori</option>
                                             <?php
                                             foreach ($category->getResult() as $category) { ?>
                                                 <option value="<?= $category->category_id; ?>" <?= ($category_id == $category->category_id) ? "selected" : ""; ?>><?= $category->category_name; ?></option>
@@ -110,7 +110,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_name">Nama Produk:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="product_name" name="product_name" placeholder="" value="<?= $product_name; ?>">
+                                        <input required type="text" autofocus class="form-control" id="product_name" name="product_name" placeholder="" value="<?= $product_name; ?>">
                                     </div>
                                 </div>                            
                                 <div class="form-group">

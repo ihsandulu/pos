@@ -83,8 +83,8 @@
                                             ->get();
                                         //echo $this->db->getLastQuery();
                                         ?>
-                                        <select class="form-control select" id="supplier_id" name="supplier_id">
-                                            <option value="0" <?= ($supplier_id == "0") ? "selected" : ""; ?>>Pilih Supplier</option>
+                                        <select required class="form-control select" id="supplier_id" name="supplier_id">
+                                            <option value="" <?= ($supplier_id == "") ? "selected" : ""; ?>>Pilih Supplier</option>
                                             <?php
                                             foreach ($supplier->getResult() as $supplier) { ?>
                                                 <option value="<?= $supplier->supplier_id; ?>" <?= ($supplier_id == $supplier->supplier_id) ? "selected" : ""; ?>><?= $supplier->supplier_name; ?></option>
@@ -96,7 +96,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="payment_nominal">Nominal:</label>
                                     <div class="col-sm-10">
-                                        <input type="number" autofocus class="form-control" id="payment_nominal" name="payment_nominal" placeholder="" value="<?= $payment_nominal; ?>">
+                                        <input required type="number" autofocus class="form-control" id="payment_nominal" name="payment_nominal" placeholder="" value="<?= $payment_nominal; ?>">
                                     </div>
                                 </div>                             
                                 

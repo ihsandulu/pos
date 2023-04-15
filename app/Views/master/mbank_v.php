@@ -66,7 +66,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="bank_name">Nama Bank:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="bank_name" name="bank_name" placeholder="" value="<?= $bank_name; ?>">
+                                        <input required type="text" class="form-control" id="bank_name" name="bank_name" placeholder="" value="<?= $bank_name; ?>">
                                     </div>
                                 </div>  
 

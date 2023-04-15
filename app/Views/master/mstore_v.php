@@ -45,7 +45,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="store_name">Toko:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="store_name" name="store_name" placeholder="" value="<?= $store_name; ?>">
+                                        <input required type="text" autofocus class="form-control" id="store_name" name="store_name" placeholder="" value="<?= $store_name; ?>">
                                     </div>
                                 </div>
 

@@ -60,8 +60,8 @@
                                             ->get();
                                         //echo $this->db->getLastQuery();
                                         ?>
-                                        <select class="form-control select" id="positionm_id" name="positionm_id">
-                                            <option value="0" <?= ($positionm_id == "0") ? "selected" : ""; ?>>Pilih Grade Member</option>
+                                        <select required class="form-control select" id="positionm_id" name="positionm_id">
+                                            <option value="" <?= ($positionm_id == "") ? "selected" : ""; ?>>Pilih Grade Member</option>
                                             <?php
                                             foreach ($positionm->getResult() as $positionm) { ?>
                                                 <option value="<?= $positionm->positionm_id; ?>" <?= ($positionm_id == $positionm->positionm_id) ? "selected" : ""; ?>><?= $positionm->positionm_name; ?></option>
@@ -75,7 +75,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="member_name">Nama:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="member_name" name="member_name" placeholder="" value="<?= $member_name; ?>">
+                                        <input required type="text" autofocus class="form-control" id="member_name" name="member_name" placeholder="" value="<?= $member_name; ?>">
 
                                     </div>
                                 </div>

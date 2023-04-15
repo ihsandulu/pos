@@ -79,7 +79,7 @@
                                         //echo $this->db->getLastQuery();
                                         ?>
                                         <select required onchange="isi(); selisih();" class="form-control select" id="product_id" name="product_id">
-                                            <option value="" <?= ($product_id == "0"||$product_id == "") ? "selected" : ""; ?> disabled>Pilih Produk</option>
+                                            <option value="" <?= ($product_id == "0"||$product_id == "") ? "selected" : ""; ?> >Pilih Produk</option>
                                             <?php
                                             foreach ($product->getResult() as $product) { ?>
                                                 <option value="<?= $product->product_id; ?>" <?= ($product_id == $product->product_id) ? "selected" : ""; ?> product_name="<?= $product->product_name; ?>" product_buy="<?= $product->product_buy; ?>" product_ube="<?= $product->product_ube; ?>" product_batch="<?= $product->product_batch; ?>" product_expiredate="<?= $product->product_expiredate; ?>" stockopname_awal="<?= $product->product_stock; ?>"><?= $product->product_name; ?></option>

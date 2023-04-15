@@ -66,7 +66,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="account_type">Tipe:</label>
                                     <div class="col-sm-10">
-                                        <select autofocus class="form-control" id="account_type" name="account_type">
+                                        <select required autofocus class="form-control" id="account_type" name="account_type">
                                             <option value="" <?=($account_type=="")?"selected":"";?>>Pilih Tipe</option>
                                             <option value="Debet" <?=($account_type=="Debet")?"selected":"";?>>Debet</option>
                                             <option value="Kredit" <?=($account_type=="Kredit")?"selected":"";?>>Kredit</option>
@@ -76,13 +76,13 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="account_sort">Urutan:</label>
                                     <div class="col-sm-10">
-                                        <input type="number" min="0" class="form-control" id="account_sort" name="account_sort" placeholder="" value="<?= $account_sort; ?>">
+                                        <input required type="number" min="0" class="form-control" id="account_sort" name="account_sort" placeholder="" value="<?= $account_sort; ?>">
                                     </div>
                                 </div>                                                      
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="account_name">Nama Akun:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="account_name" name="account_name" placeholder="" value="<?= $account_name; ?>">
+                                        <input required type="text" class="form-control" id="account_name" name="account_name" placeholder="" value="<?= $account_name; ?>">
                                     </div>
                                 </div>  
 

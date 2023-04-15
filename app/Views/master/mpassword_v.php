@@ -47,7 +47,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="user_password">Password:</label>
                                 <div class="col-sm-10">
-                                    <input onkeyup="cek()" type="text" autocomplete="off" autofocus class="form-control pass" id="user_password" name="user_password" placeholder="" value="">
+                                    <input required onkeyup="cek()" type="text" autocomplete="off" autofocus class="form-control pass" id="user_password" name="user_password" placeholder="" value="">
 
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="user_confirm">Konfirmasi Password:</label>
                                 <div class="col-sm-10">
-                                    <input onkeyup="cek()" type="password" class="form-control pass" id="user_confirm" placeholder="" value="">
+                                    <input required onkeyup="cek()" type="password" class="form-control pass" id="user_confirm" placeholder="" value="">
                                 </div>
                             </div>
 

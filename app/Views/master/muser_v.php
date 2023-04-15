@@ -61,8 +61,8 @@
                                             ->get();
                                         //echo $this->db->getLastQuery();
                                         ?>
-                                        <select class="form-control select" id="position_id" name="position_id">
-                                            <option value="0" <?= ($position_id == "0") ? "selected" : ""; ?>>Pilih Jabatan</option>
+                                        <select required class="form-control select" id="position_id" name="position_id">
+                                            <option value="" <?= ($position_id == "") ? "selected" : ""; ?>>Pilih Jabatan</option>
                                             <?php
                                             foreach ($position->getResult() as $position) { ?>
                                                 <option value="<?= $position->position_id; ?>" <?= ($position_id == $position->position_id) ? "selected" : ""; ?>><?= $position->position_name; ?></option>
@@ -76,7 +76,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="user_name">Username:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="user_name" name="user_name" placeholder="" value="<?= $user_name; ?>">
+                                        <input required type="text" autofocus class="form-control" id="user_name" name="user_name" placeholder="" value="<?= $user_name; ?>">
 
                                     </div>
                                 </div>
@@ -86,14 +86,14 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="user_password">Password:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="user_password" name="user_password" placeholder="<?=$ketpassword;?>" value="">
+                                        <input required type="text" autofocus class="form-control" id="user_password" name="user_password" placeholder="<?=$ketpassword;?>" value="">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="user_email">Email:</label>
                                     <div class="col-sm-10">
-                                        <input type="email" autofocus class="form-control" id="user_email" name="user_email" placeholder="" value="<?= $user_email; ?>">
+                                        <input required type="email" autofocus class="form-control" id="user_email" name="user_email" placeholder="" value="<?= $user_email; ?>">
 
                                     </div>
                                 </div>
