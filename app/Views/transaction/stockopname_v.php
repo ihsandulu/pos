@@ -157,23 +157,21 @@
                                         let nselisih = selisih * $("#product_buy").val();
                                         $("#stockopname_selisih").val(selisih);
                                         $("#stockopname_nselisih").val(nselisih);
-                                        rupiahnumerik($("#stockopname_selisih"));
-                                        rupiahnumerik($("#stockopname_nselisih"));
+                                        // rupiahnumerik($("#stockopname_selisih"));
+                                        // rupiahnumerik($("#stockopname_nselisih"));
                                     }
                                 </script>
                                  <div class="form-group">
                                     <label class="control-label col-sm-2" for="stockopname_selisih">Selisih:</label>
                                     <div class="col-sm-10">
-                                        <input onkeyup="rupiahnumerik(this)" type="text" required readonly class="form-control" id="stockopname_selisih" name="stockopname_selisih" placeholder="" value="<?= $stockopname_selisih; ?>">
+                                        <input  type="text" required readonly class="form-control" id="stockopname_selisih" name="stockopname_selisih" placeholder="" value="<?= $stockopname_selisih; ?>">
                                     </div>
-                                    <script>rupiahnumerik($("#stockopname_selisih"))</script>
                                 </div> 
                                  <div class="form-group">
                                     <label class="control-label col-sm-2" for="stockopname_nselisih">Nilai Selisih:</label>
                                     <div class="col-sm-10">
-                                        <input onkeyup="rupiahnumerik(this)" type="text" required readonly class="form-control" id="stockopname_nselisih" name="stockopname_nselisih" placeholder="" value="<?= $stockopname_nselisih; ?>">
+                                        <input  type="text" required readonly class="form-control" id="stockopname_nselisih" name="stockopname_nselisih" placeholder="" value="<?= $stockopname_nselisih; ?>">
                                     </div>
-                                    <script>rupiahnumerik($("#stockopname_nselisih"))</script>
                                 </div> 
 
                                 <input type="hidden" name="stockopname_id" value="<?= $stockopname_id; ?>" />

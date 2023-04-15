@@ -105,6 +105,7 @@
                                     $builder = $this->db
                                     ->table("transactiond")
                                     ->join("transaction", "transaction.transaction_id=transactiond.transaction_id", "left")
+                                    ->join("user", "user.user_id=transaction.cashier_id", "left")
                                     ->join("store", "store.store_id=transactiond.store_id", "left")
                                     ->where("transactiond.store_id",session()->get("store_id"))
                                     ->where("transactiond.product_id",$productid);
@@ -132,7 +133,7 @@
                                         $arraya["masuk"]=0;
                                         $arraya["keluar"]=$masuk->transactiond_qty;
                                         $arraya["akhir"]=$masuk->transactiond_stokakhir;
-                                        $arraya["user"]=$masuk->cashier_id;
+                                        $arraya["user"]=$masuk->user_name;
                                         $arrayb[]=$arraya;
                                     } 
 
@@ -140,6 +141,7 @@
                                     $builder = $this->db
                                     ->table("purchased")
                                     ->join("purchase", "purchase.purchase_id=purchased.purchase_id", "left")
+                                    ->join("user", "user.user_id=purchase.cashier_id", "left")
                                     ->join("store", "store.store_id=purchased.store_id", "left")
                                     ->where("purchased.store_id",session()->get("store_id"))
                                     ->where("purchased.product_id",$productid);
@@ -165,7 +167,7 @@
                                         $arraya["masuk"]=$masuk->purchased_qty;
                                         $arraya["keluar"]=0;
                                         $arraya["akhir"]=$masuk->purchased_stokakhir;
-                                        $arraya["user"]=$masuk->cashier_id;
+                                        $arraya["user"]=$masuk->user_name;
                                         $arrayb[]=$arraya;
                                     } 
                                     

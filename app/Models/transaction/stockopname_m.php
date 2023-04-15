@@ -148,8 +148,9 @@ class stockopname_m extends core_m
                     $input[$e] = $this->request->getPost($e);
                 }
             }
+            $stockopname_id=$this->request->getPost("stockopname_id");
             $input["store_id"] = session()->get("store_id");
-            $this->db->table('stockopname')->update($input, array("stockopname_id" => $this->request->getPost("stockopname_id")));
+            $this->db->table('stockopname')->update($input, array("stockopname_id" => $stockopname_id));
             $data["message"] = "Update Success";
             //echo $this->db->last_query();die;
 
