@@ -1,5 +1,7 @@
 <?php echo $this->include("template/header_v"); ?>
-
+<style>
+.text-small{font-size:10px; margin-bottom:10px; line-height:12px;}
+</style>
 <div class='container-fluid'>
     <div class='row'>
         <div class='col-12'>
@@ -137,12 +139,12 @@
                                         <input type="number" autofocus class="form-control" id="product_buy" name="product_buy" placeholder="" value="<?= $product_buy; ?>">
                                     </div>
                                 </div>                            
-                                <div class="form-group">
+                               <!--  <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_sell">Jual:</label>
                                     <div class="col-sm-10">
                                         <input type="text" autofocus class="form-control" id="product_sell" name="product_sell" placeholder="" value="<?= $product_sell; ?>">
                                     </div>
-                                </div>                               
+                                </div> -->                               
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_ube">UBE No.:</label>
                                     <div class="col-sm-10">
@@ -215,6 +217,20 @@
                                 </thead>
                                 <tbody>
                                     <?php
+                                    $jual = $this->db
+                                    ->table("positionm")
+                                    ->where("positionm.store_id",session()->get("store_id"))
+                                    ->orderBy("positionm_name", "ASC")
+                                    ->get();
+                                    $cmember=array();
+                                    $pmember=array();
+                                    $x=0;
+                                    foreach ($jual->getResult() as $jual) {
+                                        $cmember[$x]=$jual->positionm_name;
+                                        $pmember[$x]=$jual->positionm_profit;
+                                        $x++;
+                                    }
+                                    // echo $x;die;
                                     $usr = $this->db
                                         ->table("product")
                                         ->join("category", "category.category_id=product.category_id", "left")
@@ -285,12 +301,31 @@
                                             <td class="text-<?=$alstock;?>"><?=$salstock;?></td>
                                             <?php 
                                             $buy=$usr->product_buy; 
-                                            $sell=$usr->product_sell;
-                                            $margin=$sell-$buy;
+                                            // $sell=$usr->product_sell;
+                                            // $margin=$sell-$buy;
                                             ?>
                                             <td><?= number_format($buy,0,".",","); ?></td>
-                                            <td><?= number_format($sell,0,".",","); ?></td>
-                                            <td><?= number_format($margin,0,".",","); ?></td>
+                                            <td>
+                                                <?php 
+                                                for($y=0;$y<$x;$y++){                                                    
+                                                    $sell=($buy*$pmember[$y]/100)+$buy;
+                                                    ?>
+                                                    <div class="text-small">
+                                                        <?= $cmember[$y]." ".number_format($sell,0,".",","); ?>
+                                                    </div>
+                                                <?php }?>
+                                            </td>
+                                            <td>
+                                                <?php 
+                                                for($y=0;$y<$x;$y++){
+                                                $sell=($buy*$pmember[$y]/100)+$buy;
+                                                $margin=$sell-$buy;
+                                                ?>
+                                                    <div class="text-small">
+                                                        <?= $cmember[$y]." ".number_format($margin,0,".",","); ?>
+                                                    </div>
+                                                <?php }?>
+                                            </td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>

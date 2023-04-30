@@ -101,7 +101,6 @@
                                                 $("#product_batch").val(product_batch);
                                                 $("#product_expiredate").val(product_expiredate);
                                                 $("#stockopname_awal").val(stockopname_awal);
-                                                rupiahnumerik($("#stockopname_awal"));
                                             }
                                             setTimeout(() => {
                                                 isi();

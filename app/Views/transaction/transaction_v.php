@@ -566,17 +566,21 @@
                             let typelist=$("#typesearch").val();
                             plistproduct(typelist,'');
                         }
-                        function plistproduct(type,product_name){
+                        function plistproduct(type,product_name){                            
+                            // let member_id=$("#member_id").val();      
+                            // alert(member_id);                   
+                            let positionm_profit=$("#positionm_profit").val();
+                            // alert(positionm_profit);
                             if(type=="gambar"){
                                 // alert("<?=base_url("listproductgambar");?>?product_name="+product_name);
-                                $.get("<?=base_url("listproductgambar");?>",{product_name:product_name})
+                                $.get("<?=base_url("listproductgambar");?>",{product_name:product_name,positionm_profit:positionm_profit})
                                 .done(function(data1){
                                     $("#listproduct").html(data1);
                                     $("#typesearch").val("gambar");
                                 });
                             }
                             if(type=="list"){
-                                $.get("<?=base_url("listproductlist");?>",{product_name:product_name})
+                                $.get("<?=base_url("listproductlist");?>",{product_name:product_name,positionm_profit:positionm_profit})
                                 .done(function(data2){
                                     $("#listproduct").html(data2);
                                     $("#typesearch").val("list");
@@ -640,12 +644,13 @@
                             }                     
                         }
                         //masukin product hanya multi qty
-                        function insertnotaqty(product_id,transactiond_qty){
+                        function insertnotaqty(product_id,transactiond_qty){                            
+                            let positionm_profit=$("#positionm_profit").val();
                             let transaction_id = $("#transaction_id").val();
                             let transactiond_id = $("#transactiond_id").val();
                             $("#transactiond_id").val(0);
                             // alert("<?=base_url("insertnota");?>?transaction_id="+transaction_id+"&product_id="+product_id);
-                            $.get("<?=base_url("insertnota");?>",{transaction_id:transaction_id,transactiond_id:transactiond_id,product_id:product_id,transactiond_qty:transactiond_qty})
+                            $.get("<?=base_url("insertnota");?>",{transaction_id:transaction_id,transactiond_id:transactiond_id,product_id:product_id,transactiond_qty:transactiond_qty,positionm_profit:positionm_profit})
                             .done(function(data){
                                 // alert(data);
                                 listnota($("#listnotastatus").val());
@@ -700,8 +705,12 @@
                             });
                         }
                         function updateqty(transactiond_id, type, transactiond_qty){
-                            // alert("<?=base_url("updateqty");?>?transactiond_id="+transactiond_id+"&type="+type+"&transactiond_qty="+transactiond_qty);                            
-                            $.get("<?=base_url("updateqty");?>",{transactiond_id:transactiond_id,type:type,transactiond_qty:transactiond_qty})
+                                                     
+                            let positionm_profit=$("#positionm_profit").val();          
+
+                            // alert("<?=base_url("updateqty");?>?transactiond_id="+transactiond_id+"&type="+type+"&transactiond_qty="+transactiond_qty+"&positionm_profit="+positionm_profit); 
+
+                            $.get("<?=base_url("updateqty");?>",{transactiond_id:transactiond_id,type:type,transactiond_qty:transactiond_qty,positionm_profit:positionm_profit})
                             .done(function(data){
                                 // alert(data);
                                 listnota($("#listnotastatus").val());

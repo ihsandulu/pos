@@ -67,7 +67,22 @@
                                     <label class="control-label col-sm-2" for="positionm_name">Grade Member:</label>
                                     <div class="col-sm-10">
                                         <input required type="text" autofocus class="form-control" id="positionm_name" name="positionm_name" placeholder="" value="<?= $positionm_name; ?>">
+                                    </div>
+                                </div>
 
+                                <div class="form-group">
+                                    <label class="control-label col-sm-2" for="positionm_profit">Profit (%):</label>
+                                    <div class="col-sm-10">
+                                        <input required type="text" class="form-control" id="positionm_profit" name="positionm_profit" placeholder="" value="<?= $positionm_profit; ?>">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-2" for="positionm_default">Default:</label>
+                                    <div class="col-sm-10">
+                                        <select required class="form-control" id="positionm_default" name="positionm_default">
+                                            <option value="0" <?=$positionm_default=="0"?"selected":"";?>>Tidak</option>
+                                            <option value="1" <?=$positionm_default=="1"?"selected":"";?>>Ya</option>
                                     </div>
                                 </div>
 
@@ -99,6 +114,7 @@
                                         <th>No.</th>
                                         <th>Toko</th>
                                         <th>Grade Member</th>
+                                        <th>Profit (%)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -159,7 +175,8 @@
                                             <?php } ?>
                                             <td><?= $no++; ?></td>
                                             <td><?= $usr->store_name; ?></td>
-                                            <td><?= $usr->positionm_name; ?></td>
+                                            <td><?= $usr->positionm_name; ?> <span class="text-success"><?=($usr->positionm_default==1)?"(Default)":"";?></span></td>
+                                            <td><?= $usr->positionm_profit; ?></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
