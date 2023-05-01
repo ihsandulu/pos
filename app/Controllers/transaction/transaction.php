@@ -645,13 +645,17 @@ class transaction extends baseController
         $transaction=$this->db->table("transaction")
         ->join("member","member.member_id=transaction.member_id","left")
         ->join("positionm","positionm.positionm_id=member.positionm_id","left")
-        ->join("(SELECT store_id AS dstore_id, positionm_profit AS dpositionm_profit FROM positionm WHERE positionm_default='1')as pdefault","pdefault.dstore_id=transaction.store_id","left")
+        ->join("(SELECT store_id AS dstore_id, positionm_profit AS dpositionm_profit, positionm_profit AS dpositionm_profit FROM positionm WHERE positionm_default='1')as pdefault","pdefault.dstore_id=transaction.store_id","left")
         ->where("transaction_id",$this->request->getGet("transaction_id"))
         ->get();
         // echo $this->db->getLastQuery();
         foreach ($transaction->getResult() as $transaction) {
             if($transaction->transaction_status==0){$iconprint="";}else{$iconprint="hide";}
-            if($transaction->positionm_profit>0){$positionm_profit=$transaction->positionm_profit;}else{$positionm_profit=$transaction->dpositionm_profit;}
+            if($transaction->positionm_profit>0){
+                $positionm_profit=$transaction->positionm_profit;
+            }else{
+                $positionm_profit=$transaction->dpositionm_profit;
+            }
         ?>
         <div class="row">            
             <div class="col-9">

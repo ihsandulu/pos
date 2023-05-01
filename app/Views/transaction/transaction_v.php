@@ -570,7 +570,7 @@
                             // let member_id=$("#member_id").val();      
                             // alert(member_id);                   
                             let positionm_profit=$("#positionm_profit").val();
-                            alert(positionm_profit);
+                            // alert(positionm_profit);
                             if(type=="gambar"){
                                 // alert("<?=base_url("listproductgambar");?>?product_name="+product_name);
                                 $.get("<?=base_url("listproductgambar");?>",{product_name:product_name,positionm_profit:positionm_profit})
