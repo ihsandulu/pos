@@ -657,7 +657,7 @@ class transaction extends baseController
             <div class="col-9">
                 NOTA : <i id="transactionno"><?=$transaction->transaction_no;?></i>
                 <input type="hidden" id="member_id" value="<?=$transaction->member_id;?>"/>
-                <input type="hidden" id="positionm_profit" value="<?=$positionm_profit;?>"/>
+                <input type="text" id="positionm_profit" value="<?=$positionm_profit;?>"/>
                 <?php if($transaction->member_id>0){?>( <?=$transaction->member_name;?> )<?php }?>
                 <script>
                 cariproduk();
