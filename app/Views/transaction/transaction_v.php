@@ -602,7 +602,7 @@
                             });
                         }
                         function nota(transaction_id){
-                            alert("<?=base_url("nota");?>?transaction_id="+transaction_id);
+                            // alert("<?=base_url("nota");?>?transaction_id="+transaction_id);
                             $.get("<?=base_url("nota");?>",{transaction_id:transaction_id})
                             .done(function(data){
                                 $("#nota").html(data);
