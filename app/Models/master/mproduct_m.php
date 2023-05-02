@@ -37,6 +37,7 @@ class mproduct_m extends core_m
             }            
             $ubeno="UBE".date("ymdHis");
             $data["product_ube"] = $ubeno;
+            $data["product_id"] = 0;
             
             //buy
             $purchase=$this->db->table("purchased")
@@ -105,6 +106,13 @@ class mproduct_m extends core_m
                 $this->db
                 ->table("product")
                 ->delete(array("product_id" => $product_id,"store_id" =>session()->get("store_id")));
+
+
+                $this->db
+                ->table("sell")
+                ->delete(array("product_id" => $product_id,"store_id" =>session()->get("store_id")));
+                // echo $this->db->getLastQuery(); die;
+
                 $data["message"] = "Delete Success";
             }
         }
@@ -112,10 +120,11 @@ class mproduct_m extends core_m
         //insert
         if ($this->request->getPost("create") == "OK") {
             foreach ($this->request->getPost() as $e => $f) {
-                if ($e != 'create' && $e != 'product_id') {
+                if ($e != 'create' && $e != 'product_id' && substr($e,0,12)!="sell_percent") {
                     $input[$e] = $this->request->getPost($e);
                 }
             }
+            
             $input["store_id"] = session()->get("store_id");
 
             $builder = $this->db->table('product');
@@ -124,19 +133,62 @@ class mproduct_m extends core_m
             die; */
             $product_id = $this->db->insertID();
 
+            foreach ($this->request->getPost() as $e => $f) {
+                if(substr($e,0,12)=="sell_percent"){
+                    $sell=explode("|",$e);
+                    $input1["positionm_id"]=$sell[1];
+                    $input1["product_id"]=$product_id;
+                    $input1["sell_percent"]=$f;
+                    $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+                    $input1["store_id"]=session()->get("store_id");
+                    $builder = $this->db->table('sell');
+                    $builder->insert($input1);
+                }
+            }
+
             $data["message"] = "Insert Data Success";
         }
         //echo $_POST["create"];die;
         
         //update
         if ($this->request->getPost("change") == "OK") {
+            $product_id=$this->request->getPost("product_id");
             foreach ($this->request->getPost() as $e => $f) {
-                if ($e != 'change' && $e != 'product_picture') {
+                if ($e != 'change' && $e != 'product_picture' && substr($e,0,12)!="sell_percent") {
                     $input[$e] = $this->request->getPost($e);
                 }
             }
             $input["store_id"] = session()->get("store_id");
-            $this->db->table('product')->update($input, array("product_id" => $this->request->getPost("product_id")));
+            $this->db->table('product')->update($input, array("product_id" => $product_id));
+
+            foreach ($this->request->getPost() as $e => $f) {
+                if(substr($e,0,12)=="sell_percent"){          
+                    $sell=explode("|",$e);
+                    $positionm_id=$sell[1];
+                    $selld["store_id"] = session()->get("store_id");
+                    $selld["product_id"] = $product_id;
+                    $selld["positionm_id"] = $positionm_id;
+                    $sell = $this->db
+                        ->table("sell")
+                        ->getWhere($selld);
+                    if ($sell->getNumRows() > 0) {
+                        $where1["positionm_id"]=$positionm_id;
+                        $input1["sell_percent"]=$f;
+                        $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+                        $builder = $this->db->table('sell');
+                        $builder->update($input1,$where1);
+                    }else{                  
+                        $input1["positionm_id"]=$positionm_id;
+                        $input1["product_id"]=$product_id;
+                        $input1["sell_percent"]=$f;
+                        $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+                        $input1["store_id"]=session()->get("store_id");
+                        $builder = $this->db->table('sell');
+                        $builder->insert($input1);
+                    }
+                }
+            }
+
             $data["message"] = "Update Success";
             //echo $this->db->last_query();die;
         }

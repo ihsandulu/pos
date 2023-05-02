@@ -79,7 +79,7 @@
                                             ->get();
                                         //echo $this->db->getLastQuery();
                                         ?>
-                                        <select required class="form-control select" id="category_id" name="category_id">
+                                        <select autofocus required class="form-control select" id="category_id" name="category_id">
                                             <option value="" <?= ($category_id == "") ? "selected" : ""; ?>>Pilih Kategori</option>
                                             <?php
                                             foreach ($category->getResult() as $category) { ?>
@@ -112,49 +112,72 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_name">Nama Produk:</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" autofocus class="form-control" id="product_name" name="product_name" placeholder="" value="<?= $product_name; ?>">
+                                        <input required type="text"  class="form-control" id="product_name" name="product_name" placeholder="" value="<?= $product_name; ?>">
                                     </div>
                                 </div>                            
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_description">Deskripsi:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="product_description" name="product_description" placeholder="" value="<?= $product_description; ?>">
+                                        <input type="text"  class="form-control" id="product_description" name="product_description" placeholder="" value="<?= $product_description; ?>">
                                     </div>
                                 </div>                            
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_countlimit">Limit Stok:</label>
                                     <div class="col-sm-10">
-                                        <input type="number" autofocus class="form-control" id="product_countlimit" name="product_countlimit" placeholder="" value="<?= $product_countlimit; ?>">
+                                        <input type="number"  class="form-control" id="product_countlimit" name="product_countlimit" placeholder="" value="<?= $product_countlimit; ?>">
                                     </div>
                                 </div>                            
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_stock">Stok Real Time:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="product_stock" name="product_stock" placeholder="" value="<?= $product_stock; ?>">
+                                        <input type="text"  class="form-control" id="product_stock" name="product_stock" placeholder="" value="<?= $product_stock; ?>">
                                     </div>
                                 </div>                                 
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_buy">Beli:</label>
                                     <div class="col-sm-10">
-                                        <input type="number" autofocus class="form-control" id="product_buy" name="product_buy" placeholder="" value="<?= $product_buy; ?>">
+                                        <input type="number"  class="form-control" id="product_buy" name="product_buy" placeholder="" value="<?= $product_buy; ?>">
                                     </div>
                                 </div>                            
                                <!--  <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_sell">Jual:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="product_sell" name="product_sell" placeholder="" value="<?= $product_sell; ?>">
+                                        <input type="text"  class="form-control" id="product_sell" name="product_sell" placeholder="" value="<?= $product_sell; ?>">
                                     </div>
-                                </div> -->                               
+                                </div> --> 
+                                <hr/> 
+                                <div class="form-group bg-secondary text-white p-5">
+                                    <label class="control-label col-sm-2">Jual (persentase):</label>
+                                    <div class="form-group">
+                                    <?php
+                                    $positionm=$this->db->table("positionm")
+                                    ->select("*,positionm.positionm_id AS positionm_id")
+                                    ->join("sell","sell.positionm_id=positionm.positionm_id AND sell.product_id=".$product_id,"left")
+                                    ->where("positionm.store_id",session()->get("store_id"))
+                                    ->orderBy("positionm_name","ASC")
+                                    ->get();
+                                    // echo $this->db->getLastquery(); die; 
+                                    foreach($positionm->getResult() as $positionm){?>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="sell_percent<?=$positionm->positionm_id;?>"><?=$positionm->positionm_name;?>:</label>
+                                            <div class="col-sm-10">
+                                                <input required type="text" class="form-control" id="sell_percent<?=$positionm->positionm_id;?>" name="sell_percent|<?=$positionm->positionm_id;?>|<?= $product_id; ?>" value="<?= $positionm->sell_percent; ?>">
+                                            </div>
+                                        </div>
+                                    <?php }?>  
+                                    </div>          
+                                </div>     
+                                <hr/>                       
                                 <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_ube">UBE No.:</label>
                                     <div class="col-sm-10">
-                                        <input type="text" autofocus class="form-control" id="product_ube" name="product_ube" placeholder="" value="<?= $product_ube; ?>">
+                                        <input type="text"  class="form-control" id="product_ube" name="product_ube" placeholder="" value="<?= $product_ube; ?>">
                                     </div>
                                 </div>                       
                                <div class="form-group">
                                     <label class="control-label col-sm-2" for="product_picture">Photo Produk:</label>
                                     <div class="col-sm-10">
-                                        <input type="file" autofocus class="form-control" id="product_picture" name="product_picture" placeholder="" value="<?= $product_picture; ?>">
+                                        <input type="file"  class="form-control" id="product_picture" name="product_picture" placeholder="" value="<?= $product_picture; ?>">
                                         <?php if($product_picture!=""&&$product_picture!="product.png"){$user_image="images/product_picture/".$product_picture;}else{$user_image="images/product_picture/no_image.png";}?>
                                           <img id="product_picture_image" width="100" height="100" src="<?=base_url($user_image);?>"/>
                                           <script>
@@ -216,20 +239,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
-                                    $jual = $this->db
-                                    ->table("positionm")
-                                    ->where("positionm.store_id",session()->get("store_id"))
-                                    ->orderBy("positionm_name", "ASC")
-                                    ->get();
-                                    $cmember=array();
-                                    $pmember=array();
-                                    $x=0;
-                                    foreach ($jual->getResult() as $jual) {
-                                        $cmember[$x]=$jual->positionm_name;
-                                        $pmember[$x]=$jual->positionm_profit;
-                                        $x++;
-                                    }
+                                    <?php                                    
                                     // echo $x;die;
                                     $usr = $this->db
                                         ->table("product")
@@ -241,7 +251,23 @@
                                         ->get();
                                     //echo $this->db->getLastquery();
                                     $no = 1;
-                                    foreach ($usr->getResult() as $usr) { ?>
+                                    foreach ($usr->getResult() as $usr) { 
+                                        $jual = $this->db
+                                        ->table("sell")
+                                        ->join("positionm", "positionm.positionm_id=sell.positionm_id", "left")
+                                        ->where("sell.store_id",session()->get("store_id"))
+                                        ->where("sell.product_id",$usr->product_id)
+                                        ->orderBy("positionm_name", "ASC")
+                                        ->get();
+                                        $cmember=array();
+                                        $pmember=array();
+                                        $x=0;
+                                        foreach ($jual->getResult() as $jual) {
+                                            $cmember[$x]=$jual->positionm_name;
+                                            $pmember[$x]=$jual->sell_price;
+                                            $x++;
+                                        }
+                                        ?>
                                         <tr>
                                             <?php if (!isset($_GET["report"])) { ?>
                                                 <td style="padding-left:0px; padding-right:0px;">
@@ -308,7 +334,7 @@
                                             <td>
                                                 <?php 
                                                 for($y=0;$y<$x;$y++){                                                    
-                                                    $sell=($buy*$pmember[$y]/100)+$buy;
+                                                    $sell=$pmember[$y];
                                                     ?>
                                                     <div class="text-small">
                                                         <?= $cmember[$y]." ".number_format($sell,0,".",","); ?>
@@ -317,9 +343,9 @@
                                             </td>
                                             <td>
                                                 <?php 
-                                                for($y=0;$y<$x;$y++){
-                                                $sell=($buy*$pmember[$y]/100)+$buy;
-                                                $margin=$sell-$buy;
+                                                for($y=0;$y<$x;$y++){                                             
+                                                    $sell=$pmember[$y];
+                                                    $margin=$sell-$buy;
                                                 ?>
                                                     <div class="text-small">
                                                         <?= $cmember[$y]." ".number_format($margin,0,".",","); ?>
