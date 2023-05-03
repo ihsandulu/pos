@@ -568,19 +568,33 @@
                         }
                         function plistproduct(type,product_name){                            
                             // let member_id=$("#member_id").val();      
-                            // alert(member_id);                   
-                            let positionm_profit=$("#positionm_profit").val();
-                            // alert(positionm_profit);
+                            // alert(member_id);  
+                            <?php
+                            $positionm = $this->db->table("positionm")
+                            ->where("positionm.store_id",session()->get("store_id"))
+                            ->where("positionm.positionm_default","1")
+                            ->get();
+                            $default=0;
+                            foreach ($positionm->getResult() as $positionm) {
+                                $default=$positionm->positionm_id;
+                            }
+                            ?>                 
+                            let positionm_id=$("#positionm_id").val();
+                            // alert(positionm_id);
+                            if(positionm_id==null){positionm_id=<?=$default;?>;}
+                                
+                            // alert(positionm_id);
                             if(type=="gambar"){
-                                // alert("<?=base_url("listproductgambar");?>?product_name="+product_name);
-                                $.get("<?=base_url("listproductgambar");?>",{product_name:product_name,positionm_profit:positionm_profit})
+                                // alert("<?=base_url("listproductgambar");?>?product_name="+product_name+"&positionm_id="+positionm_id);
+                                $.get("<?=base_url("listproductgambar");?>",{product_name:product_name,positionm_id:positionm_id})
                                 .done(function(data1){
                                     $("#listproduct").html(data1);
                                     $("#typesearch").val("gambar");
                                 });
                             }
                             if(type=="list"){
-                                $.get("<?=base_url("listproductlist");?>",{product_name:product_name,positionm_profit:positionm_profit})
+                                // alert("<?=base_url("listproductlist");?>?product_name="+product_name+"&positionm_id="+positionm_id);
+                                $.get("<?=base_url("listproductlist");?>",{product_name:product_name,positionm_id:positionm_id})
                                 .done(function(data2){
                                     $("#listproduct").html(data2);
                                     $("#typesearch").val("list");
@@ -645,12 +659,24 @@
                         }
                         //masukin product hanya multi qty
                         function insertnotaqty(product_id,transactiond_qty){                            
-                            let positionm_profit=$("#positionm_profit").val();
+                            <?php
+                            $positionm = $this->db->table("positionm")
+                            ->where("positionm.store_id",session()->get("store_id"))
+                            ->where("positionm.positionm_default","1")
+                            ->get();
+                            $default=0;
+                            foreach ($positionm->getResult() as $positionm) {
+                                $default=$positionm->positionm_id;
+                            }
+                            ?>                 
+                            let positionm_id=$("#positionm_id").val();
+                            // alert(positionm_id);
+                            if(positionm_id==null){positionm_id=<?=$default;?>;}
                             let transaction_id = $("#transaction_id").val();
                             let transactiond_id = $("#transactiond_id").val();
                             $("#transactiond_id").val(0);
                             // alert("<?=base_url("insertnota");?>?transaction_id="+transaction_id+"&product_id="+product_id);
-                            $.get("<?=base_url("insertnota");?>",{transaction_id:transaction_id,transactiond_id:transactiond_id,product_id:product_id,transactiond_qty:transactiond_qty,positionm_profit:positionm_profit})
+                            $.get("<?=base_url("insertnota");?>",{transaction_id:transaction_id,transactiond_id:transactiond_id,product_id:product_id,transactiond_qty:transactiond_qty,positionm_id:positionm_id})
                             .done(function(data){
                                 // alert(data);
                                 listnota($("#listnotastatus").val());
@@ -706,11 +732,23 @@
                         }
                         function updateqty(transactiond_id, type, transactiond_qty){
                                                      
-                            let positionm_profit=$("#positionm_profit").val();          
+                            <?php
+                            $positionm = $this->db->table("positionm")
+                            ->where("positionm.store_id",session()->get("store_id"))
+                            ->where("positionm.positionm_default","1")
+                            ->get();
+                            $default=0;
+                            foreach ($positionm->getResult() as $positionm) {
+                                $default=$positionm->positionm_id;
+                            }
+                            ?>                 
+                            let positionm_id=$("#positionm_id").val();
+                            // alert(positionm_id);
+                            if(positionm_id==null){positionm_id=<?=$default;?>;}         
 
-                            // alert("<?=base_url("updateqty");?>?transactiond_id="+transactiond_id+"&type="+type+"&transactiond_qty="+transactiond_qty+"&positionm_profit="+positionm_profit); 
+                            // alert("<?=base_url("updateqty");?>?transactiond_id="+transactiond_id+"&type="+type+"&transactiond_qty="+transactiond_qty+"&positionm_id="+positionm_id); 
 
-                            $.get("<?=base_url("updateqty");?>",{transactiond_id:transactiond_id,type:type,transactiond_qty:transactiond_qty,positionm_profit:positionm_profit})
+                            $.get("<?=base_url("updateqty");?>",{transactiond_id:transactiond_id,type:type,transactiond_qty:transactiond_qty,positionm_id:positionm_id})
                             .done(function(data){
                                 // alert(data);
                                 listnota($("#listnotastatus").val());

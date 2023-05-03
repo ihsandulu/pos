@@ -346,13 +346,14 @@ class transaction extends baseController
     }
 
     public function insertnota(){
-        if($this->request->getGet("positionm_profit")>0){
-            $positionm_profit=$this->request->getGet("positionm_profit");
+        if($this->request->getGet("positionm_id")>0){
+            $positionm_id=$this->request->getGet("positionm_id");
         }else{
-            $positionm_profit=0;
+            $positionm_id=0;
         }
         $transaction_id=$this->request->getGet("transaction_id");
-        $builder=$this->db->table("product");
+        $builder=$this->db->table("product")
+        ->join("(SELECT product_id AS prodid, positionm_id, sell_price FROM sell)sell","sell.prodid=product.product_id AND sell.positionm_id=".$positionm_id,"left");
         if(isset($_GET["product_id"])){
             $product_id=$this->request->getGet("product_id");
             $product=$builder->where("product_id",$product_id);
@@ -368,7 +369,7 @@ class transaction extends baseController
         $pro=$product->get();
         // $sell=$pro->getRow()->product_sell;
         $buy=$pro->getRow()->product_buy;
-        $sell=($buy*$positionm_profit/100)+ $buy;
+        $sell=$pro->getRow()->sell_price;
         
         if($pro->getNumRows()>0){
             $where["transaction_id"] = $transaction_id;
@@ -385,9 +386,8 @@ class transaction extends baseController
                     $qty=$cari->transactiond_qty;
                     $price=$cari->transactiond_price;
                     
-                    $sell=($price*$positionm_profit/100)+ $price;
                     $input["transactiond_qty"] = $qty+$transactiond_qty;
-                    $input["transactiond_price"] = $price+$sell;
+                    $input["transactiond_price"] = $price+($sell*$qty);
                     $transactiond->update($input,$where);
 
                     
@@ -494,10 +494,10 @@ class transaction extends baseController
     }
 
     public function updateqty(){
-        if($this->request->getGet("positionm_profit")>0){
-            $positionm_profit=$this->request->getGet("positionm_profit");
+        if($this->request->getGet("positionm_id")>0){
+            $positionm_id=$this->request->getGet("positionm_id");
         }else{
-            $positionm_profit=0;
+            $positionm_id=0;
         }
         $transactiond_id=$this->request->getGet("transactiond_id");
         $type=$this->request->getGet("type");
@@ -507,12 +507,13 @@ class transaction extends baseController
         //cek qty
         $transactiond = $this->db->table('transactiond')
         ->join("product","product.product_id=transactiond.product_id","left")
+        ->join("(SELECT product_id AS prodid, positionm_id, sell_price FROM sell)sell","sell.prodid=product.product_id AND sell.positionm_id=".$positionm_id,"left")
         ->where($input)
         ->get();
         foreach ($transactiond->getResult() as $transactiond) {
             // $sell=$transactiond->product_sell*$transactiond_qty;
             $buy=$transactiond->product_buy;
-            $sell=($buy*$positionm_profit/100)+ $buy;
+            $sell=$transactiond->sell_price;
             $product_id=$transactiond->product_id;
         
             $qty=$transactiond->transactiond_qty;
@@ -645,23 +646,23 @@ class transaction extends baseController
         $transaction=$this->db->table("transaction")
         ->join("member","member.member_id=transaction.member_id","left")
         ->join("positionm","positionm.positionm_id=member.positionm_id","left")
-        ->join("(SELECT store_id AS dstore_id, positionm_profit AS dpositionm_profit FROM positionm WHERE positionm_default='1')as pdefault","pdefault.dstore_id=transaction.store_id","left")
+        ->join("(SELECT store_id AS dstore_id, positionm_id AS dpositionm_id FROM positionm WHERE positionm_default='1')as pdefault","pdefault.dstore_id=transaction.store_id","left")
         ->where("transaction_id",$this->request->getGet("transaction_id"))
         ->get();
         // echo $this->db->getLastQuery();
         foreach ($transaction->getResult() as $transaction) {
             if($transaction->transaction_status==0){$iconprint="";}else{$iconprint="hide";}
             if($transaction->member_id>0){
-                $positionm_profit=$transaction->positionm_profit;
+                $positionm_id=$transaction->positionm_id;
             }else{
-                $positionm_profit=$transaction->dpositionm_profit;
+                $positionm_id=$transaction->dpositionm_id;
             }
         ?>
         <div class="row">            
             <div class="col-9">
                 NOTA : <i id="transactionno"><?=$transaction->transaction_no;?></i>
                 <input type="hidden" id="member_id" value="<?=$transaction->member_id;?>"/>
-                <input type="hidden" id="positionm_profit" value="<?=$positionm_profit;?>"/>
+                <input type="hidden" id="positionm_id" value="<?=$positionm_id;?>"/>
                 <?php if($transaction->member_id>0){?>( <?=$transaction->member_name;?> )<?php }?>
                 <script>
                 cariproduk();
@@ -768,7 +769,7 @@ class transaction extends baseController
                                 <?php if($qty>0){?>
                                 <i onclick="updateqty(<?= $usr->transactiond_id; ?>,'kurang','1')" class="fa fa-minus text-small text-danger pointer"></i> 
                                 <?php }?>
-                                <button type="button" class="btn btn-xs btn-warning" onclick="insertjmlnota(<?= $usr->product_id; ?>);$('#transactiond_id').val(<?= $usr->transactiond_id; ?>);"> <?= number_format($qty,0,",",".") ?> <?= $usr->unit_name; ?> </button>
+                                <button type="button" class="btn btn-xs btn-warning" onclick="insertjmlnota(<?= $usr->product_id; ?>);$('#transactiond_id').val(<?= $usr->transactiond_id; ?>);$('#qtyproduct').val(<?= $qty; ?>);"> <?= number_format($qty,0,",",".") ?> <?= $usr->unit_name; ?> </button>
                                 <?php if($usr->product_stock>0){?>
                                 <i onclick="updateqty(<?= $usr->transactiond_id; ?>,'tambah','1')" class="fa fa-plus text-small text-success pointer"></i>
                                 <?php }?>
@@ -824,12 +825,13 @@ class transaction extends baseController
     }
 
     public function listproductgambar(){
-        if($this->request->getGet("positionm_profit")>0){
-            $positionm_profit=$this->request->getGet("positionm_profit");
+        if($this->request->getGet("positionm_id")>0){
+            $positionm_id=$this->request->getGet("positionm_id");
         }else{
-            $positionm_profit=0;
+            $positionm_id=0;
         }
-        $builder = $this->db->table("product");
+        $builder = $this->db->table("product")
+        ->join("(SELECT sell_percent, sell_price, positionm_id, product_id AS prodid FROM sell)sell","sell.prodid=product.product_id AND sell.positionm_id=".$positionm_id,"left");
         if($this->request->getGet("product_name")!=""){
             $builder->like("product.product_name",$this->request->getGet("product_name"),"BOTH");
         }
@@ -869,7 +871,8 @@ class transaction extends baseController
         }
 
         $buy=$product->product_buy;
-        $sell=($buy*$positionm_profit/100)+ $buy;
+        $sell=$product->sell_price;
+        if($sell==""){$sell=0;}
         ?>
         <div class="col-3 divimg_product <?=$disabled;?>" onclick="<?=$insertnota;?>" >
             <figure class="caption-1 pointer">
@@ -900,12 +903,13 @@ class transaction extends baseController
                 </thead>
                 <tbody>
                     <?php                    
-                    if($this->request->getGet("positionm_profit")>0){
-                        $positionm_profit=$this->request->getGet("positionm_profit");
+                    if($this->request->getGet("positionm_id")>0){
+                        $positionm_id=$this->request->getGet("positionm_id");
                     }else{
-                        $positionm_profit=0;
+                        $positionm_id=0;
                     }
-                    $builder = $this->db->table("product");
+                    $builder = $this->db->table("product")
+                    ->join("(SELECT sell_percent, sell_price, positionm_id, product_id AS prodid FROM sell)sell","sell.prodid=product.product_id AND sell.positionm_id=".$positionm_id,"left");
                     $usr1 = $builder->join("category", "category.category_id=product.category_id", "left")
                         ->join("unit", "unit.unit_id=product.unit_id", "left")
                         ->join("store", "store.store_id=product.store_id", "left")
@@ -956,8 +960,9 @@ class transaction extends baseController
                             <?php 
                             $buy=$usr->product_buy; 
                             // $sell=$usr->product_sell;
-                            $sell=($buy*$positionm_profit/100)+ $buy;
-                            $margin=$sell-$buy;
+                            // $sell=($buy*$positionm_id/100)+ $buy;
+                            $sell=$usr->sell_price;
+                            if($sell==""){$sell=0;}
                             ?>
                             <td><?= number_format($sell,0,",","."); ?></td>
                         </tr>
