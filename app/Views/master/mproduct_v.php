@@ -204,7 +204,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" id="submit" class="btn btn-primary col-md-5" <?= $namabutton; ?> value="OK">Submit</button>
-                                        <button class="btn btn-warning col-md-offset-1 col-md-5" onClick="location.href=<?= site_url("product"); ?>">Back</button>
+                                        <a type="button" class="btn btn-warning col-md-offset-1 col-md-5" href="<?= base_url("product"); ?>">Back</a>
                                     </div>
                                 </div>
                             </form>

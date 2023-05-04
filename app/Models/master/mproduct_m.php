@@ -194,6 +194,7 @@ class mproduct_m extends core_m
         }
 
         //update buy
+        set_time_limit(300);
         if ($this->request->getPost("updatebuy") == "OK") {
             $product=$this->db->table("product")
             ->where("store_id",session()->get("store_id"))
@@ -202,6 +203,7 @@ class mproduct_m extends core_m
                 $purchased=$this->db->table("purchased")
                 // ->select("*,COUNT(purchased_id)")
                 ->where("product_id",$product->product_id)
+                ->where("store_id",session()->get("store_id"))
                 ->orderBy("purchased_id ","DESC")
                 ->limit(1)
                 ->get();
@@ -211,6 +213,39 @@ class mproduct_m extends core_m
                         $input["product_buy"] = $purchased->purchased_price/$purchased->purchased_qty;  
                         $where["product_id"] = $product->product_id;
                         $this->db->table('product')->update($input, $where);
+
+                         $positionm=$this->db->table("positionm")
+                        ->where("positionm.store_id",session()->get("store_id"))
+                        ->get();
+                            // echo $this->db->getLastQuery();die;
+                        foreach ($positionm->getResult() as $positionm) {
+                            $sell=$this->db->table("sell")
+                            ->join("positionm","positionm.positionm_id=sell.positionm_id","left")
+                            ->where("sell.store_id",session()->get("store_id"))
+                            ->where("sell.product_id",$product->product_id)
+                            ->where("sell.positionm_id",$positionm->positionm_id)
+                            ->get();
+                            // echo $this->db->getLastQuery();
+                            if ($sell->getNumRows() > 0) {
+                                foreach ($sell->getResult() as $sell) {
+                                    $input1["sell_price"] = ($sell->sell_percent/100*$input["product_buy"])+$input["product_buy"];  
+                                    $where1["product_id"] = $product->product_id;
+                                    $where1["positionm_id"] = $positionm->positionm_id;
+                                    $this->db->table('sell')->update($input1, $where1);
+                                }
+                            }else{                                          
+                                $input1["positionm_id"]=$positionm->positionm_id;
+                                $input1["product_id"]=$product->product_id;
+                                $input1["sell_percent"]=$positionm->positionm_profit;
+                                $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+                                $input1["store_id"]=session()->get("store_id");
+                                $builder = $this->db->table('sell');
+                                $builder->insert($input1);
+                            }
+                            // echo $this->db->getLastQuery();
+
+                        }
+                        // die;
                     }
                 }                
             }
