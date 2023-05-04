@@ -1043,5 +1043,20 @@ class transaction extends baseController
         ->update($input,$where);
         // echo $this->db->getLastQuery();
         echo $where["transaction_id"];
+
+        //rubah harga
+        $transactiond=$this->db->table("transactiond")
+        ->join("transaction","transaction.transaction_id=transactiond.transaction_id","left")
+        ->join("member","member.member_id=transaction.member_id","left")
+        ->join("product","product.product_id=transactiond.product_id","left")
+        ->join("sell","sell.product_id=product.product_id AND sell.positionm_id=member.positionm_id AND sell.store_id=transactiond.store_id","left")
+        ->where("transactiond.transaction_id",$where["transaction_id"])
+        ->get();
+        foreach($transactiond->getResult() as $transactiond){
+            $where1["transaction_id"]=$transactiond->transaction_id;
+            $input1["transactiond_price"]=$transactiond->sell_price*$transactiond->transactiond_qty;
+            $builder = $this->db->table('transactiond');
+            $builder->update($input1,$where1);
+        }
     }
 }

@@ -308,6 +308,7 @@
                             $("#to").val('<?=date("Y-m-d");?>');
                         }
                         function insertmember(transaction_id,member_id){ 
+                            // alert("<?=base_url("insertmember");?>?transaction_id="+transaction_id+"&member_id="+member_id);
                              $.get("<?=base_url("insertmember");?>",{transaction_id:transaction_id,member_id:member_id})
                             .done(function(data){ 
                                 $("#showmember").modal('hide');
@@ -386,6 +387,7 @@
                             
                         }
                         function member(){
+                            $("#listmembernya").html("");
                             $("#showmember").modal();
                             fokus('memberno');  
                                                      
