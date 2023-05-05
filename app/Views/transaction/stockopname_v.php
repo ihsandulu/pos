@@ -100,7 +100,14 @@
                                                 $("#product_ube").val(product_ube);
                                                 $("#product_batch").val(product_batch);
                                                 $("#product_expiredate").val(product_expiredate);
-                                                $("#stockopname_awal").val(stockopname_awal);
+                                                <?php if (isset($_POST['edit'])) {?>
+                                                    $("#stockopname_awal").val(<?=$stockopname_awal;?>);
+                                                    $("#stockopname_awal1").val(<?=$stockopname_awal;?>);
+                                                <?php }else{?>
+                                                    $("#stockopname_awal").val(stockopname_awal);
+                                                    $("#stockopname_awal1").val(stockopname_awal);
+                                                <?php }?>
+
                                             }
                                             setTimeout(() => {
                                                 isi();
@@ -131,7 +138,7 @@
                                  <div class="form-group">
                                     <label class="control-label col-sm-2" for="stockopname_awal">Stock Awal:</label>
                                     <div class="col-sm-10">
-                                        <input required readonly onkeyup="rupiahnumerik(this)" change="selisih()" type="text" class="form-control" id="stockopname_awal" name="stockopname_awal" placeholder="" value="<?= $stockopname_awal; ?>">
+                                        <input required readonly onkeyup="rupiahnumerik(this)" change="selisih();" type="text" class="form-control" id="stockopname_awal" name="stockopname_awal" placeholder="" value="<?= $stockopname_awal; ?>">
                                     </div>
                                     <script>rupiahnumerik($("#stockopname_awal"))</script>
                                 </div> 

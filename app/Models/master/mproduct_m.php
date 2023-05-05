@@ -140,6 +140,16 @@ class mproduct_m extends core_m
                     $input1["product_id"]=$product_id;
                     $input1["sell_percent"]=$f;
                     $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+
+                    //pembulatan 500an
+                    $asal = $input1["sell_price"];
+                    $tiga = substr($asal,-3);
+                    $sisa = $asal - $tiga;
+                    $hasil = 0;
+                    // echo $sisa;
+                    if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
+                    $input1["sell_price"]=$hasil;
+
                     $input1["store_id"]=session()->get("store_id");
                     $builder = $this->db->table('sell');
                     $builder->insert($input1);
@@ -174,7 +184,19 @@ class mproduct_m extends core_m
                     if ($sell->getNumRows() > 0) {
                         $where1["positionm_id"]=$positionm_id;
                         $input1["sell_percent"]=$f;
-                        $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+                        $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];                        
+
+                        //pembulatan 500an
+                        $asal = $input1["sell_price"];
+                        $tiga = substr($asal,-3);
+                        $sisa = $asal - $tiga;
+                        $hasil = 0;
+                        // echo $asal."=>";
+                        // echo $sisa."=>";
+                        // echo $tiga."<br/>";
+                        if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
+                        $input1["sell_price"]=$hasil;
+
                         $builder = $this->db->table('sell');
                         $builder->update($input1,$where1);
                     }else{                  
@@ -182,12 +204,25 @@ class mproduct_m extends core_m
                         $input1["product_id"]=$product_id;
                         $input1["sell_percent"]=$f;
                         $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+
+                        //pembulatan 500an
+                        $asal = $input1["sell_price"];
+                        $tiga = substr($asal,-3);
+                        $sisa = $asal - $tiga;
+                        $hasil = 0;
+                        // echo $asal."=>";
+                        // echo $sisa."=>";
+                        // echo $tiga."<br/>";
+                        if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
+                        $input1["sell_price"]=$hasil;
+
                         $input1["store_id"]=session()->get("store_id");
                         $builder = $this->db->table('sell');
                         $builder->insert($input1);
                     }
                 }
             }
+                    // die;
 
             $data["message"] = "Update Success";
             //echo $this->db->last_query();die;
@@ -229,6 +264,16 @@ class mproduct_m extends core_m
                             if ($sell->getNumRows() > 0) {
                                 foreach ($sell->getResult() as $sell) {
                                     $input1["sell_price"] = ($sell->sell_percent/100*$input["product_buy"])+$input["product_buy"];  
+
+                                    //pembulatan 500an
+                                    $asal = $input1["sell_price"];
+                                    $tiga = substr($asal,-3);
+                                    $sisa = $asal - $tiga;
+                                    $hasil = 0;
+                                    // echo $sisa;
+                                    if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
+                                    $input1["sell_price"]=$hasil;
+
                                     $where1["product_id"] = $product->product_id;
                                     $where1["positionm_id"] = $positionm->positionm_id;
                                     $this->db->table('sell')->update($input1, $where1);
@@ -238,6 +283,16 @@ class mproduct_m extends core_m
                                 $input1["product_id"]=$product->product_id;
                                 $input1["sell_percent"]=$positionm->positionm_profit;
                                 $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+
+                                //pembulatan 500an
+                                $asal = $input1["sell_price"];
+                                $tiga = substr($asal,-3);
+                                $sisa = $asal - $tiga;
+                                $hasil = 0;
+                                // echo $sisa;
+                                if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
+                                $input1["sell_price"]=$hasil;
+                                
                                 $input1["store_id"]=session()->get("store_id");
                                 $builder = $this->db->table('sell');
                                 $builder->insert($input1);

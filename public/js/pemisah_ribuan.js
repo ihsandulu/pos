@@ -162,13 +162,17 @@ function rupiahnumerik(a) {
     if ($(a).attr("name") == $(a).attr("id")) {
       $(a).after(txt1);
       $(a).attr("name", "");
-      digitangka = numb.toString().split(".")[1].length;
+      setTimeout(() => {
+        document.getElementById(id1).value = angka;
+      }, 500);
+      // alert(angka);
+      digitangka = angka.toString().split(".")[1].length;
       rupiah = number_format(angka, digitangka, ",", ".");
       if (angka <= 0) {
         rupiah = "";
       }
       $(a).val(rupiah);
-      $("#" + id1).val(angka);
+      //   $("#" + id1).val(angka);
     } else {
       rupiah = formatRupiah1(angka, "");
 
@@ -181,9 +185,9 @@ function rupiahnumerik(a) {
       }
       var awal = pecahkoma[0].replace(/\./g, "");
       var gabung = awal + koma;
-
       $(a).val(rupiah);
-      $("#" + id1).val(gabung);
+      //   $("#" + id1).val(gabung);
+      document.getElementById(id1).value = gabung;
     }
 
     var onchangex = $("#" + id1).attr("onchange");
