@@ -279,24 +279,6 @@ class mproduct_m extends core_m
                                     $where1["store_id"] = session()->get("store_id");
                                     $this->db->table('sell')->update($input1, $where1);
                                 }
-                            }else{                                          
-                                $input1["positionm_id"]=$positionm->positionm_id;
-                                $input1["product_id"]=$product->product_id;
-                                $input1["sell_percent"]=$positionm->positionm_profit;
-                                $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
-
-                                //pembulatan 500an
-                                $asal = $input1["sell_price"];
-                                $tiga = substr($asal,-3);
-                                $sisa = $asal - $tiga;
-                                $hasil = 0;
-                                // echo $sisa;
-                                if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
-                                $input1["sell_price"]=$hasil;
-                                
-                                $input1["store_id"]=session()->get("store_id");
-                                $builder = $this->db->table('sell');
-                                $builder->insert($input1);
                             }
                             // echo $this->db->getLastQuery();
 
