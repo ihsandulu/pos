@@ -276,6 +276,7 @@ class mproduct_m extends core_m
 
                                     $where1["product_id"] = $product->product_id;
                                     $where1["positionm_id"] = $positionm->positionm_id;
+                                    $where1["store_id"] = session()->get("store_id");
                                     $this->db->table('sell')->update($input1, $where1);
                                 }
                             }else{                                          
