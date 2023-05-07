@@ -182,7 +182,7 @@ class mproduct_m extends core_m
                         ->table("sell")
                         ->getWhere($selld);
                     if ($sell->getNumRows() > 0) {
-                        $where1["positionm_id"]=$positionm_id;
+                        $where1["sell_id"]=$sell->getRow()->sell_id;
                         $input1["sell_percent"]=$f;
                         $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];                        
 
