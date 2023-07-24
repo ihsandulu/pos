@@ -506,7 +506,7 @@
                             let transaction_pay=$("#bayarannya").val();
                             let transaction_change=$("#kembaliannya").val();
                             let shift=$("#kasshift").val();
-                            // $('#test').html('<?=base_url("pelunasan");?>?transaction_id='+transaction_id+"&transaction_bill="+transaction_bill+"&transaction_pay="+transaction_pay+"&transaction_change="+transaction_change+"&shift="+shift+"&transaction_no="+transaction_no);
+                            // $('#test').html('<?=base_url("pelunasan");?>?account_id='+account_id+'&transaction_id='+transaction_id+"&transaction_bill="+transaction_bill+"&transaction_pay="+transaction_pay+"&transaction_change="+transaction_change+"&shift="+shift+"&transaction_no="+transaction_no);
                             $.get("<?=base_url("pelunasan");?>",{account_id:account_id,transaction_id:transaction_id,transaction_bill:transaction_bill,transaction_pay:transaction_pay,transaction_change:transaction_change,shift:shift,transaction_no:transaction_no})
                             .done(function(data){                                 
                                 updatestatus(transaction_id, data);
