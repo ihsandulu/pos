@@ -129,7 +129,9 @@ class transaction extends baseController
                     $builder=$this->db->table("kas")
                     ->insert($input);
                     $kas_id = $this->db->insertID();
+                    $lastQuery = $this->db->getLastQuery();
                     $data["message"]="Store modal awal berhasil.";
+                    // $data["message"]="1".$lastQuery;
 
                     //insert modal
                     $input2["kas_id"]=$kas_id;
@@ -251,7 +253,9 @@ class transaction extends baseController
             $builder=$this->db->table("kas")
             ->insert($input);
             $kas_id = $this->db->insertID();
+            $lastQuery = $this->db->getLastQuery();
             $data["message"]="Store modal awal berhasil.";
+            // $data["message"]="2".$lastQuery;
 
             
             //insert modal

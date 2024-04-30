@@ -148,7 +148,7 @@
                                 <hr/> 
                                 <div class="form-group bg-secondary text-white p-5">
                                     <label class="control-label col-sm-2">Jual (persentase):</label>
-                                    <div class="form-group">
+                                    <div class="form-group row">
                                     <?php
                                     $positionm=$this->db->table("positionm")
                                     ->select("*,positionm.positionm_id AS positionm_id")
@@ -158,13 +158,33 @@
                                     ->get();
                                     // echo $this->db->getLastquery(); die; 
                                     foreach($positionm->getResult() as $positionm){?>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-2" for="sell_percent<?=$positionm->positionm_id;?>"><?=$positionm->positionm_name;?>:</label>
+                                        <div class="col-6">
+                                            <label class="control-label col-sm-12" for="sell_percent<?=$positionm->positionm_id;?>"><?=$positionm->positionm_name;?> <span style="font-weight:bold; color:powderblue;">(Percent)</span>:</label>
                                             <div class="col-sm-10">
-                                                <input required type="text" class="form-control" id="sell_percent<?=$positionm->positionm_id;?>" name="sell_percent|<?=$positionm->positionm_id;?>|<?= $product_id; ?>" value="<?= $positionm->sell_percent; ?>">
+                                                <input onkeyup="itungprice(<?=$positionm->positionm_id;?>)" required type="text" class="form-control" id="sell_percent<?=$positionm->positionm_id;?>"  value="<?= $positionm->sell_percent; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="control-label col-sm-12" for="sell_percent<?=$positionm->positionm_id;?>"><?=$positionm->positionm_name;?> <span style="font-weight:bold; color:cyan;">(Price)</span>:</label>
+                                            <div class="col-sm-10">
+                                                <input onkeyup="itungpercent(<?=$positionm->positionm_id;?>)" required type="text" class="form-control" id="sell_price<?=$positionm->positionm_id;?>" name="sell_price|<?=$positionm->positionm_id;?>|<?= $product_id; ?>" value="<?= $positionm->sell_price; ?>">
                                             </div>
                                         </div>
                                     <?php }?>  
+                                    <script>
+                                        function itungprice(id){
+                                            let sell_percent = parseInt($("#sell_percent"+id).val());  
+                                            let product_buy = parseInt($("#product_buy").val());                                            
+                                            let sell_price = ((product_buy*sell_percent)/100)+product_buy;
+                                            $("#sell_price"+id).val(sell_price);
+                                        }
+                                        function itungpercent(id){
+                                            let sell_price = parseInt($("#sell_price"+id).val());
+                                            let product_buy = parseInt($("#product_buy").val());          
+                                            let sell_percent = ((sell_price - product_buy) / product_buy) * 100;
+                                            $("#sell_percent"+id).val(sell_percent);
+                                        }
+                                    </script>
                                     </div>          
                                 </div>     
                                 <hr/>                       

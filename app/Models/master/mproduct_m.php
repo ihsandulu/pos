@@ -120,7 +120,7 @@ class mproduct_m extends core_m
         //insert
         if ($this->request->getPost("create") == "OK") {
             foreach ($this->request->getPost() as $e => $f) {
-                if ($e != 'create' && $e != 'product_id' && substr($e,0,12)!="sell_percent") {
+                if ($e != 'create' && $e != 'product_id' && substr($e,0,10)!="sell_price") {
                     $input[$e] = $this->request->getPost($e);
                 }
             }
@@ -134,12 +134,12 @@ class mproduct_m extends core_m
             $product_id = $this->db->insertID();
 
             foreach ($this->request->getPost() as $e => $f) {
-                if(substr($e,0,12)=="sell_percent"){
+                if(substr($e,0,10)=="sell_price"){
                     $sell=explode("|",$e);
                     $input1["positionm_id"]=$sell[1];
                     $input1["product_id"]=$product_id;
-                    $input1["sell_percent"]=$f;
-                    $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+                    $input1["sell_price"]=$f;                    
+                    $input1["sell_percent"]=(($input1["sell_price"] - $input["product_buy"]) / $input["product_buy"]) * 100;
 
                     //pembulatan 500an
                     $asal = $input1["sell_price"];
@@ -164,7 +164,7 @@ class mproduct_m extends core_m
         if ($this->request->getPost("change") == "OK") {
             $product_id=$this->request->getPost("product_id");
             foreach ($this->request->getPost() as $e => $f) {
-                if ($e != 'change' && $e != 'product_picture' && substr($e,0,12)!="sell_percent") {
+                if ($e != 'change' && $e != 'product_picture' && substr($e,0,10)!="sell_price") {
                     $input[$e] = $this->request->getPost($e);
                 }
             }
@@ -172,7 +172,7 @@ class mproduct_m extends core_m
             $this->db->table('product')->update($input, array("product_id" => $product_id));
 
             foreach ($this->request->getPost() as $e => $f) {
-                if(substr($e,0,12)=="sell_percent"){          
+                if(substr($e,0,10)=="sell_price"){          
                     $sell=explode("|",$e);
                     $positionm_id=$sell[1];
                     $selld["store_id"] = session()->get("store_id");
@@ -183,8 +183,10 @@ class mproduct_m extends core_m
                         ->getWhere($selld);
                     if ($sell->getNumRows() > 0) {
                         $where1["sell_id"]=$sell->getRow()->sell_id;
-                        $input1["sell_percent"]=$f;
-                        $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];                        
+                        
+                        
+                        $input1["sell_price"]=$f;                    
+                        $input1["sell_percent"]=(($input1["sell_price"] - $input["product_buy"]) / $input["product_buy"]) * 100;
 
                         //pembulatan 500an
                         $asal = $input1["sell_price"];
@@ -202,8 +204,10 @@ class mproduct_m extends core_m
                     }else{                  
                         $input1["positionm_id"]=$positionm_id;
                         $input1["product_id"]=$product_id;
-                        $input1["sell_percent"]=$f;
-                        $input1["sell_price"]=($input["product_buy"]*$input1["sell_percent"]/100)+$input["product_buy"];
+
+                        
+                        $input1["sell_price"]=$f;                    
+                        $input1["sell_percent"]=(($input1["sell_price"] - $input["product_buy"]) / $input["product_buy"]) * 100;
 
                         //pembulatan 500an
                         $asal = $input1["sell_price"];
