@@ -147,7 +147,14 @@ class mproduct_m extends core_m
                     $sisa = $asal - $tiga;
                     $hasil = 0;
                     // echo $sisa;
-                    if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
+                    // if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
+                    if($tiga>500){
+                        $hasil=$sisa+1000;
+                    }else if($tiga>0){
+                        $hasil=$sisa+500;
+                    }else{
+                        $hasil=$sisa;
+                    }
                     $input1["sell_price"]=$hasil;
 
                     $input1["store_id"]=session()->get("store_id");
@@ -185,7 +192,7 @@ class mproduct_m extends core_m
                         $where1["sell_id"]=$sell->getRow()->sell_id;
                         
                         
-                        $input1["sell_price"]=$f;                    
+                        $input1["sell_price"]=$f;                 
                         $input1["sell_percent"]=(($input1["sell_price"] - $input["product_buy"]) / $input["product_buy"]) * 100;
 
                         //pembulatan 500an
@@ -196,8 +203,15 @@ class mproduct_m extends core_m
                         // echo $asal."=>";
                         // echo $sisa."=>";
                         // echo $tiga."<br/>";
-                        if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
-                        $input1["sell_price"]=$hasil;
+                        if($tiga>500){
+                            $hasil=$sisa+1000;
+                        }else if($tiga>0){
+                            $hasil=$sisa+500;
+                        }else{
+                            $hasil=$sisa;
+                        }
+                        $input1["sell_price"]=$hasil;  
+                        // echo  $input1["sell_price"];die;
 
                         $builder = $this->db->table('sell');
                         $builder->update($input1,$where1);
@@ -217,7 +231,14 @@ class mproduct_m extends core_m
                         // echo $asal."=>";
                         // echo $sisa."=>";
                         // echo $tiga."<br/>";
-                        if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
+                        // if($tiga>500){$hasil=$sisa+1000;}else{$hasil=$sisa+500;}
+                        if($tiga>500){
+                            $hasil=$sisa+1000;
+                        }else if($tiga>0){
+                            $hasil=$sisa+500;
+                        }else{
+                            $hasil=$sisa;
+                        }
                         $input1["sell_price"]=$hasil;
 
                         $input1["store_id"]=session()->get("store_id");
