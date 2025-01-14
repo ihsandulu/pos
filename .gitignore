@@ -130,7 +130,7 @@ public/images/store_picture/
 images/product_picture/
 images/store_picture/
 
-.env
+#.env
 #vendor/
 
 
